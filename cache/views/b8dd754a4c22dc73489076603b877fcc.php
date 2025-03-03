@@ -1,0 +1,1 @@
+Welcome to NovaLite Framework!<?php /**PATH C:\Users\marko\OneDrive\Desktop\Z\views/welcome.blade.php ENDPATH**/ ?>
