@@ -1,11 +1,11 @@
 <?php
 
-namespace App;
+namespace App\Mail;
 
 use NovaLite\Application;
+use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
-use PHPMailer\PHPMailer\Exception;
 
 require Application::$ROOT_DIR .  '/vendor/autoload.php';
 class MailSender

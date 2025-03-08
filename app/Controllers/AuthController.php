@@ -2,10 +2,9 @@
 
 namespace App\Controllers;
 
-use App\MailSender;
+use App\Mail\MailSender;
 use App\Models\User;
 use App\Requests\RegisterUserRequest;
-use App\Traits\Mail;
 use NovaLite\Database\Database;
 use NovaLite\Http\Controller;
 use NovaLite\Http\RedirectResponse;
