@@ -103,6 +103,9 @@
             </a>--}}
         </div>
         <a href="#" class="post-btn w-button">Post</a>
+        <div id="logout-wrapper">
+            <a href="{{route('logout')}}" id="logout-text">Logout, <span id="logged-user-fullname">{{session()->get('user')->full_name}}</span></a>
+        </div>
         <div class="logged-in-user">
             <img src="{{asset('assets/img/67b61da06092cd17329df26d/67b9c46d9abe545630bb3f09_default.jpg')}}" loading="lazy" alt="" class="user-image" />
             <div class="logged-in-user-info">

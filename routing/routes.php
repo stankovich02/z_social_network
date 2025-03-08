@@ -14,6 +14,7 @@ Router::middleware([\App\Middlewares\IsLoggedIn::class])->group(function () {
     Router::get('/explore', [\App\Controllers\Client\ExploreController::class, 'index']);
     Router::get('/messages', [\App\Controllers\Client\MessageController::class, 'index']);
     Router::get('/notifications', [\App\Controllers\Client\NotificationController::class, 'index']);
+    Router::get('/logout', [\App\Controllers\AuthController::class, 'logout'])->name('logout');
 });
 
 

@@ -347,6 +347,7 @@ pre.w-code-block code {
 }
 
 .w-webflow-badge {
+
   white-space: nowrap;
   cursor: pointer;
   box-shadow: 0 0 0 1px #0000001a, 0 1px 3px #0000001a;
@@ -364,10 +365,10 @@ pre.w-code-block code {
   font-size: 12px !important;
   line-height: 14px !important;
   text-decoration: none !important;
-  display: inline-block !important;
   position: fixed !important;
   inset: auto 12px 12px auto !important;
   transform: none !important;
+  display: none!important;
 }
 
 .w-webflow-badge > img {
@@ -2171,25 +2172,53 @@ textarea.w-input, textarea.w-select {
   justify-content: flex-start;
   align-items: center;
   margin-top: 100px;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding: 15px 15px;
   display: flex;
   position: absolute;
   inset: auto 0 2%;
+  margin-right: 10px;
+  border-radius: 30px;
+  cursor: pointer;
 }
 .logged-in-user:hover{
-  background-color: rgba(231,233,234,10);
+  background-color: #111212;
 }
 
 .logged-in-user-info {
   width: 60%;
-  margin-right: 45px;
+  margin-right: 5px;
   font-size: 18px;
   white-space: wrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
+#logged-user-fullname{
+  font-weight: bold;
+}
+#logout-wrapper{
+  position: absolute;
+  bottom: 110px;
+  box-shadow: rgba(255, 255, 255, 0.2) 0 0 15px, rgba(255, 255, 255, 0.15) 0 0 3px 1px;
+  border-radius: 16px;
+  padding: 10px 0;
+  width: 90%;
+  display: none;
+}
+#logout-text{
+  padding: 10px 15px;
+  width: 100%!important;
+  font-size: 16px;
+  color: white;
+  text-decoration: none;
+}
+#logout-text:hover{
+  background-color: #111212;
+  cursor: pointer;
 
+}
+#logout-wrapper p{
+  margin-bottom: 0;
+}
 .user-fullname {
   margin-bottom: 5px;
   font-weight: 700;
