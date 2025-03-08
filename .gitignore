@@ -3,3 +3,4 @@
 /cache/views
 .env
 /logs/app.log
+/app/Mail/MailSender.php
