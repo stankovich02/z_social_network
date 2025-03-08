@@ -16,7 +16,9 @@ audio, canvas, progress, video {
   vertical-align: baseline;
   display: inline-block;
 }
-
+.section-wrapper{
+  width: 65%;
+}
 audio:not([controls]) {
   height: 0;
   display: none;
@@ -184,7 +186,7 @@ td, th {
   font-style: normal;
   font-weight: normal;
   line-height: 1;
-  font-family: webflow-icons !important;
+  font-family: webflow-icons, serif !important;
 }
 
 .w-icon-slider-right:before {
@@ -1166,10 +1168,10 @@ textarea.w-input, textarea.w-select {
   inset: -100%;
 }
 
-.w-background-video > video::-webkit-media-controls-start-playback-button {
+/*.w-background-video > video::-webkit-media-controls-start-playback-button {
   -webkit-appearance: none;
   display: none !important;
-}
+}*/
 
 .w-background-video--control {
   background-color: #0000;
@@ -2067,11 +2069,10 @@ textarea.w-input, textarea.w-select {
 
 .left-bar-menu {
   border-right: 1px solid #88888880;
-  width: 300px;
+  width: 45%;
   height: 100vh;
   padding: 20px 10px 10px;
-  position: fixed;
-  top: 0;
+  position: relative;
 }
 
 .container {
@@ -2174,22 +2175,34 @@ textarea.w-input, textarea.w-select {
   padding-right: 10px;
   display: flex;
   position: absolute;
-  inset: auto 0% 2%;
+  inset: auto 0 2%;
+}
+.logged-in-user:hover{
+  background-color: rgba(231,233,234,10);
 }
 
 .logged-in-user-info {
   width: 60%;
   margin-right: 45px;
   font-size: 18px;
+  white-space: wrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .user-fullname {
   margin-bottom: 5px;
   font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .user-username {
   color: #fff6;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .more-options {
@@ -2199,6 +2212,7 @@ textarea.w-input, textarea.w-select {
   width: 2rem;
   height: 2rem;
   display: flex;
+  cursor: pointer;
 }
 
 .content {
@@ -2212,12 +2226,12 @@ textarea.w-input, textarea.w-select {
   display: none;
 }
 
-.content.messages {
+.messages {
   align-items: flex-start;
   width: 50%;
   min-height: 100vh;
   margin-left: 0;
-  display: none;
+  display: flex;
 }
 
 .posts-filter {
@@ -2287,6 +2301,7 @@ textarea.w-input, textarea.w-select {
   font-size: 16px;
   font-weight: 400;
   overflow: hidden;
+  color: white;
 }
 
 .form-block {
@@ -2441,8 +2456,10 @@ textarea.w-input, textarea.w-select {
   flex-flow: row;
   justify-content: center;
   align-items: center;
-  width: 100%;
+  width: 80%;
   margin-top: 10px;
+  margin-left: auto;
+  margin-right: auto;
   padding-left: 10px;
   padding-right: 10px;
   display: flex;
@@ -2488,7 +2505,9 @@ textarea.w-input, textarea.w-select {
 
 .search-results {
   border: 1px solid #88888880;
-  width: 100%;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
   max-height: 420px;
   overflow: auto;
 }
@@ -3235,7 +3254,7 @@ textarea.w-input, textarea.w-select {
   max-width: 600px;
   padding: 15px;
   position: fixed;
-  inset: 30% 0% auto 50%;
+  inset: 30% 0 auto 50%;
   transform: translate(-50%, -50%);
 }
 
@@ -3247,6 +3266,7 @@ textarea.w-input, textarea.w-select {
   height: 1.5rem;
   margin-bottom: 40px;
   display: block;
+  cursor: pointer;
 }
 
 .close-icon.close-new-message, .close-icon.close-edit-icon {
@@ -3260,7 +3280,7 @@ textarea.w-input, textarea.w-select {
   height: 100%;
   display: none;
   position: absolute;
-  inset: 0%;
+  inset: 0;
 }
 
 .popup-wrapper.edit-popup {
@@ -3364,7 +3384,7 @@ textarea.w-input, textarea.w-select {
   height: 100%;
   display: none;
   position: absolute;
-  inset: 0%;
+  inset: 0;
 }
 
 .new-message-popup {
@@ -3484,7 +3504,7 @@ textarea.w-input, textarea.w-select {
   height: 100%;
   display: none;
   position: absolute;
-  inset: 0%;
+  inset: 0;
 }
 
 .new-post-popup {
@@ -3510,7 +3530,7 @@ textarea.w-input, textarea.w-select {
   height: 100%;
   display: none;
   position: absolute;
-  inset: 0%;
+  inset: 0;
 }
 
 .setup-profile-popup {
@@ -3527,7 +3547,7 @@ textarea.w-input, textarea.w-select {
   transform: translate(-50%, -50%);
 }
 
-.top-setup-profile {
+.top-setup-profile,.register-login-top {
   position: relative;
 }
 
@@ -3587,7 +3607,7 @@ textarea.w-input, textarea.w-select {
   position: absolute;
   bottom: -7%;
   left: 50%;
-  right: 0%;
+  right: 0;
   transform: translate(-50%, -50%);
 }
 
@@ -3771,7 +3791,7 @@ textarea.w-input, textarea.w-select {
   border-radius: 0;
 }
 
-.save-proifle {
+.save-profile {
   grid-column-gap: 50px;
   grid-row-gap: 50px;
   flex-flow: column;
@@ -3787,7 +3807,7 @@ textarea.w-input, textarea.w-select {
   font-weight: 700;
 }
 
-.save-proifle-btn {
+.save-profile-btn {
   color: #000;
   background-color: #fff;
   border-radius: 30px;
@@ -3872,6 +3892,7 @@ textarea.w-input, textarea.w-select {
 
 .input-info {
   justify-content: space-between;
+  width: 100%;
   align-items: center;
   display: flex;
 }
@@ -3895,4 +3916,153 @@ textarea.w-input, textarea.w-select {
   margin-top: 5px;
   padding-left: 0;
   padding-right: 0;
+}
+#opening-wrapper{
+  width: 60%;
+  height: 100vh;
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  justify-content: space-between;
+  align-items: center;
+}
+#opening-heading{
+  font-size: 80px;
+  line-height: 80px;
+}
+#join-text{
+  margin-top: 50px;
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 40px;
+}
+#login-question{
+  margin-top: 100px;
+}
+#has-account-text{
+  font-size: 18px;
+  font-weight: 700;
+}
+#register-login-popup{
+  background-color: #000;
+  border-radius: 20px;
+  width: 50%;
+  max-width: 600px;
+  height: 80vh;
+  max-height: 800px;
+  padding: 15px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+#register-btn, #login-btn{
+  width: 300px;
+  margin-top: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-radius: 30px;
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+}
+#register-btn{
+  background-color: #009dff;
+}
+#login-btn{
+  background-color: black;
+  color: #009dff;
+  border: 1px solid rgba(136, 136, 136, 0.5);
+}
+#register-login-wrapper{
+  display: none;
+}
+#register-container,#login-container{
+  width: 80%;
+  height: 70%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 60px;
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.inputs{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+#create-account-text,#login-to-account-text{
+  font-size: 30px;
+  margin-bottom: 30px;
+}
+#name-wrapper,#email-wrapper,#password-wrapper,#username-wrapper{
+  border: 1px solid #88888880;
+  margin-top: 0;
+  margin-bottom: 10px;
+  padding: 10px;
+  width: 100%;
+}
+#register-login-wrapper input{
+  color: white;
+  background-color: #0000;
+  height: 30px;
+  margin-top: 5px;
+  margin-bottom: 0;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-left: 0;
+  line-height: 20px;
+  border: none;
+}
+#register-login-wrapper input:focus{
+  border: none!important;
+}
+#register-form,#login-form{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+}
+#login-form{
+  padding-top: 100px;
+}
+#submit-register-form,#submit-login-form{
+  color: #000;
+  text-align: center;
+  background-color: #fff;
+  border-radius: 30px;
+  width: 60%;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  margin-top: 20px;
+  font-size: 16px;
+  font-weight: 700;
+}
+#login-password{
+  width: 95%;
+}
+#password-wrapper{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+#closed-eye{
+  display: none;
+}
+.eye-icon{
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+}
+.validationError,.errorMsg{
+  color: red;
+}
+.success-message{
+  color: green;
+  margin-top: 30px;
+  font-size: 16px;
 }

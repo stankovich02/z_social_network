@@ -14,7 +14,7 @@
             "Database\\Seeders\\": "database/seeders/"
         },
         "files": [
-            "./helpers.php"
+            "vendor/novalite/framework/helpers.php"
         ]
     },
     "scripts": {

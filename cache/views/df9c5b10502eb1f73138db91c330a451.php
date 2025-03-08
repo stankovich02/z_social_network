@@ -1742,10 +1742,10 @@
             </div>
             <a href="#" class="skip-profile-btn w-button">Skip for now</a><a href="#" class="next-profile-btn w-button">Next</a>
         </div>
-        <div class="save-proifle">
+        <div class="save-profile">
             <img src="assets/img/67b61da06092cd17329df26d/67c47292b287cfef93ba2a67_logo2.png" loading="lazy" alt="" class="save-profile-logo" />
             <div class="save-text">Click to save updates</div>
-            <a href="#" class="save-proifle-btn w-button">Save</a>
+            <a href="#" class="save-profile-btn w-button">Save</a>
         </div>
     </div>
 </div>
