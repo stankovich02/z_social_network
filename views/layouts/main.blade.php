@@ -4,6 +4,7 @@
     <title>
         Z | @yield('title')
     </title>
+    <script src="{{asset('assets/js/jquery-3.5.1.min.dc5e7f18c8.js')}}" type="text/javascript" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
     @include("fixed.client.head")
 </head>
 <body class="body">
@@ -74,7 +75,6 @@
             </div>
         </div>
     </div>
-<script src="{{asset('assets/js/jquery-3.5.1.min.dc5e7f18c8.js')}}" type="text/javascript" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
 <script src="{{asset('assets/js/webflow.a0aa6ca1.8803622a53cb8314.js')}}" type="text/javascript"></script>
     <script src="{{asset("assets/js/main.js")}}"></script>
 </body>

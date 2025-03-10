@@ -108,13 +108,13 @@
                             <div class="input-info">
                                 <div class="name-text">Username</div>
                             </div>
-                            <input class="w-input" name="username" data-name="username" type="text" id="login-username" value="{{old('username')}}" />
+                            <input class="w-input" name="username" data-name="username" type="text" id="login-username" value="stanke2002" />
                         </div>
                         <div id="password-wrapper">
                             <div class="input-info">
                                 <div class="name-text">Password</div>
                             </div>
-                            <input class="w-input" name="password" data-name="password" type="password" id="login-password" value="{{old('password')}}"/>
+                            <input class="w-input" name="password" data-name="password" type="password" id="login-password" value="Sifra1234"/>
                             <svg id="opened-eye" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--tabler eye-icon" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0-4 0"></path><path d="M21 12q-3.6 6-9 6t-9-6q3.6-6 9-6t9 6"></path></g></svg>
                             <svg id="closed-eye" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--iconoir eye-icon" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><path d="m3 3l18 18M10.5 10.677a2 2 0 0 0 2.823 2.823"></path><path d="M7.362 7.561C5.68 8.74 4.279 10.42 3 12c1.889 2.991 5.282 6 9 6c1.55 0 3.043-.523 4.395-1.35M12 6c4.008 0 6.701 3.158 9 6a15.66 15.66 0 0 1-1.078 1.5"></path></g></svg>
                         </div>

@@ -23,7 +23,6 @@ loggedInUserInfo.addEventListener("click", () => {
 document.addEventListener("click", function (event) {
     const loggedInUserInfo = document.querySelector(".logged-in-user");
     const logoutWrapper = document.querySelector("#logout-wrapper");
-    console.log(event.target)
     if (!loggedInUserInfo.contains(event.target)) {
         logoutWrapper.style.display = "none";
     }

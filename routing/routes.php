@@ -1,7 +1,7 @@
 <?php
 
 use NovaLite\Routing\Router;
-Router::view('/profile', 'pages.client.profile');
+/*Router::view('/profile', 'pages.client.profile');*/
 
 Router::middleware([\App\Middlewares\IsNotLoggedIn::class])->group(function () {
     Router::get('/', [\App\Controllers\AuthController::class, 'index'])->name('start');
@@ -16,6 +16,8 @@ Router::middleware([\App\Middlewares\IsLoggedIn::class])->group(function () {
     Router::get('/messages', [\App\Controllers\Client\MessageController::class, 'index']);
     Router::get('/notifications', [\App\Controllers\Client\NotificationController::class, 'index']);
     Router::get('/logout', [\App\Controllers\AuthController::class, 'logout'])->name('logout');
+    Router::get('/profile/{username}', [\App\Controllers\Client\ProfileController::class, 'index'])->name('profile');
+    Router::get('/search', [\App\Controllers\Client\ExploreController::class, 'search'])->name('search');
 });
 
 

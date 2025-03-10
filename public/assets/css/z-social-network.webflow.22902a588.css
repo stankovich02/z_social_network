@@ -2555,6 +2555,10 @@ textarea.w-input, textarea.w-select {
   padding-left: 15px;
   padding-right: 15px;
   display: flex;
+  text-decoration: none;
+}
+.single-search-result:hover{
+  background-color: #111212;
 }
 
 .search-result-user-image {
@@ -2578,6 +2582,7 @@ textarea.w-input, textarea.w-select {
 
 .search-result-user-fullname {
   font-weight: 700;
+  color: white;
 }
 
 .search-result-user-username {
