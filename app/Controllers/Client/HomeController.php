@@ -2,6 +2,7 @@
 
 namespace App\Controllers\Client;
 
+use App\Models\Nav;
 use NovaLite\Http\Controller;
 
 class HomeController extends Controller

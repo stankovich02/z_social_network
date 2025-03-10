@@ -33,8 +33,24 @@ registerInputs.forEach(input => {
 const fullNameInput = document.querySelector("#register-fullname");
 const usernameInput = document.querySelector("#register-username")
 fullNameInput.addEventListener("keyup", () => {
+    if(fullNameInput.value.length >= 50){
+        fullNameInput.parentElement.querySelector(".num-of-characters").style.color = "red";
+    }
+    else{
+        fullNameInput.parentElement.querySelector(".num-of-characters").style.color = "#fff6";
+    }
     const numOfCharacters = fullNameInput.parentElement.querySelector(".current-num-of-characters");
     numOfCharacters.innerHTML = fullNameInput.value.length;
+})
+usernameInput.addEventListener("keyup", () => {
+    if(usernameInput.value.length >= 50){
+        usernameInput.parentElement.querySelector(".num-of-characters").style.color = "red";
+    }
+    else{
+        usernameInput.parentElement.querySelector(".num-of-characters").style.color = "#fff6";
+    }
+    const numOfCharacters = usernameInput.parentElement.querySelector(".current-num-of-characters");
+    numOfCharacters.innerHTML = usernameInput.value.length;
 })
 const eyeIcons = document.querySelectorAll(".eye-icon");
 eyeIcons.forEach(eye => {
@@ -56,3 +72,13 @@ eyeIcons.forEach(eye => {
         }
     })
 })
+const notificationPopup = document.querySelector(".notification-popup");
+if(notificationPopup){
+    notificationPopup.style.opacity = "1";
+    setTimeout(() =>{
+        notificationPopup.style.opacity = "0";
+    }, 4000)
+    setTimeout(() =>{
+        notificationPopup.remove();
+    }, 5000)
+}

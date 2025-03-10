@@ -7,6 +7,7 @@ Router::middleware([\App\Middlewares\IsNotLoggedIn::class])->group(function () {
     Router::get('/', [\App\Controllers\AuthController::class, 'index'])->name('start');
     Router::post('/register', [\App\Controllers\AuthController::class, 'register'])->name('register');
     Router::post('/login', [\App\Controllers\AuthController::class, 'login'])->name('login');
+    Router::get('/verification/{token}', [\App\Controllers\AuthController::class, 'verification'])->name('verification');
 });
 
 Router::middleware([\App\Middlewares\IsLoggedIn::class])->group(function () {

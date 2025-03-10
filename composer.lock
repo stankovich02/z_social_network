@@ -937,16 +937,16 @@
         },
         {
             "name": "novalite/framework",
-            "version": "v1.0.7",
+            "version": "v1.0.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stankovich02/novalite.git",
-                "reference": "8f36cbb7a472e98e5dc5d2191b4558e35828eea0"
+                "reference": "fb2f9ef9791431cf3adf44dc28f6ae4eabfda15e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stankovich02/novalite/zipball/8f36cbb7a472e98e5dc5d2191b4558e35828eea0",
-                "reference": "8f36cbb7a472e98e5dc5d2191b4558e35828eea0",
+                "url": "https://api.github.com/repos/stankovich02/novalite/zipball/fb2f9ef9791431cf3adf44dc28f6ae4eabfda15e",
+                "reference": "fb2f9ef9791431cf3adf44dc28f6ae4eabfda15e",
                 "shasum": ""
             },
             "require": {
@@ -971,9 +971,9 @@
             "description": "The NovaLite Framework",
             "support": {
                 "issues": "https://github.com/stankovich02/novalite/issues",
-                "source": "https://github.com/stankovich02/novalite/tree/v1.0.7"
+                "source": "https://github.com/stankovich02/novalite/tree/v1.0.12"
             },
-            "time": "2025-03-07T15:13:14+00:00"
+            "time": "2025-03-09T18:57:07+00:00"
         },
         {
             "name": "phpmailer/phpmailer",

@@ -3,8 +3,11 @@
 namespace App\Controllers;
 
 use App\Mail\MailSender;
+use App\Mail\VerificationEmail;
+use App\Models\Nav;
 use App\Models\User;
 use App\Requests\RegisterUserRequest;
+use Illuminate\Support\Facades\Mail;
 use NovaLite\Database\Database;
 use NovaLite\Http\Controller;
 use NovaLite\Http\RedirectResponse;
@@ -22,9 +25,19 @@ class AuthController extends Controller
         $newUser['password'] = password_hash($request->input('password'), PASSWORD_DEFAULT);
         $roleUserId = Database::table('roles')->where('name', '=', 'user')->value('id');
         $newUser['role_id'] = $roleUserId;
+        $newUser['photo'] = 'default.jpg';
+        $newUser['cover_photo'] = 'default-cover.jpg';
+        $verificationToken = bin2hex(random_bytes(15));
+        $exists = User::where('token','=', $verificationToken)->first();
+        while ($exists) {
+            $verificationToken = bin2hex(random_bytes(15));
+            $exists = User::where('token','=', $verificationToken)->first();
+        }
+        $newUser['token'] = $verificationToken;
         User::create($newUser);
-        MailSender::sendEmail($newUser['email']);
-        return redirect()->back()->with('success-message', 'You have successfully registered.');
+        $mail = new VerificationEmail($verificationToken);
+        $mail->sendEmail($newUser['email']);
+        return redirect()->back()->with('success-message', 'You have successfully registered. Please check your email to activate your account.');
     }
     public function login(Request $request) : RedirectResponse
     {
@@ -53,5 +66,16 @@ class AuthController extends Controller
     {
         session()->remove('user');
         return redirect()->to('start');
+    }
+    public function verification(string $token) : RedirectResponse
+    {
+        $user = User::where('token', '=', $token)->first();
+        if ($user) {
+            $user->is_active = true;
+            $user->token = null;
+            $user->save();
+            return redirect()->to('start')->with('verification-message', 'Your account has been activated. You can now login.');
+        }
+        return redirect()->to('start')->with('error-verification-message', 'Your token is invalid.');
     }
 }

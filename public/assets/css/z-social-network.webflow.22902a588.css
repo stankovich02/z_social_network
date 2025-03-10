@@ -2070,10 +2070,11 @@ textarea.w-input, textarea.w-select {
 
 .left-bar-menu {
   border-right: 1px solid #88888880;
-  width: 45%;
+  width: 300px;
   height: 100vh;
   padding: 20px 10px 10px;
-  position: relative;
+  position: fixed;
+  top: 0;
 }
 
 .container {
@@ -2372,12 +2373,15 @@ textarea.w-input, textarea.w-select {
 .single-post {
   grid-column-gap: 10px;
   grid-row-gap: 10px;
-  border-bottom: 2px solid #88888880;
+  border-bottom: 1px solid #88888880;
   flex-flow: wrap;
   justify-content: flex-start;
   align-items: flex-start;
   padding: 20px;
   display: flex;
+}
+.single-post:last-child{
+  border-bottom: 0;
 }
 
 .single-post.repsoted-post, .post-body {
@@ -4094,4 +4098,27 @@ textarea.w-input, textarea.w-select {
   color: green;
   margin-top: 30px;
   font-size: 16px;
+  text-align: center;
+}
+.notification-popup{
+  width: 300px;
+  position: fixed;
+  color: white;
+  font-size: 15px;
+  padding: 10px;
+  top: 2%;
+  right: 1%;
+  text-align: center;
+  border-radius: 10px;
+  opacity: 0;
+  transition: all 1.5s;
+}
+#verification{
+  background-color: forestgreen;
+}
+#error-verification{
+  background-color: red;
+}
+.notification-popup .notification-message{
+  margin-bottom: 0;
 }
