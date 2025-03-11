@@ -17,7 +17,7 @@ trait CalculateDate
             return $minutes . " min" . ($minutes > 1 ? "s" : "");
         } elseif ($diff < 86400) {
             $hours = floor($diff / 3600);
-            return $hours . " hour" . ($hours > 1 ? "s" : "");
+            return $hours . "h";
         } else {
             return date("M j", $timestamp);
         }

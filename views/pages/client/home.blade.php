@@ -2,6 +2,7 @@
 @section('title') Home @endsection
 @section('content')
     <section class="content">
+
         <div class="posts-filter">
             <div class="foryou-filter"><div class="post-filter-text">For you</div></div>
             <div class="following-filter"><div class="post-filter-text active-post-filter">Following</div></div>
@@ -50,7 +51,7 @@
         </div>
         <div id="posts">
             @foreach($posts as $index => $post)
-                <div class="single-post">
+                <div class="single-post" data-id="{{$post->id}}">
                     <img src="{{asset('assets/img/users/' . $post->user->photo)}}" loading="eager" alt="" class="user-image" />
                     <div class="post-info-and-body">
                         <div class="post-info">
@@ -59,7 +60,18 @@
                             <div class="dot">·</div>
                             <div class="posted-on-date-text">{{$post->created_at}}</div>
                         </div>
-                        <div class="post-body"><p class="post-body-text">{{$post->content}}</p></div>
+                        <div class="post-body">
+                            <p class="post-body-text">{{$post->content}}</p>
+                            @if($post->images)
+                                <img
+                                        src="{{asset('assets/img/posts/' . $post->images[0]->image)}}"
+                                        loading="lazy"
+                                        sizes="100vw"
+                                        alt=""
+                                        class="post-image"
+                                />
+                            @endif
+                        </div>
                         <div class="post-reactions">
                             <div class="post-comment-stats">
                                 <div class="post-stats-icon w-embed">
@@ -137,7 +149,7 @@
                                         <path fill="currentColor" d="M4 9h4v11H4zm12 4h4v7h-4zm-6-9h4v16h-4z"></path>
                                     </svg>
                                 </div>
-                                <div class="post-reaction-stats-text">0</div>
+                                <div class="post-reaction-stats-text">{{$post->views}}</div>
                             </div>
                         </div>
                     </div>

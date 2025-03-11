@@ -44,8 +44,8 @@ function newPostLogic(){
                 uploadedPostImageDiv.appendChild(removePhotoDiv);
                 newFormBlock.appendChild(uploadedPostImageDiv);
                 const postBtn = document.querySelector("#feedPostBtn");
-                postBtn.classList.contains("disabled-new-post-btn") ? postBtn.classList.remove("disabled-new-post-btn") : postBtn.classList.add("disabled-new-post-btn");
-                postBtn.disabled ? postBtn.disabled = false : postBtn.disabled = true;
+                postBtn.classList.contains("disabled-new-post-btn") ? postBtn.classList.remove("disabled-new-post-btn") : null;
+                postBtn.disabled ? postBtn.disabled = false : null;
 
                 const removePhotoIcon = document.querySelector(".remove-photo");
                 removePhotoIcon.addEventListener("click", function () {
@@ -78,17 +78,20 @@ function newPostLogic(){
     });
     document.querySelector("#feedPostBtn").addEventListener("click",function (){
         const textarea = document.querySelector("#feedNewPost .new-post-body");
+        const addedImage = document.querySelector(".uploaded-post-image img");
         $.ajax({
             url: '/posts',
             type: 'POST',
             data: {
-                content: textarea.value
+                content: textarea.value,
+                image: addedImage ? addedImage.src : null
             },
             success: function (post){
                 textarea.value = "";
+                addedImage ? addedImage.parentElement.remove() : null;
                 const postsSection = document.querySelector("#posts");
-                const newPostHtml = `
-                   <div class="single-post">
+                let newPostHtml = `
+                   <div class="single-post" data-id="${post.id}">
             <img src="${post.user.photo}" loading="eager" alt="" class="user-image" />
             <div class="post-info-and-body">
                 <div class="post-info">
@@ -97,8 +100,17 @@ function newPostLogic(){
                     <div class="dot">·</div>
                     <div class="posted-on-date-text">now</div>
                 </div>
-                <div class="post-body"><p class="post-body-text">${post.content}</p></div>
-                <div class="post-reactions">
+                <div class="post-body"><p class="post-body-text">${post.content}</p></div>`;
+                if(post.images){
+                    newPostHtml += `<img
+                            src="${post.images[0]}"
+                            loading="lazy"
+                            sizes="100vw"
+                            alt=""
+                            class="post-image"
+                    />`;
+                }
+                newPostHtml += `<div class="post-reactions">
                     <div class="post-comment-stats">
                         <div class="post-stats-icon w-embed">
                             <svg
@@ -191,6 +203,39 @@ function newPostLogic(){
     })
 }
 newPostLogic();
+/*document.addEventListener("DOMContentLoaded", function () {
+    let observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                let post = entry.target;
+                let postId = post.getAttribute("data-id");
+                if (!post.dataset.viewed) {
+                    post.dataset.viewed = "true";
+                    $.ajax({
+                        url: "/register-view",
+                        type: "POST",
+                        data: {
+                            post_id: postId
+                        },
+                        success: function (data) {
+                            if (data.success) {
+
+                            }
+                        },
+                        error: function (err) {
+                            console.log(err);
+                        }
+                    })
+                }
+            }
+        });
+    }, { threshold: 1.0 });
+
+    document.querySelectorAll(".single-post").forEach(post => {
+        observer.observe(post);
+    });
+});*/
+
 //id za sliku,fileinput,id za formu gde se dodaje slika, id za postBtn, id za textareu
 //*dodati fleg na kraju ako je popup i onda ga zatvoriti kad se post upise u bazu
 
