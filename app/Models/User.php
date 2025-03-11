@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use NovaLite\Database\Model;
+use NovaLite\Database\Relations\BelongsTo;
 
 class User extends Model
 {
@@ -22,4 +23,9 @@ class User extends Model
         'is_active',
         'role_id',
     ];
+
+    public function role() : BelongsTo
+    {
+        return $this->belongsTo(Role::class, 'role_id');
+    }
 }

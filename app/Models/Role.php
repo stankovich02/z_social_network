@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use NovaLite\Database\Model;
+use NovaLite\Database\Relations\HasMany;
 
 class Role extends Model
 {
@@ -13,4 +14,9 @@ class Role extends Model
     protected array $fillable = [
         'name'
     ];
+
+    public function users() : HasMany
+    {
+        return $this->hasMany(User::class, 'role_id');
+    }
 }

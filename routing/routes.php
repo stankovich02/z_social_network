@@ -18,6 +18,9 @@ Router::middleware([\App\Middlewares\IsLoggedIn::class])->group(function () {
     Router::get('/logout', [\App\Controllers\AuthController::class, 'logout'])->name('logout');
     Router::get('/profile/{username}', [\App\Controllers\Client\ProfileController::class, 'index'])->name('profile');
     Router::get('/search', [\App\Controllers\Client\ExploreController::class, 'search'])->name('search');
+    Router::post('/upload-post-image', [\App\Controllers\Client\ImageController::class, 'uploadPostImage'])->name('upload-post-image');
+    Router::post('/delete-post-image', [\App\Controllers\Client\ImageController::class, 'deletePostImage'])->name('delete-post-image');
+    Router::resource('/posts', \App\Controllers\Client\PostController::class);
 });
 
 

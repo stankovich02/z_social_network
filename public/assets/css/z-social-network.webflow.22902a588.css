@@ -4127,3 +4127,32 @@ textarea.w-input, textarea.w-select {
 .notification-popup .notification-message{
   margin-bottom: 0;
 }
+.upload-post-image{
+  cursor: pointer;
+}
+.hidden-file-input{
+  display: none;
+}
+.uploaded-post-image{
+  display: inline-block;
+  position: relative;
+  width: auto;
+}
+.remove-photo{
+  width: 1.5rem;
+  height: 1.5rem;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  padding: 3px;
+  cursor: pointer;
+  background-color: rgba(15, 20, 25, 0.75);
+  transition: all 0.5s;
+  color: white;
+}
+.remove-photo:hover{
+  background-color: rgba(39, 44, 48, 0.75);
+}
+.disabled-new-post-btn{
+  background-color: #808080;
+}

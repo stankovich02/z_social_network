@@ -69,13 +69,13 @@
                                 ></path>
                             </svg>
                         </div>
-                        <a href="#" class="submit-post-btn w-button">Post</a>
+                        <button  class="submit-post-btn w-button">Post</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-<script src="{{asset('assets/js/webflow.a0aa6ca1.8803622a53cb8314.js')}}" type="text/javascript"></script>
+    <script src="{{asset('assets/js/webflow.a0aa6ca1.8803622a53cb8314.js')}}" type="text/javascript"></script>
     <script src="{{asset("assets/js/main.js")}}"></script>
 </body>
 </html>
