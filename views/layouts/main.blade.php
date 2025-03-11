@@ -15,7 +15,7 @@
     </div>
     <div class="popup-wrapper" id="new-post-popup-wrapper">
         <div class="new-post-popup">
-            <div class="close-icon close-new-message w-embed">
+            <div class="close-icon close-new-post w-embed">
                 <svg
                         xmlns="http://www.w3.org/2000/svg"
                         xmlns:xlink="http://www.w3.org/1999/xlink"

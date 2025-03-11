@@ -2,7 +2,14 @@ const postBtn = document.querySelector(".post-btn");
 postBtn.addEventListener("click", () => {
     const newPostPopup = document.querySelector("#new-post-popup-wrapper");
     newPostPopup.style.display = "block";
-});
+    const closeIcon = document.querySelector(".close-new-post");
+    closeIcon.addEventListener("click", () => {
+       newPostPopup.style.display = "none";
+    })
+
+})
+
+
 const textareas = document.querySelectorAll('textarea');
 textareas.forEach(textarea => {
     textarea.addEventListener('input', function () {

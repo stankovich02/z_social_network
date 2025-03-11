@@ -9,7 +9,7 @@
         <div class="new-post">
             <img src="{{asset('assets/img/67b61da06092cd17329df26d/67b9c46d9abe545630bb3f09_default.jpg')}}" loading="eager" alt="" class="user-image" />
             <div class="post-creating">
-                <div class="form-block w-form">
+                <div class="form-block w-form" id="newFormBlock">
                     <form
                             id="wf-form-New-post"
                             name="wf-form-New-post"
@@ -22,8 +22,6 @@
                     >
                         <textarea id="post-body" name="post-body" maxlength="5000" data-name="post-body" placeholder="What is happening?!" class="new-post-body w-input"></textarea>
                     </form>
-                    <div class="w-form-done"><div>Thank you! Your submission has been received!</div></div>
-                    <div class="w-form-fail"><div>Oops! Something went wrong while submitting the form.</div></div>
                 </div>
                 <div class="post-options">
                     <div class="icon-embed-xsmall w-embed">
@@ -141,7 +139,7 @@
                 </div>
             </div>
         </div>
-        <div class="single-post repsoted-post">
+        <div class="single-post reposted-post">
             <div class="reposted-info">
                 <div class="icon-embed-xsmall-7 w-embed">
                     <svg
