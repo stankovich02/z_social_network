@@ -56,6 +56,12 @@ class AuthController extends Controller
             if(!$user->is_active){
                 return redirect()->back()->with('error-message', 'Your account is not activated.');
             }
+            $user->blocked_users = array_column(
+                Database::table('blocked_users')
+                    ->where('blocked_by_user_id', '=', $user->id)
+                    ->get(),
+                'blocked_user_id'
+            );
             session()->set('user', $user);
             $_SESSION['old'] = null;
             return redirect('/home')->with('success-message', 'You have successfully logged in.');

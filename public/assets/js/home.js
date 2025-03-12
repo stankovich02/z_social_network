@@ -202,7 +202,6 @@ function newPostLogic(){
         })
     })
 }
-newPostLogic();
 /*document.addEventListener("DOMContentLoaded", function () {
     let observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -235,7 +234,61 @@ newPostLogic();
         observer.observe(post);
     });
 });*/
-
+document.addEventListener("click", function (event) {
+    if(!event.target.classList.contains("more-opt-ic")){
+        document.querySelectorAll(".choose-post-option").forEach(chooseOption => {
+            chooseOption.style.display = "none";
+        })
+    }
+});
+const postMoreOptions = document.querySelectorAll(".post-more-options");
+postMoreOptions.forEach(postMoreOption => {
+    postMoreOption.addEventListener("click", function () {
+            const chooseOption = this.parentElement.querySelector(".choose-post-option");
+            if(chooseOption.style.display === "block"){
+                chooseOption.style.display = "none";
+            }
+            else{
+                chooseOption.style.display = "block";
+            }
+    })
+});
+const deletePostBtns = document.querySelectorAll(".delete-post");
+deletePostBtns.forEach(deletePostBtn => {
+    deletePostBtn.addEventListener("click", function () {
+        const postId = this.getAttribute("data-id");
+        $.ajax({
+            url: "/posts/" + postId,
+            type: "DELETE",
+            success: function(){
+                deletePostBtn.parentElement.parentElement.parentElement.remove();
+            },
+            error: function(err){
+                console.log(err);
+            }
+        })
+    })
+});
+const blockUserBtns = document.querySelectorAll(".block-user");
+blockUserBtns.forEach(blockUserBtn => {
+    blockUserBtn.addEventListener("click", function () {
+        const userId = this.getAttribute("data-id");
+        $.ajax({
+            url: "/block-user",
+            type: "POST",
+            data: {
+                user_id: userId
+            },
+            success: function(){
+                blockUserBtn.parentElement.parentElement.parentElement.remove();
+            },
+            error: function(err){
+                console.log(err);
+            }
+        })
+    })
+});
+newPostLogic();
 //id za sliku,fileinput,id za formu gde se dodaje slika, id za postBtn, id za textareu
 //*dodati fleg na kraju ako je popup i onda ga zatvoriti kad se post upise u bazu
 

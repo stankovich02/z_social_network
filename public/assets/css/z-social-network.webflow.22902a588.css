@@ -2379,6 +2379,7 @@ textarea.w-input, textarea.w-select {
   align-items: flex-start;
   padding: 20px;
   display: flex;
+  position: relative;
 }
 .single-post:last-child{
   border-bottom: 0;
@@ -4155,4 +4156,61 @@ textarea.w-input, textarea.w-select {
 }
 .disabled-new-post-btn{
   background-color: #808080;
+}
+.trash-icon{
+  width: 1rem;
+  height: 1rem;
+  margin-right: 5px;
+}
+.block-icon{
+    width: 1rem;
+    height: 1rem;
+    margin-right: 5px;
+}
+.post-more-options-wrapper{
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+
+}
+.choose-post-option{
+  box-shadow: rgba(255, 255, 255, 0.2) 0 0 15px, rgba(255, 255, 255, 0.15) 0 0 3px 1px;
+  background-color: black;
+  border-radius: 16px;
+  padding: 10px;
+  width: 200px;
+  font-weight: bold;
+  position: absolute;
+  top: 35px;
+  z-index: 5;
+  display: none;
+}
+.choose-post-option:hover{
+  background-color: #111212;
+}
+.single-post-option{
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.delete-post{
+    color: red;
+}
+.post-more-options{
+  color: #88888880;
+  transition: all 0.5s;
+  padding: 5px;
+  border-radius: 50%;
+}
+.post-more-options:hover{
+  color: #009dff;
+  background-color: #5b708366;
+}
+.non-clicked-post-more-options:hover{
+  color: #88888880;
+  background-color: black;
 }

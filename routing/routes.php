@@ -22,6 +22,7 @@ Router::middleware([\App\Middlewares\IsLoggedIn::class])->group(function () {
     Router::post('/delete-post-image', [\App\Controllers\Client\ImageController::class, 'deletePostImage'])->name('delete-post-image');
     Router::resource('/posts', \App\Controllers\Client\PostController::class);
     Router::post('/register-view', [\App\Controllers\Client\PostController::class, 'registerView'])->name('register-view');
+    Router::post('/block-user', [\App\Controllers\Client\UserController::class, 'blockUser'])->name('block-user');
 });
 
 

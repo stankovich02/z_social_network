@@ -75,7 +75,7 @@ class PostController extends Controller
 
 	public function destroy(string $id)
 	{
-		//
+		Post::delete($id);
 	}
     public function registerView(Request $request) : void
     {
