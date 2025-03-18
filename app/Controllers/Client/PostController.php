@@ -37,18 +37,16 @@ class PostController extends Controller
             ];
             ImagePost::create($newImagePost);
         }
-        $post = Post::with('user', 'images')->where('id', '=', $post->id)->first();
-        $images = [];
-        if($post->images){
-            foreach ($post->images as $image) {
-                $images[] = asset('assets/img/posts/' . $image->image);
-            }
+        $post = Post::with('user', 'image')->where('id', '=', $post->id)->first();
+        $image = null;
+        if($post->image){
+                $image = asset('assets/img/posts/' .$post->image[0]->image);
         }
         return response()->json([
             'id' => $post->id,
             'content' => $post->content,
             'created_at' => $this->calculatePostedDate($post->created_at),
-            'images' => $images,
+            'image' => $image,
             'user' => [
                 'id' => $post->user->id,
                 'photo' => asset('assets/img/users/' . $post->user->photo),
@@ -75,6 +73,10 @@ class PostController extends Controller
 
 	public function destroy(string $id)
 	{
+        $post = Post::with('image')->where('id', '=', $id)->first();
+        if($post->image){
+            unlink(public_path('assets/img/posts/' . $post->image[0]->image));
+        }
 		Post::delete($id);
 	}
     public function registerView(Request $request) : void

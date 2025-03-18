@@ -60,11 +60,7 @@
                                 </svg>
                             </div>
                             <div class="choose-post-option">
-                                @if($post->user_id === session()->get('user')->id)
-                                    <div class="single-post-option delete-post" data-id="{{$post->id}}"><div class="trash-icon w-embed"><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" height="100%" width="100%" class="iconify iconify--bx" role="img" aria-hidden="true" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M6 7H5v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7H6zm10.618-3L15 2H9L7.382 4H3v2h18V4z"></path></svg></div>Delete your post</div>
-                                @else
                                     <div class="single-post-option block-user" data-id="{{$post->user->id}}"><div class="block-icon w-embed"><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" height="100%" width="100%" class="iconify iconify--ic" role="img" aria-hidden="true" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2M4 12c0-4.42 3.58-8 8-8c1.85 0 3.55.63 4.9 1.69L5.69 16.9A7.9 7.9 0 0 1 4 12m8 8c-1.85 0-3.55-.63-4.9-1.69L18.31 7.1A7.9 7.9 0 0 1 20 12c0 4.42-3.58 8-8 8" fill="currentColor"></path></svg></div>Block &#64;{{$post->user->username}}</div>
-                                @endif
                             </div>
                         </div>
 
@@ -78,9 +74,9 @@
                             </div>
                             <div class="post-body">
                                 <p class="post-body-text">{{$post->content}}</p>
-                                @if($post->images)
+                                @if($post->image)
                                     <img
-                                            src="{{asset('assets/img/posts/' . $post->images[0]->image)}}"
+                                            src="{{asset('assets/img/posts/' . $post->image[0]->image)}}"
                                             loading="lazy"
                                             sizes="100vw"
                                             alt=""
@@ -108,7 +104,7 @@
                                             ></path>
                                         </svg>
                                     </div>
-                                    <div class="post-reaction-stats-text">0</div>
+                                    <div class="post-reaction-stats-text"></div>
                                 </div>
                                 <div class="post-reposted-stats">
                                     <div class="post-stats-icon w-embed">
@@ -126,7 +122,7 @@
                                             <path fill="currentColor" d="M19 7a1 1 0 0 0-1-1h-8v2h7v5h-3l3.969 5L22 13h-3zM5 17a1 1 0 0 0 1 1h8v-2H7v-5h3L6 6l-4 5h3z"></path>
                                         </svg>
                                     </div>
-                                    <div class="post-reaction-stats-text">0</div>
+                                    <div class="post-reaction-stats-text"></div>
                                 </div>
                                 <div class="post-likes-stats">
                                     <div class="post-stats-icon w-embed">
@@ -147,7 +143,7 @@
                                             ></path>
                                         </svg>
                                     </div>
-                                    <div class="post-reaction-stats-text">0</div>
+                                    <div class="post-reaction-stats-text"></div>
                                 </div>
                                 <div class="post-views-stats">
                                     <div class="post-stats-icon w-embed">
@@ -165,7 +161,7 @@
                                             <path fill="currentColor" d="M4 9h4v11H4zm12 4h4v7h-4zm-6-9h4v16h-4z"></path>
                                         </svg>
                                     </div>
-                                    <div class="post-reaction-stats-text">{{$post->views}}</div>
+                                    <div class="post-reaction-stats-text">{{$post->views > 0 ? $post->views : ''}}</div>
                                 </div>
                             </div>
                         </div>
@@ -174,7 +170,6 @@
 
             @endforeach
         </div>
-
     </section>
 
 

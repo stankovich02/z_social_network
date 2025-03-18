@@ -2,12 +2,16 @@
 
 namespace App\Controllers\Client;
 
+use App\Models\Post;
+use App\Models\User;
+use App\Traits\CalculateDate;
 use NovaLite\Database\Database;
 use NovaLite\Http\Controller;
 use NovaLite\Http\RedirectResponse;
 
 class ProfileController extends Controller
 {
+    use CalculateDate;
     public function index(string $username) : string|RedirectResponse
     {
         $profileUser = Database::table('users')
@@ -23,6 +27,18 @@ class ProfileController extends Controller
         if(in_array($profileUser->id, $blockedUsers)) {
             return redirect()->to('home');
         }
-        return view('pages.client.profile');
+        $posts = Post::with('user','image')->where('user_id', '=',$profileUser->id)->orderBy('id','desc')->get();
+        $numOfPosts = (count($posts) == 0 || count($posts) > 1) ? count($posts) . ' posts' : count($posts) . ' post';
+        foreach ($posts as $post) {
+            $post->created_at = $this->calculatePostedDate($post->created_at);
+        }
+        $joinedDate = date('F Y', strtotime(session()->get('user')->created_at));
+        $user = User::where('username', '=', $username)->first();
+        return view('pages.client.profile', [
+            'posts' => $posts,
+            'numOfPosts' => $numOfPosts,
+            'joinedDate' => $joinedDate,
+            'user' => $user,
+        ]);
     }
 }

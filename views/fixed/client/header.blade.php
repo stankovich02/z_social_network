@@ -3,7 +3,7 @@
         <a href="" aria-current="page" class="w-inline-block w--current"><img src="{{asset("assets/img/67b61da06092cd17329df26d/67c47292b287cfef93ba2a67_logo2.png")}}" loading="lazy" alt="" class="logo" /></a>
         <div class="menu">
             @foreach(App\Models\Nav::with('icon')->get() as $index => $nav)
-                    <a href="@if($nav->route === '/profile') {{$nav->route . "/" . session()->get('user')->username}} @else {{$nav->route}} @endif" class="single-link w-inline-block">
+                    <a href="@if($nav->route === '/') {{$nav->route . session()->get('user')->username}} @else {{$nav->route}} @endif" class="single-link w-inline-block">
                         <div class="icon-embed-medium link-icon w-embed">
                             <svg
                                     xmlns="http://www.w3.org/2000/svg"

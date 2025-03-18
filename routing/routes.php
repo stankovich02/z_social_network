@@ -16,7 +16,7 @@ Router::middleware([\App\Middlewares\IsLoggedIn::class])->group(function () {
     Router::get('/messages', [\App\Controllers\Client\MessageController::class, 'index']);
     Router::get('/notifications', [\App\Controllers\Client\NotificationController::class, 'index']);
     Router::get('/logout', [\App\Controllers\AuthController::class, 'logout'])->name('logout');
-    Router::get('/profile/{username}', [\App\Controllers\Client\ProfileController::class, 'index'])->name('profile');
+    Router::get('/{username}', [\App\Controllers\Client\ProfileController::class, 'index'])->name('profile');
     Router::get('/search', [\App\Controllers\Client\ExploreController::class, 'search'])->name('search');
     Router::post('/upload-post-image', [\App\Controllers\Client\ImageController::class, 'uploadPostImage'])->name('upload-post-image');
     Router::post('/delete-post-image', [\App\Controllers\Client\ImageController::class, 'deletePostImage'])->name('delete-post-image');

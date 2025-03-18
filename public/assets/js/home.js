@@ -26,27 +26,29 @@ function newPostLogic(){
                 removePhotoDiv.classList.add("remove-photo");
                 removePhotoDiv.classList.add("w-embed");
                 removePhotoDiv.innerHTML = `
-             <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    xmlns:xlink="http://www.w3.org/1999/xlink"
-                                    aria-hidden="true"
-                                    role="img"
-                                    class="iconify iconify--ic"
-                                    width="100%"
-                                    height="100%"
-                                    preserveAspectRatio="xMidYMid meet"
-                                    viewBox="0 0 24 24"
-                            >
-                                <path fill="currentColor" d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12z"></path>
-                            </svg>
+         <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                xmlns:xlink="http://www.w3.org/1999/xlink"
+                                aria-hidden="true"
+                                role="img"
+                                class="iconify iconify--ic"
+                                width="100%"
+                                height="100%"
+                                preserveAspectRatio="xMidYMid meet"
+                                viewBox="0 0 24 24"
+                        >
+                            <path fill="currentColor" d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12z"></path>
+                        </svg>
 
-            `;
+        `;
                 uploadedPostImageDiv.appendChild(removePhotoDiv);
                 newFormBlock.appendChild(uploadedPostImageDiv);
-                const postBtn = document.querySelector("#feedPostBtn");
-                postBtn.classList.contains("disabled-new-post-btn") ? postBtn.classList.remove("disabled-new-post-btn") : null;
-                postBtn.disabled ? postBtn.disabled = false : null;
-
+                let uploadPostImage = document.querySelector(".upload-post-image");
+                let fileInput = document.querySelector("#newFormBlock #fileInput");
+                fileInput.remove();
+                uploadPostImage.remove();
+                let postOptions = document.querySelector("#feedNewPost .post-options");
+                postOptions.style.justifyContent = "flex-end";
                 const removePhotoIcon = document.querySelector(".remove-photo");
                 removePhotoIcon.addEventListener("click", function () {
                     $.ajax({
@@ -57,25 +59,33 @@ function newPostLogic(){
                         },
                         success: function(){
                             uploadedPostImageDiv.remove();
+                            writeInputAndIcon();
                             postBtn.classList.add("disabled-new-post-btn");
                             postBtn.disabled = true;
+                            newPostLogic();
                         },
                         error: function(err){
                             console.log(err)
                         }
                     })
                 })
+                const postBtn = document.querySelector("#feedPostBtn");
+                postBtn.classList.contains("disabled-new-post-btn") ? postBtn.classList.remove("disabled-new-post-btn") : null;
+                postBtn.disabled ? postBtn.disabled = false : null;
             },
             error: function(err){
                 console.log(err)
             }
         })
     });
-    document.querySelector("#feedNewPost .new-post-body").addEventListener("keyup", function () {
-        const postBtn = document.querySelector("#feedPostBtn");
-        postBtn.disabled = this.value.trim() === "";
-        this.value.trim() === "" ? postBtn.classList.add("disabled-new-post-btn") : postBtn.classList.remove("disabled-new-post-btn");
-    });
+}
+document.querySelector("#feedNewPost .new-post-body").addEventListener("keyup", function () {
+    const postBtn = document.querySelector("#feedPostBtn");
+    postBtn.disabled = this.value.trim() === "";
+    this.value.trim() === "" ? postBtn.classList.add("disabled-new-post-btn") : postBtn.classList.remove("disabled-new-post-btn");
+});
+sendPost();
+function sendPost(){
     document.querySelector("#feedPostBtn").addEventListener("click",function (){
         const textarea = document.querySelector("#feedNewPost .new-post-body");
         const addedImage = document.querySelector(".uploaded-post-image img");
@@ -92,6 +102,16 @@ function newPostLogic(){
                 const postsSection = document.querySelector("#posts");
                 let newPostHtml = `
                    <div class="single-post" data-id="${post.id}">
+                    <div class="post-more-options-wrapper">
+                        <div class="more-options w-embed post-more-options">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--ph more-opt-ic" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 256">
+                                <path fill="currentColor" d="M144 128a16 16 0 1 1-16-16a16 16 0 0 1 16 16m-84-16a16 16 0 1 0 16 16a16 16 0 0 0-16-16m136 0a16 16 0 1 0 16 16a16 16 0 0 0-16-16"></path>
+                            </svg>
+                        </div>
+                        <div class="choose-post-option">
+                                <div class="single-post-option delete-post" data-id="${post.id}"><div class="trash-icon w-embed"><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" height="100%" width="100%" class="iconify iconify--bx" role="img" aria-hidden="true" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M6 7H5v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7H6zm10.618-3L15 2H9L7.382 4H3v2h18V4z"></path></svg></div>Delete</div>
+                        </div>
+                    </div>
             <img src="${post.user.photo}" loading="eager" alt="" class="user-image" />
             <div class="post-info-and-body">
                 <div class="post-info">
@@ -101,9 +121,9 @@ function newPostLogic(){
                     <div class="posted-on-date-text">now</div>
                 </div>
                 <div class="post-body"><p class="post-body-text">${post.content}</p></div>`;
-                if(post.images){
+                if(post.image){
                     newPostHtml += `<img
-                            src="${post.images[0]}"
+                            src="${post.image}"
                             loading="lazy"
                             sizes="100vw"
                             alt=""
@@ -130,7 +150,7 @@ function newPostLogic(){
                                 ></path>
                             </svg>
                         </div>
-                        <div class="post-reaction-stats-text">0</div>
+                        <div class="post-reaction-stats-text"></div>
                     </div>
                     <div class="post-reposted-stats">
                         <div class="post-stats-icon w-embed">
@@ -148,7 +168,7 @@ function newPostLogic(){
                                 <path fill="currentColor" d="M19 7a1 1 0 0 0-1-1h-8v2h7v5h-3l3.969 5L22 13h-3zM5 17a1 1 0 0 0 1 1h8v-2H7v-5h3L6 6l-4 5h3z"></path>
                             </svg>
                         </div>
-                        <div class="post-reaction-stats-text">0</div>
+                        <div class="post-reaction-stats-text"></div>
                     </div>
                     <div class="post-likes-stats">
                         <div class="post-stats-icon w-embed">
@@ -169,7 +189,7 @@ function newPostLogic(){
                                 ></path>
                             </svg>
                         </div>
-                        <div class="post-reaction-stats-text">0</div>
+                        <div class="post-reaction-stats-text"></div>
                     </div>
                     <div class="post-views-stats">
                         <div class="post-stats-icon w-embed">
@@ -187,13 +207,19 @@ function newPostLogic(){
                                 <path fill="currentColor" d="M4 9h4v11H4zm12 4h4v7h-4zm-6-9h4v16h-4z"></path>
                             </svg>
                         </div>
-                        <div class="post-reaction-stats-text">0</div>
+                        <div class="post-reaction-stats-text"></div>
                     </div>
                 </div>
             </div>
         </div
             `;
                 postsSection.insertAdjacentHTML('afterbegin', newPostHtml);
+                if(!document.querySelector(".hidden-file-input")){
+                    writeInputAndIcon();
+                }
+                document.querySelector("#feedPostBtn").classList.add("disabled-new-post-btn");
+                document.querySelector("#feedPostBtn").disabled = true;
+                deletePostLogic();
                 newPostLogic();
             },
             error: function (err){
@@ -201,6 +227,79 @@ function newPostLogic(){
             }
         })
     })
+}
+document.addEventListener("click", function (event) {
+    if (event.target.parentElement.classList.contains("post-more-options")) {
+        const chooseOption = event.target.parentElement.parentElement.querySelector(".choose-post-option");
+
+        chooseOption.style.display = (chooseOption.style.display === "block") ? "none" : "block";
+    }
+});
+function deletePostLogic(){
+    const deletePostBtns = document.querySelectorAll(".delete-post");
+    deletePostBtns.forEach(deletePostBtn => {
+        deletePostBtn.addEventListener("click", function () {
+            const postId = this.getAttribute("data-id");
+            $.ajax({
+                url: "/posts/" + postId,
+                type: "DELETE",
+                success: function(){
+                    deletePostBtn.parentElement.parentElement.parentElement.remove();
+                    if(location.href.includes("profile")){
+                        let numOfPosts = document.querySelector(".num-of-posts");
+                        let numOfPostsText = numOfPosts.textContent;
+                        let numOfPostsArr = numOfPostsText.split(" ");
+                        let numOfPostsNum = parseInt(numOfPostsArr[0]);
+                        numOfPostsNum--;
+                        if(numOfPostsNum === 1){
+                            numOfPosts.textContent = numOfPostsNum + " post";
+                        }
+                        else{
+                            numOfPosts.textContent = numOfPostsNum + " posts";
+                        }
+                    }
+                },
+                error: function(err){
+                    console.log(err);
+                }
+            })
+        })
+    });
+}
+function writeInputAndIcon(){
+    let form = document.querySelector("#newFormBlock form");
+    let fileInput = document.createElement("input");
+    fileInput.type = "file";
+    fileInput.id = "fileInput";
+    fileInput.name = "post-image";
+    fileInput.classList.add("hidden-file-input");
+    form.appendChild(fileInput);
+    let postOptions = document.querySelector("#feedNewPost .post-options");
+    postOptions.style.justifyContent = 'space-between';
+    let uploadPostImage = document.createElement("div");
+    uploadPostImage.classList.add("upload-post-image");
+    uploadPostImage.classList.add("w-embed");
+    uploadPostImage.classList.add("icon-embed-xsmall");
+    uploadPostImage.innerHTML = `
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                xmlns:xlink="http://www.w3.org/1999/xlink"
+                                aria-hidden="true"
+                                role="img"
+                                class="iconify iconify--carbon"
+                                width="100%"
+                                height="100%"
+                                preserveAspectRatio="xMidYMid meet"
+                                viewBox="0 0 32 32"
+                        >
+                            <path fill="currentColor" d="M19 14a3 3 0 1 0-3-3a3 3 0 0 0 3 3m0-4a1 1 0 1 1-1 1a1 1 0 0 1 1-1"></path>
+                            <path
+                                    fill="currentColor"
+                                    d="M26 4H6a2 2 0 0 0-2 2v20a2 2 0 0 0 2 2h20a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2m0 22H6v-6l5-5l5.59 5.59a2 2 0 0 0 2.82 0L21 19l5 5Zm0-4.83l-3.59-3.59a2 2 0 0 0-2.82 0L18 19.17l-5.59-5.59a2 2 0 0 0-2.82 0L6 17.17V6h20Z"
+                            ></path>
+                        </svg>
+                            `;
+    postOptions.insertAdjacentHTML('afterbegin', uploadPostImage.outerHTML);
 }
 /*document.addEventListener("DOMContentLoaded", function () {
     let observer = new IntersectionObserver((entries) => {
@@ -241,8 +340,8 @@ document.addEventListener("click", function (event) {
         })
     }
 });
-const postMoreOptions = document.querySelectorAll(".post-more-options");
-postMoreOptions.forEach(postMoreOption => {
+const postMoreOptionsBlock = document.querySelectorAll(".post-more-options");
+postMoreOptionsBlock.forEach(postMoreOption => {
     postMoreOption.addEventListener("click", function () {
             const chooseOption = this.parentElement.querySelector(".choose-post-option");
             if(chooseOption.style.display === "block"){
@@ -251,22 +350,6 @@ postMoreOptions.forEach(postMoreOption => {
             else{
                 chooseOption.style.display = "block";
             }
-    })
-});
-const deletePostBtns = document.querySelectorAll(".delete-post");
-deletePostBtns.forEach(deletePostBtn => {
-    deletePostBtn.addEventListener("click", function () {
-        const postId = this.getAttribute("data-id");
-        $.ajax({
-            url: "/posts/" + postId,
-            type: "DELETE",
-            success: function(){
-                deletePostBtn.parentElement.parentElement.parentElement.remove();
-            },
-            error: function(err){
-                console.log(err);
-            }
-        })
     })
 });
 const blockUserBtns = document.querySelectorAll(".block-user");

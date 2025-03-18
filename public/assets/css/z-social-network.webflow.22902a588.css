@@ -2313,6 +2313,8 @@ textarea.w-input, textarea.w-select {
 
 .user-image {
   border-radius: 50%;
+  width: 40px;
+  height: 40px;
 }
 
 .post-creating {
@@ -2433,7 +2435,9 @@ textarea.w-input, textarea.w-select {
   margin-top: 15px;
   display: flex;
 }
-
+.post-reactions .post-stats-icon{
+  cursor: pointer;
+}
 .post-reactions.single-post-reactions {
   border-top: 1px solid #88888880;
   border-bottom: 1px solid #88888880;
@@ -2473,10 +2477,6 @@ textarea.w-input, textarea.w-select {
   align-items: center;
   width: 25%;
   display: flex;
-}
-
-.post-image {
-  max-height: 300px;
 }
 
 .post-video {
@@ -2564,6 +2564,8 @@ textarea.w-input, textarea.w-select {
 
 .search-result-user-image {
   border-radius: 50%;
+  width: 40px;
+  height: 40px;
 }
 
 .search-wrapper {
@@ -4137,18 +4139,23 @@ textarea.w-input, textarea.w-select {
 .uploaded-post-image{
   display: inline-block;
   position: relative;
-  width: auto;
+  width: 100%;
+}
+.uploaded-post-image img{
+  width: 100%;
+  border-radius: 20px;
 }
 .remove-photo{
   width: 1.5rem;
   height: 1.5rem;
   position: absolute;
-  top: 5px;
-  right: 5px;
+  top: 10px;
+  right: 10px;
   padding: 3px;
   cursor: pointer;
   background-color: rgba(15, 20, 25, 0.75);
   transition: all 0.5s;
+  border-radius: 50%;
   color: white;
 }
 .remove-photo:hover{
@@ -4195,7 +4202,6 @@ textarea.w-input, textarea.w-select {
   cursor: pointer;
   display: flex;
   align-items: center;
-  justify-content: center;
 }
 .delete-post{
     color: red;
@@ -4213,4 +4219,8 @@ textarea.w-input, textarea.w-select {
 .non-clicked-post-more-options:hover{
   color: #88888880;
   background-color: black;
+}
+.single-post .post-image{
+  width: 100%;
+  border-radius: 20px;
 }
