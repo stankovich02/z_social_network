@@ -4,6 +4,7 @@ namespace App\Models;
 
 use NovaLite\Database\Model;
 use NovaLite\Database\Relations\BelongsTo;
+use NovaLite\Database\Relations\HasMany;
 
 class User extends Model
 {
@@ -32,5 +33,17 @@ class User extends Model
     public function role() : BelongsTo
     {
         return $this->belongsTo(Role::class, 'role_id');
+    }
+    public function posts() : HasMany
+    {
+        return $this->hasMany(Post::class, 'user_id');
+    }
+    public function likedPosts() : HasMany
+    {
+        return $this->hasMany(LikedPost::class, 'user_id');
+    }
+    public function notifications() : HasMany
+    {
+        return $this->hasMany(Notification::class, 'target_user_id');
     }
 }

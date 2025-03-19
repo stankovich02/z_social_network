@@ -26,4 +26,12 @@ class Post extends Model
     {
         return $this->hasMany(ImagePost::class, 'post_id', 'id');
     }
+    public function likes() : HasMany
+    {
+        return $this->hasMany(LikedPost::class, 'post_id', 'id');
+    }
+    public function likesCount(int $id) : int
+    {
+        return LikedPost::where('post_id', '=', $id)->count();
+    }
 }

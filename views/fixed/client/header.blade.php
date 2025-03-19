@@ -5,6 +5,14 @@
             @foreach(App\Models\Nav::with('icon')->get() as $index => $nav)
                     <a href="@if($nav->route === '/') {{$nav->route . session()->get('user')->username}} @else {{$nav->route}} @endif" class="single-link w-inline-block">
                         <div class="icon-embed-medium link-icon w-embed">
+                            <?php
+                            $newNotifications = App\Models\Notification::where('is_read','=',0)->where('target_user_id', '=', session()->get('user')->id)->count();
+                            ?>
+                            @if($newNotifications > 0 && $nav->name === 'Notifications')
+                                <div class="numOfNewMessOrNotifications">
+                                    <p>{{$newNotifications}}</p>
+                                </div>
+                            @endif
                             <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     xmlns:xlink="http://www.w3.org/1999/xlink"

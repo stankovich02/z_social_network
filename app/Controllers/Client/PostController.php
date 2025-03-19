@@ -3,9 +3,12 @@
 namespace App\Controllers\Client;
 
 use App\Models\ImagePost;
+use App\Models\LikedPost;
+use App\Models\Notification;
 use App\Models\Post;
 use App\Traits\CalculateDate;
 use DateTime;
+use NovaLite\Database\Database;
 use NovaLite\Http\Controller;
 use NovaLite\Http\RedirectResponse;
 use NovaLite\Http\Request;
@@ -63,6 +66,10 @@ class PostController extends Controller
 	public function show(string $username, string $id)
 	{
         $post = Post::with('user', 'image')->where('id', '=', $id)->first();
+        $post->number_of_likes = $post->likesCount($post->id);
+        $post->user_liked = LikedPost::where('user_id', '=', session()->get('user')->id)
+            ->where('post_id', '=', $post->id)
+            ->count();
         $date = new DateTime($post->created_at);
         $postedOn = $date->format("g:i A - M j, Y");
         $splitDate = explode('-', $postedOn);
@@ -105,6 +112,46 @@ class PostController extends Controller
             $post->views += 1;
             $post->save();
         }
+    }
+    public function likePost(string $id)
+    {
+        $alreadyLiked = LikedPost::where('user_id', '=', session()->get('user')->id)
+            ->where('post_id', '=', $id)
+            ->first();
+        if($alreadyLiked){
+            Database::table('liked_posts')
+                     ->where('post_id', '=', $id)
+                     ->where('user_id', '=', session()->get('user')->id)
+                     ->delete();
+        }
+        else{
+            $likedPost = [
+                'user_id' => session()->get('user')->id,
+                'post_id' => $id
+            ];
+            LikedPost::create($likedPost);
+            $post = Post::with('user')->where('id', '=', $id)->first();
+            if($post->user_id !== session()->get('user')->id){
+                $newNotification = [
+                    'notification_type_id' => Notification::NOTIFICATION_TYPE_LIKE,
+                    'user_id' => session()->get('user')->id,
+                    'target_user_id' => $post->user->id,
+                    'link' => route('post', ['username' => $post->user->username, 'id' => $post->id])
+                ];
+                $notificationExist = Notification::where('notification_type_id', '=', $newNotification['notification_type_id'])
+                    ->where('user_id', '=', $newNotification['user_id'])
+                    ->where('target_user_id', '=', $newNotification['target_user_id'])
+                    ->where('link', '=', $newNotification['link'])
+                    ->first();
+                if(!$notificationExist){
+                    Notification::create($newNotification);
+                }
+            }
+        }
+        $numOfLikes = LikedPost::where('post_id', '=', $id)->count();
+        return response()->json([
+            'likes' => $numOfLikes
+        ]);
     }
     public function navigateToPost(string $id) : Response
     {

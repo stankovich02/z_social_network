@@ -11,7 +11,7 @@ document.addEventListener("click", function (event) {
         if(post.classList.contains("single-post")){
             let postId = post.getAttribute("data-id");
             $.ajax({
-                url: '/navigate-to-post/' + postId,
+                url: '/posts/navigate/' + postId,
                 type: 'GET',
                 success: function (link) {
                     window.location.href = link.post_link;
@@ -27,7 +27,7 @@ document.addEventListener("click", function (event) {
                 if(post.classList.contains("single-post")){
                     let postId = post.getAttribute("data-id");
                     $.ajax({
-                        url: '/navigate-to-post/' + postId,
+                        url: '/posts/navigate/' + postId,
                         type: 'GET',
                         success: function (link) {
                             window.location.href = link.post_link;
@@ -69,6 +69,28 @@ document.addEventListener("click", function (event) {
             error: function(err){
                 console.log(err);
             }
+        })
+    }
+    if(event.target.parentElement.parentElement.classList.contains("post-likes-stats")){
+        let icon = event.target;
+        let postId = icon.parentElement.getAttribute("data-id");
+        $.ajax({
+            url: `/posts/${postId}/like`,
+            type: "POST",
+            success: function(data){
+                if(icon.classList.contains("fa-regular")){
+                    icon.classList.remove("fa-regular");
+                    icon.classList.add("fa-solid");
+                    icon.classList.add("likedPost");
+                }
+                else{
+                    icon.classList.remove("fa-solid");
+                    icon.classList.remove("likedPost");
+                    icon.classList.add("fa-regular");
+                }
+                let postLikesStats = event.target.parentElement.parentElement.querySelector(".post-reaction-stats-text");
+                postLikesStats.textContent = data.likes > 0 ? data.likes : "";
+            },
         })
     }
 });

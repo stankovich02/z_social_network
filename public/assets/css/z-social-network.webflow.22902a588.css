@@ -2133,6 +2133,7 @@ textarea.w-input, textarea.w-select {
   color: #fff;
   width: 2rem;
   height: 2rem;
+  position: relative;
 }
 
 .link-text {
@@ -4279,18 +4280,43 @@ textarea.w-input, textarea.w-select {
   text-decoration: none;
   color: white;
 }
-.post-reactions svg,.post-reaction-stats-text{
+.post-reactions i,.post-reaction-stats-text{
   transition: all 0.5s;
 }
-.post-comment-stats svg:hover{
+.post-comment-stats i:hover{
   color: #009dff;
 }
-.post-reposted-stats svg:hover{
+.post-reposted-stats i:hover{
   color: #33f63a;
 }
-.post-likes-stats svg:hover{
+.post-likes-stats i:hover, .likedPost{
   color: #ff008c;
 }
 .post-views-stats:hover{
   color: #009dff;
 }
+.post-info a{
+  text-decoration: none;
+}
+.single-notification-link{
+  text-decoration: none;
+}
+.single-notification-link .liked-info .text-block{
+  color: white;
+}
+.numOfNewMessOrNotifications{
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #009dff;
+  border-radius: 50%;
+  font-size: 11px;
+  width: 15px;
+  height: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.numOfNewMessOrNotifications p{
+  margin-bottom: 0;
+ }
