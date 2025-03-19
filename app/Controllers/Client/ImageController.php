@@ -20,10 +20,11 @@ class ImageController extends Controller
     }
     public function deletePostImage(Request $request) : void
     {
-        $imgPath = $request->input('imgPath');
+        $imgPath = $request->query('imgPath');
         $explodedPath = explode('/', $imgPath);
         $imgName = end($explodedPath);
-        $path = public_path('/assets/img/posts/' . $imgName);
+        $path = public_path('assets/img/posts/' . $imgName);
+
         unlink($path);
     }
 }

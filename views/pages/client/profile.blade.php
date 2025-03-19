@@ -76,7 +76,7 @@
     </div>
     <div id="posts">
         @foreach($posts as $index => $post)
-                <div class="single-post" data-id="{{$post->id}}">
+                <a href="{{route('post', ['username' => $post->user->username, 'id' => $post->id])}}" class="single-post" data-id="{{$post->id}}">
                     <div class="post-more-options-wrapper">
                         <div class="more-options w-embed post-more-options">
                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--ph more-opt-ic" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 256">
@@ -188,7 +188,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </a>
         @endforeach
     </div>
 </section>

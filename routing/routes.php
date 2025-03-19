@@ -1,7 +1,7 @@
 <?php
 
+use App\Controllers\Client\PostController;
 use NovaLite\Routing\Router;
-/*Router::view('/profile', 'pages.client.profile');*/
 
 Router::middleware([\App\Middlewares\IsNotLoggedIn::class])->group(function () {
     Router::get('/', [\App\Controllers\AuthController::class, 'index'])->name('start');
@@ -9,6 +9,7 @@ Router::middleware([\App\Middlewares\IsNotLoggedIn::class])->group(function () {
     Router::post('/login', [\App\Controllers\AuthController::class, 'login'])->name('login');
     Router::get('/verification/{token}', [\App\Controllers\AuthController::class, 'verification'])->name('verification');
 });
+
 
 Router::middleware([\App\Middlewares\IsLoggedIn::class])->group(function () {
     Router::get('/home', [\App\Controllers\Client\HomeController::class, 'index'])->name('home');
@@ -18,12 +19,24 @@ Router::middleware([\App\Middlewares\IsLoggedIn::class])->group(function () {
     Router::get('/logout', [\App\Controllers\AuthController::class, 'logout'])->name('logout');
     Router::get('/{username}', [\App\Controllers\Client\ProfileController::class, 'index'])->name('profile');
     Router::get('/search', [\App\Controllers\Client\ExploreController::class, 'search'])->name('search');
+
     Router::post('/upload-post-image', [\App\Controllers\Client\ImageController::class, 'uploadPostImage'])->name('upload-post-image');
-    Router::post('/delete-post-image', [\App\Controllers\Client\ImageController::class, 'deletePostImage'])->name('delete-post-image');
-    Router::resource('/posts', \App\Controllers\Client\PostController::class);
-    Router::post('/register-view', [\App\Controllers\Client\PostController::class, 'registerView'])->name('register-view');
+    Router::delete('/delete-post-image', [\App\Controllers\Client\ImageController::class, 'deletePostImage'])->name('delete-post-image');
+
+
+    Router::controller(PostController::class)->group(function () {
+        Router::resource('/posts');
+        Router::get('/{username}/status/{id}', 'show')->name('post');
+        Router::post('/register-view', 'registerView')->name('register-view');
+       /* Router::get('/get-post-link', 'getPostLink')->name('get-post-link');*/
+    });
+
+
     Router::post('/block-user', [\App\Controllers\Client\UserController::class, 'blockUser'])->name('block-user');
 });
+
+
+
 
 
 

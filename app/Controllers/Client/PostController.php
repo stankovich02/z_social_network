@@ -7,6 +7,7 @@ use App\Models\Post;
 use App\Traits\CalculateDate;
 use NovaLite\Http\Controller;
 use NovaLite\Http\Request;
+use NovaLite\Http\Response;
 
 class PostController extends Controller
 {
@@ -47,6 +48,7 @@ class PostController extends Controller
             'content' => $post->content,
             'created_at' => $this->calculatePostedDate($post->created_at),
             'image' => $image,
+            'post_link' => route('post', ['username' => $post->user->username, 'id' => $post->id]),
             'user' => [
                 'id' => $post->user->id,
                 'photo' => asset('assets/img/users/' . $post->user->photo),
@@ -56,9 +58,9 @@ class PostController extends Controller
         ]);
 	}
 
-	public function show(string $id)
+	public function show(string $username, string $id)
 	{
-		//
+		return view('pages.client.post');
 	}
 
 	public function edit(string $id)
@@ -88,4 +90,12 @@ class PostController extends Controller
             $post->save();
         }
     }
+/*    public function getPostLink(Request $request) : Response
+    {
+        $postId = $request->query('postId');
+        $post = Post::with('user')->where('id', '=',$postId)->first();
+        return response()->json([
+            'post_link' => route('post', ['username' => $post->user->username, 'id' => $post->id])
+        ]);
+    }*/
 }

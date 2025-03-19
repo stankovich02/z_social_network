@@ -33,7 +33,7 @@
             <div class="new-post new-post-popup-create">
                 <img src="{{asset('assets/img/67b61da06092cd17329df26d/67b9c46d9abe545630bb3f09_default.jpg')}}" loading="eager" alt="" class="user-image" />
                 <div class="post-creating">
-                    <div class="form-block w-form">
+                    <div class="form-block w-form" id="popupFormBlock">
                         <form
                                 id="wf-form-New-post"
                                 name="wf-form-New-post"
@@ -45,12 +45,13 @@
                                 data-turnstile-sitekey="0x4AAAAAAAQTptj2So4dx43e"
                         >
                             <textarea id="post-body-2" name="post-body-2" maxlength="5000" data-name="Post Body 2" placeholder="What is happening?!" class="new-post-body w-input"></textarea>
+                            <input type="file" id="fileInput" class="hidden-file-input" name="post-image">
                         </form>
                         <div class="w-form-done"><div>Thank you! Your submission has been received!</div></div>
                         <div class="w-form-fail"><div>Oops! Something went wrong while submitting the form.</div></div>
                     </div>
                     <div class="post-options">
-                        <div class="icon-embed-xsmall w-embed">
+                        <div class="icon-embed-xsmall w-embed upload-post-image">
                             <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -69,7 +70,7 @@
                                 ></path>
                             </svg>
                         </div>
-                        <button  class="submit-post-btn w-button">Post</button>
+                        <button  class="submit-post-btn w-button disabled-new-post-btn" id="popupPostBtn" disabled>Post</button>
                     </div>
                 </div>
             </div>

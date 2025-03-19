@@ -1,11 +1,102 @@
+document.addEventListener("click", function (event) {
+    if (event.target.parentElement.classList.contains("post-more-options")) {
+        const chooseOption = event.target.parentElement.parentElement.querySelector(".choose-post-option");
 
+        chooseOption.style.display = (chooseOption.style.display === "block") ? "none" : "block";
+    }
+    if (event.target.classList.contains("delete-post")) {
+        const postId = event.target.getAttribute("data-id");
+        $.ajax({
+            url: "/posts/" + postId,
+            type: "DELETE",
+            success: function(){
+                event.target.parentElement.parentElement.parentElement.remove();
+                /*if(location.href.includes("profile")){
 
+                }*/
+            },
+            error: function(err){
+                console.log(err);
+            }
+        })
+    }
+});
+/*document.addEventListener("DOMContentLoaded", function () {
+    let observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                let post = entry.target;
+                let postId = post.getAttribute("data-id");
+                if (!post.dataset.viewed) {
+                    post.dataset.viewed = "true";
+                    $.ajax({
+                        url: "/register-view",
+                        type: "POST",
+                        data: {
+                            post_id: postId
+                        },
+                        success: function (data) {
+                            if (data.success) {
+
+                            }
+                        },
+                        error: function (err) {
+                            console.log(err);
+                        }
+                    })
+                }
+            }
+        });
+    }, { threshold: 1.0 });
+
+    document.querySelectorAll(".single-post").forEach(post => {
+        observer.observe(post);
+    });
+});*/
+document.addEventListener("click", function (event) {
+    if(!event.target.classList.contains("more-opt-ic")){
+        document.querySelectorAll(".choose-post-option").forEach(chooseOption => {
+            chooseOption.style.display = "none";
+        })
+    }
+});
+const postMoreOptionsBlock = document.querySelectorAll(".post-more-options");
+postMoreOptionsBlock.forEach(postMoreOption => {
+    postMoreOption.addEventListener("click", function () {
+            const chooseOption = this.parentElement.querySelector(".choose-post-option");
+            if(chooseOption.style.display === "block"){
+                chooseOption.style.display = "none";
+            }
+            else{
+                chooseOption.style.display = "block";
+            }
+    })
+});
+const blockUserBtns = document.querySelectorAll(".block-user");
+blockUserBtns.forEach(blockUserBtn => {
+    blockUserBtn.addEventListener("click", function () {
+        const userId = this.getAttribute("data-id");
+        $.ajax({
+            url: "/block-user",
+            type: "POST",
+            data: {
+                user_id: userId
+            },
+            success: function(){
+                blockUserBtn.parentElement.parentElement.parentElement.remove();
+            },
+            error: function(err){
+                console.log(err);
+            }
+        })
+    })
+});
 function newPostLogic(){
-    document.querySelector(".post-options .upload-post-image").addEventListener("click", function () {
-        document.getElementById("fileInput").click();
+    document.querySelector("#feedNewPost .post-options .upload-post-image").addEventListener("click", function () {
+        document.querySelector("#feedNewPost #fileInput").click();
     });
 
-    document.getElementById("fileInput").addEventListener("change", function () {
+    document.querySelector("#feedNewPost #fileInput").addEventListener("change", function () {
         let image = this.files[0];
         let formData = new FormData();
         formData.append("image", image);
@@ -16,7 +107,7 @@ function newPostLogic(){
             contentType: false,
             data: formData,
             success: function(imgPath){
-                const newFormBlock = document.querySelector("#newFormBlock");
+                const FormBlock = document.querySelector("#feedNewPost #newFormBlock");
                 let uploadedPostImageDiv = document.createElement('div');
                 uploadedPostImageDiv.classList.add("uploaded-post-image");
                 let img = document.createElement("img");
@@ -42,21 +133,19 @@ function newPostLogic(){
 
         `;
                 uploadedPostImageDiv.appendChild(removePhotoDiv);
-                newFormBlock.appendChild(uploadedPostImageDiv);
-                let uploadPostImage = document.querySelector(".upload-post-image");
-                let fileInput = document.querySelector("#newFormBlock #fileInput");
+                FormBlock.appendChild(uploadedPostImageDiv);
+                let uploadPostImage = document.querySelector("#feedNewPost .post-options .upload-post-image");
+                let fileInput = document.querySelector("#feedNewPost #fileInput");
                 fileInput.remove();
                 uploadPostImage.remove();
                 let postOptions = document.querySelector("#feedNewPost .post-options");
                 postOptions.style.justifyContent = "flex-end";
-                const removePhotoIcon = document.querySelector(".remove-photo");
+                const removePhotoIcon = document.querySelector("#feedNewPost .remove-photo");
+                const postBtn = document.querySelector("#feedPostBtn");
                 removePhotoIcon.addEventListener("click", function () {
                     $.ajax({
-                        url: "/delete-post-image",
-                        type: "POST",
-                        data: {
-                            imgPath: imgPath
-                        },
+                        url: "/delete-post-image?imgPath=" + encodeURIComponent(imgPath),
+                        type: "DELETE",
                         success: function(){
                             uploadedPostImageDiv.remove();
                             writeInputAndIcon();
@@ -69,7 +158,6 @@ function newPostLogic(){
                         }
                     })
                 })
-                const postBtn = document.querySelector("#feedPostBtn");
                 postBtn.classList.contains("disabled-new-post-btn") ? postBtn.classList.remove("disabled-new-post-btn") : null;
                 postBtn.disabled ? postBtn.disabled = false : null;
             },
@@ -79,16 +167,45 @@ function newPostLogic(){
         })
     });
 }
-document.querySelector("#feedNewPost .new-post-body").addEventListener("keyup", function () {
-    const postBtn = document.querySelector("#feedPostBtn");
-    postBtn.disabled = this.value.trim() === "";
-    this.value.trim() === "" ? postBtn.classList.add("disabled-new-post-btn") : postBtn.classList.remove("disabled-new-post-btn");
-});
-sendPost();
+function writeInputAndIcon(){
+    let form = document.querySelector("#feedNewPost form");
+    let fileInput = document.createElement("input");
+    fileInput.type = "file";
+    fileInput.id = "fileInput";
+    fileInput.name = "post-image";
+    fileInput.classList.add("hidden-file-input");
+    form.appendChild(fileInput);
+    let postOptions = document.querySelector("#feedNewPost .post-options");
+    postOptions.style.justifyContent = 'space-between';
+    let uploadPostImage = document.createElement("div");
+    uploadPostImage.classList.add("upload-post-image");
+    uploadPostImage.classList.add("w-embed");
+    uploadPostImage.classList.add("icon-embed-xsmall");
+    uploadPostImage.innerHTML = `
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                xmlns:xlink="http://www.w3.org/1999/xlink"
+                                aria-hidden="true"
+                                role="img"
+                                class="iconify iconify--carbon"
+                                width="100%"
+                                height="100%"
+                                preserveAspectRatio="xMidYMid meet"
+                                viewBox="0 0 32 32"
+                        >
+                            <path fill="currentColor" d="M19 14a3 3 0 1 0-3-3a3 3 0 0 0 3 3m0-4a1 1 0 1 1-1 1a1 1 0 0 1 1-1"></path>
+                            <path
+                                    fill="currentColor"
+                                    d="M26 4H6a2 2 0 0 0-2 2v20a2 2 0 0 0 2 2h20a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2m0 22H6v-6l5-5l5.59 5.59a2 2 0 0 0 2.82 0L21 19l5 5Zm0-4.83l-3.59-3.59a2 2 0 0 0-2.82 0L18 19.17l-5.59-5.59a2 2 0 0 0-2.82 0L6 17.17V6h20Z"
+                            ></path>
+                        </svg>
+                            `;
+    postOptions.insertAdjacentHTML('afterbegin', uploadPostImage.outerHTML);
+}
 function sendPost(){
     document.querySelector("#feedPostBtn").addEventListener("click",function (){
-        const textarea = document.querySelector("#feedNewPost .new-post-body");
-        const addedImage = document.querySelector(".uploaded-post-image img");
+        const textarea = document.querySelector("#post-body");
+        const addedImage = document.querySelector("#newFormBlock .uploaded-post-image img");
         $.ajax({
             url: '/posts',
             type: 'POST',
@@ -101,7 +218,7 @@ function sendPost(){
                 addedImage ? addedImage.parentElement.remove() : null;
                 const postsSection = document.querySelector("#posts");
                 let newPostHtml = `
-                   <div class="single-post" data-id="${post.id}">
+                    <div class="single-post" data-id="${post.id}">
                     <div class="post-more-options-wrapper">
                         <div class="more-options w-embed post-more-options">
                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--ph more-opt-ic" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 256">
@@ -121,16 +238,16 @@ function sendPost(){
                     <div class="posted-on-date-text">now</div>
                 </div>
                 <div class="post-body"><p class="post-body-text">${post.content}</p></div>`;
-                if(post.image){
-                    newPostHtml += `<img
+                    if(post.image){
+                        newPostHtml += `<img
                             src="${post.image}"
                             loading="lazy"
                             sizes="100vw"
                             alt=""
                             class="post-image"
                     />`;
-                }
-                newPostHtml += `<div class="post-reactions">
+                    }
+                    newPostHtml += `<div class="post-reactions">
                     <div class="post-comment-stats">
                         <div class="post-stats-icon w-embed">
                             <svg
@@ -210,17 +327,14 @@ function sendPost(){
                         <div class="post-reaction-stats-text"></div>
                     </div>
                 </div>
-            </div>
-        </div
-            `;
-                postsSection.insertAdjacentHTML('afterbegin', newPostHtml);
-                if(!document.querySelector(".hidden-file-input")){
+                    </div></div`;
+                    postsSection.insertAdjacentHTML('afterbegin', newPostHtml);
+                if(!document.querySelector("#feedNewPost #fileInput")){
                     writeInputAndIcon();
+                    newPostLogic();
                 }
                 document.querySelector("#feedPostBtn").classList.add("disabled-new-post-btn");
                 document.querySelector("#feedPostBtn").disabled = true;
-                deletePostLogic();
-                newPostLogic();
             },
             error: function (err){
                 console.log(err)
@@ -228,150 +342,11 @@ function sendPost(){
         })
     })
 }
-document.addEventListener("click", function (event) {
-    if (event.target.parentElement.classList.contains("post-more-options")) {
-        const chooseOption = event.target.parentElement.parentElement.querySelector(".choose-post-option");
-
-        chooseOption.style.display = (chooseOption.style.display === "block") ? "none" : "block";
-    }
-});
-function deletePostLogic(){
-    const deletePostBtns = document.querySelectorAll(".delete-post");
-    deletePostBtns.forEach(deletePostBtn => {
-        deletePostBtn.addEventListener("click", function () {
-            const postId = this.getAttribute("data-id");
-            $.ajax({
-                url: "/posts/" + postId,
-                type: "DELETE",
-                success: function(){
-                    deletePostBtn.parentElement.parentElement.parentElement.remove();
-                    if(location.href.includes("profile")){
-                        let numOfPosts = document.querySelector(".num-of-posts");
-                        let numOfPostsText = numOfPosts.textContent;
-                        let numOfPostsArr = numOfPostsText.split(" ");
-                        let numOfPostsNum = parseInt(numOfPostsArr[0]);
-                        numOfPostsNum--;
-                        if(numOfPostsNum === 1){
-                            numOfPosts.textContent = numOfPostsNum + " post";
-                        }
-                        else{
-                            numOfPosts.textContent = numOfPostsNum + " posts";
-                        }
-                    }
-                },
-                error: function(err){
-                    console.log(err);
-                }
-            })
-        })
-    });
-}
-function writeInputAndIcon(){
-    let form = document.querySelector("#newFormBlock form");
-    let fileInput = document.createElement("input");
-    fileInput.type = "file";
-    fileInput.id = "fileInput";
-    fileInput.name = "post-image";
-    fileInput.classList.add("hidden-file-input");
-    form.appendChild(fileInput);
-    let postOptions = document.querySelector("#feedNewPost .post-options");
-    postOptions.style.justifyContent = 'space-between';
-    let uploadPostImage = document.createElement("div");
-    uploadPostImage.classList.add("upload-post-image");
-    uploadPostImage.classList.add("w-embed");
-    uploadPostImage.classList.add("icon-embed-xsmall");
-    uploadPostImage.innerHTML = `
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                xmlns:xlink="http://www.w3.org/1999/xlink"
-                                aria-hidden="true"
-                                role="img"
-                                class="iconify iconify--carbon"
-                                width="100%"
-                                height="100%"
-                                preserveAspectRatio="xMidYMid meet"
-                                viewBox="0 0 32 32"
-                        >
-                            <path fill="currentColor" d="M19 14a3 3 0 1 0-3-3a3 3 0 0 0 3 3m0-4a1 1 0 1 1-1 1a1 1 0 0 1 1-1"></path>
-                            <path
-                                    fill="currentColor"
-                                    d="M26 4H6a2 2 0 0 0-2 2v20a2 2 0 0 0 2 2h20a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2m0 22H6v-6l5-5l5.59 5.59a2 2 0 0 0 2.82 0L21 19l5 5Zm0-4.83l-3.59-3.59a2 2 0 0 0-2.82 0L18 19.17l-5.59-5.59a2 2 0 0 0-2.82 0L6 17.17V6h20Z"
-                            ></path>
-                        </svg>
-                            `;
-    postOptions.insertAdjacentHTML('afterbegin', uploadPostImage.outerHTML);
-}
-/*document.addEventListener("DOMContentLoaded", function () {
-    let observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                let post = entry.target;
-                let postId = post.getAttribute("data-id");
-                if (!post.dataset.viewed) {
-                    post.dataset.viewed = "true";
-                    $.ajax({
-                        url: "/register-view",
-                        type: "POST",
-                        data: {
-                            post_id: postId
-                        },
-                        success: function (data) {
-                            if (data.success) {
-
-                            }
-                        },
-                        error: function (err) {
-                            console.log(err);
-                        }
-                    })
-                }
-            }
-        });
-    }, { threshold: 1.0 });
-
-    document.querySelectorAll(".single-post").forEach(post => {
-        observer.observe(post);
-    });
-});*/
-document.addEventListener("click", function (event) {
-    if(!event.target.classList.contains("more-opt-ic")){
-        document.querySelectorAll(".choose-post-option").forEach(chooseOption => {
-            chooseOption.style.display = "none";
-        })
-    }
-});
-const postMoreOptionsBlock = document.querySelectorAll(".post-more-options");
-postMoreOptionsBlock.forEach(postMoreOption => {
-    postMoreOption.addEventListener("click", function () {
-            const chooseOption = this.parentElement.querySelector(".choose-post-option");
-            if(chooseOption.style.display === "block"){
-                chooseOption.style.display = "none";
-            }
-            else{
-                chooseOption.style.display = "block";
-            }
-    })
-});
-const blockUserBtns = document.querySelectorAll(".block-user");
-blockUserBtns.forEach(blockUserBtn => {
-    blockUserBtn.addEventListener("click", function () {
-        const userId = this.getAttribute("data-id");
-        $.ajax({
-            url: "/block-user",
-            type: "POST",
-            data: {
-                user_id: userId
-            },
-            success: function(){
-                blockUserBtn.parentElement.parentElement.parentElement.remove();
-            },
-            error: function(err){
-                console.log(err);
-            }
-        })
-    })
-});
+sendPost();
 newPostLogic();
-//id za sliku,fileinput,id za formu gde se dodaje slika, id za postBtn, id za textareu
-//*dodati fleg na kraju ako je popup i onda ga zatvoriti kad se post upise u bazu
+document.querySelector("#feedNewPost .new-post-body").addEventListener("keyup", function () {
+    const postBtn = document.querySelector("#feedPostBtn");
+    postBtn.disabled = this.value.trim() === "";
+    this.value.trim() === "" ? postBtn.classList.add("disabled-new-post-btn") : postBtn.classList.remove("disabled-new-post-btn");
+});
 
