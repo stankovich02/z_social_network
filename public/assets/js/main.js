@@ -150,7 +150,6 @@ function newPostLogic(){
         })
     });
 }
-
 function sendPost(){
     document.querySelector("#popupPostBtn").addEventListener("click",function (){
         const textarea = document.querySelector("#post-body-2");

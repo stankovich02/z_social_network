@@ -2435,7 +2435,7 @@ textarea.w-input, textarea.w-select {
   color: #fff6;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
+  width: 70%;
   margin-top: 15px;
   display: flex;
 }
@@ -2446,13 +2446,16 @@ textarea.w-input, textarea.w-select {
   border-top: 1px solid #88888880;
   border-bottom: 1px solid #88888880;
   padding: 10px 5px;
+  width: 100%;
 }
-
+.single-post-comment-stats,.single-post-reposted-stats,.single-post-likes-stats{
+  width: 25%;
+}
 .post-comment-stats {
   grid-column-gap: 5px;
   grid-row-gap: 5px;
   align-items: center;
-  width: 25%;
+/*  width: 25%;*/
   display: flex;
 }
 
@@ -2479,7 +2482,7 @@ textarea.w-input, textarea.w-select {
   grid-column-gap: 5px;
   grid-row-gap: 5px;
   align-items: center;
-  width: 25%;
+/*  width: 25%;*/
   display: flex;
 }
 
@@ -4275,4 +4278,19 @@ textarea.w-input, textarea.w-select {
 .returnBackLink{
   text-decoration: none;
   color: white;
+}
+.post-reactions svg,.post-reaction-stats-text{
+  transition: all 0.5s;
+}
+.post-comment-stats svg:hover{
+  color: #009dff;
+}
+.post-reposted-stats svg:hover{
+  color: #33f63a;
+}
+.post-likes-stats svg:hover{
+  color: #ff008c;
+}
+.post-views-stats:hover{
+  color: #009dff;
 }

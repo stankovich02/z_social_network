@@ -20,6 +20,49 @@ document.addEventListener("click", function (event) {
             }
         })
     }
+    if(!event.target.classList.contains("more-opt-ic")){
+        document.querySelectorAll(".choose-post-option").forEach(chooseOption => {
+            chooseOption.style.display = "none";
+        })
+    }
+    let disallowedPostClicks = ["user-image","posted-by-fullname","post-ic","more-opt-ic", "choose-post-option", "delete-post"];
+    let allowedPostClicks = ["post-info", "single-post", "post-info-and-body", "post-body", "post-body-text", "post-reactions"];
+    if(allowedPostClicks.includes(event.target.className) && !disallowedPostClicks.includes(event.target.className)){
+        let post = event.target;
+        if(post.classList.contains("single-post")){
+            let postId = post.getAttribute("data-id");
+            $.ajax({
+                url: '/navigate-to-post/' + postId,
+                type: 'GET',
+                success: function (link) {
+                    window.location.href = link.post_link;
+                },
+                error: function () {
+                    console.log("error");
+                }
+            });
+        }
+        else{
+            while(!post.classList.contains("single-post")){
+                post = post.parentElement;
+                if(post.classList.contains("single-post")){
+                    let postId = post.getAttribute("data-id");
+                    $.ajax({
+                        url: '/navigate-to-post/' + postId,
+                        type: 'GET',
+                        success: function (link) {
+                            window.location.href = link.post_link;
+                        },
+                        error: function () {
+                            console.log("error");
+                        }
+                    });
+                    break;
+                }
+            }
+        }
+    }
+
 });
 /*document.addEventListener("DOMContentLoaded", function () {
     let observer = new IntersectionObserver((entries) => {
@@ -53,13 +96,6 @@ document.addEventListener("click", function (event) {
         observer.observe(post);
     });
 });*/
-document.addEventListener("click", function (event) {
-    if(!event.target.classList.contains("more-opt-ic")){
-        document.querySelectorAll(".choose-post-option").forEach(chooseOption => {
-            chooseOption.style.display = "none";
-        })
-    }
-});
 const postMoreOptionsBlock = document.querySelectorAll(".post-more-options");
 postMoreOptionsBlock.forEach(postMoreOption => {
     postMoreOption.addEventListener("click", function () {
@@ -91,7 +127,7 @@ blockUserBtns.forEach(blockUserBtn => {
         })
     })
 });
-function newPostLogic(){
+function feedNewPostLogic(){
     function writeInputAndIcon(){
         let form = document.querySelector("#feedNewPost form");
         let fileInput = document.createElement("input");
@@ -183,13 +219,13 @@ function newPostLogic(){
                         type: "DELETE",
                         success: function(){
                             uploadedPostImageDiv.remove();
-                            writeInputAndIcon();
+                            feedWriteInputAndIcon();
                             let textArea = document.querySelector("#feedNewPost .new-post-body");
                             if(textArea.value.trim() === ""){
                                 postBtn.classList.add("disabled-new-post-btn");
                                 postBtn.disabled = true;
                             }
-                            newPostLogic();
+                            feedNewPostLogic();
                         },
                         error: function(err){
                             console.log(err)
@@ -205,8 +241,7 @@ function newPostLogic(){
         })
     });
 }
-
-function sendPost(){
+function feedSendPost(){
     document.querySelector("#feedPostBtn").addEventListener("click",function (){
         const textarea = document.querySelector("#post-body");
         const addedImage = document.querySelector("#newFormBlock .uploaded-post-image img");
@@ -334,8 +369,8 @@ function sendPost(){
                     </div></div`;
                     postsSection.insertAdjacentHTML('afterbegin', newPostHtml);
                 if(!document.querySelector("#feedNewPost #fileInput")){
-                    writeInputAndIcon();
-                    newPostLogic();
+                    feedWriteInputAndIcon();
+                    feedNewPostLogic();
                 }
                 document.querySelector("#feedPostBtn").classList.add("disabled-new-post-btn");
                 document.querySelector("#feedPostBtn").disabled = true;
@@ -346,8 +381,44 @@ function sendPost(){
         })
     })
 }
-sendPost();
-newPostLogic();
+feedSendPost();
+feedNewPostLogic();
+function feedWriteInputAndIcon(){
+    console.log("ovo je doslo posle postavljanja posta")
+    let form = document.querySelector("#feedNewPost form");
+    let fileInput = document.createElement("input");
+    fileInput.type = "file";
+    fileInput.id = "fileInput";
+    fileInput.name = "post-image";
+    fileInput.classList.add("hidden-file-input");
+    form.appendChild(fileInput);
+    let postOptions = document.querySelector("#feedNewPost .post-options");
+    postOptions.style.justifyContent = 'space-between';
+    let uploadPostImage = document.createElement("div");
+    uploadPostImage.classList.add("upload-post-image");
+    uploadPostImage.classList.add("w-embed");
+    uploadPostImage.classList.add("icon-embed-xsmall");
+    uploadPostImage.innerHTML = `
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                xmlns:xlink="http://www.w3.org/1999/xlink"
+                                aria-hidden="true"
+                                role="img"
+                                class="iconify iconify--carbon"
+                                width="100%"
+                                height="100%"
+                                preserveAspectRatio="xMidYMid meet"
+                                viewBox="0 0 32 32"
+                        >
+                            <path fill="currentColor" d="M19 14a3 3 0 1 0-3-3a3 3 0 0 0 3 3m0-4a1 1 0 1 1-1 1a1 1 0 0 1 1-1"></path>
+                            <path
+                                    fill="currentColor"
+                                    d="M26 4H6a2 2 0 0 0-2 2v20a2 2 0 0 0 2 2h20a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2m0 22H6v-6l5-5l5.59 5.59a2 2 0 0 0 2.82 0L21 19l5 5Zm0-4.83l-3.59-3.59a2 2 0 0 0-2.82 0L18 19.17l-5.59-5.59a2 2 0 0 0-2.82 0L6 17.17V6h20Z"
+                            ></path>
+                        </svg>
+                            `;
+    postOptions.insertAdjacentHTML('afterbegin', uploadPostImage.outerHTML);
+}
 document.querySelector("#feedNewPost .new-post-body").addEventListener("keyup", function () {
     const postBtn = document.querySelector("#feedPostBtn");
     postBtn.disabled = this.value.trim() === "";

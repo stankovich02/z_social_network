@@ -1,6 +1,6 @@
 <div class="header">
     <div class="left-bar-menu">
-        <a href="" aria-current="page" class="w-inline-block w--current"><img src="{{asset("assets/img/67b61da06092cd17329df26d/67c47292b287cfef93ba2a67_logo2.png")}}" loading="lazy" alt="" class="logo" /></a>
+        <a href="{{route('home')}}" aria-current="page" class="w-inline-block w--current"><img src="{{asset("assets/img/67b61da06092cd17329df26d/67c47292b287cfef93ba2a67_logo2.png")}}" loading="lazy" alt="" class="logo" /></a>
         <div class="menu">
             @foreach(App\Models\Nav::with('icon')->get() as $index => $nav)
                     <a href="@if($nav->route === '/') {{$nav->route . session()->get('user')->username}} @else {{$nav->route}} @endif" class="single-link w-inline-block">

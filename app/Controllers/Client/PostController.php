@@ -7,6 +7,7 @@ use App\Models\Post;
 use App\Traits\CalculateDate;
 use DateTime;
 use NovaLite\Http\Controller;
+use NovaLite\Http\RedirectResponse;
 use NovaLite\Http\Request;
 use NovaLite\Http\Response;
 
@@ -105,12 +106,11 @@ class PostController extends Controller
             $post->save();
         }
     }
-/*    public function getPostLink(Request $request) : Response
+    public function navigateToPost(string $id) : Response
     {
-        $postId = $request->query('postId');
-        $post = Post::with('user')->where('id', '=',$postId)->first();
+        $post = Post::with('user')->where('id', '=',$id)->first();
         return response()->json([
             'post_link' => route('post', ['username' => $post->user->username, 'id' => $post->id])
         ]);
-    }*/
+    }
 }

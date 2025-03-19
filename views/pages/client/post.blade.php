@@ -48,7 +48,7 @@
             @endif
         </div>
         <div class="post-reactions single-post-reactions">
-            <div class="post-comment-stats">
+            <div class="post-comment-stats single-post-comment-stats">
                 <div class="post-stats-icon singe-post-stats-icon w-embed">
                     <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -69,7 +69,7 @@
                 </div>
                 <div class="post-reaction-stats-text"></div>
             </div>
-            <div class="post-reposted-stats">
+            <div class="post-reposted-stats  single-post-reposted-stats">
                 <div class="post-stats-icon singe-post-stats-icon w-embed">
                     <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -87,7 +87,7 @@
                 </div>
                 <div class="post-reaction-stats-text"></div>
             </div>
-            <div class="post-likes-stats">
+            <div class="post-likes-stats single-post-likes-stats">
                 <div class="post-stats-icon singe-post-stats-icon w-embed">
                     <svg
                             xmlns="http://www.w3.org/2000/svg"

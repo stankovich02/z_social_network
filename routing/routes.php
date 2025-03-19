@@ -28,7 +28,7 @@ Router::middleware([\App\Middlewares\IsLoggedIn::class])->group(function () {
         Router::resource('/posts');
         Router::get('/{username}/status/{id}', 'show')->name('post');
         Router::post('/register-view', 'registerView')->name('register-view');
-       /* Router::get('/get-post-link', 'getPostLink')->name('get-post-link');*/
+        Router::get('/navigate-to-post/{id}', 'navigateToPost')->name('navigate-to-post');
     });
 
 

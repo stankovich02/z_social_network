@@ -52,7 +52,7 @@
         <div id="posts">
             @foreach($posts as $index => $post)
                 @if(!in_array($post->user->id, session()->get('user')->blocked_users) && $post->user->id !== session()->get('user')->id)
-                    <a href="{{route('post', ['username' => $post->user->username, 'id' => $post->id])}}" class="single-post" data-id="{{$post->id}}">
+                    <div class="single-post" data-id="{{$post->id}}">
                         <div class="post-more-options-wrapper">
                             <div class="more-options w-embed post-more-options">
                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--ph more-opt-ic" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 256">
@@ -92,7 +92,7 @@
                                                 xmlns:xlink="http://www.w3.org/1999/xlink"
                                                 aria-hidden="true"
                                                 role="img"
-                                                class="iconify iconify--fe"
+                                                class="iconify iconify--fe post-ic"
                                                 width="100%"
                                                 height="100%"
                                                 preserveAspectRatio="xMidYMid meet"
@@ -113,7 +113,7 @@
                                                 xmlns:xlink="http://www.w3.org/1999/xlink"
                                                 aria-hidden="true"
                                                 role="img"
-                                                class="iconify iconify--bx"
+                                                class="iconify iconify--bx post-ic"
                                                 width="100%"
                                                 height="100%"
                                                 preserveAspectRatio="xMidYMid meet"
@@ -131,7 +131,7 @@
                                                 xmlns:xlink="http://www.w3.org/1999/xlink"
                                                 aria-hidden="true"
                                                 role="img"
-                                                class="iconify iconify--ph"
+                                                class="iconify iconify--ph post-ic"
                                                 width="100%"
                                                 height="100%"
                                                 preserveAspectRatio="xMidYMid meet"
@@ -152,7 +152,7 @@
                                                 xmlns:xlink="http://www.w3.org/1999/xlink"
                                                 aria-hidden="true"
                                                 role="img"
-                                                class="iconify iconify--ic"
+                                                class="iconify iconify--ic post-ic"
                                                 width="100%"
                                                 height="100%"
                                                 preserveAspectRatio="xMidYMid meet"
@@ -165,7 +165,7 @@
                                 </div>
                             </div>
                         </div>
-                    </a>
+                    </div>
                 @endif
             @endforeach
         </div>
