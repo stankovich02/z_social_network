@@ -5,6 +5,7 @@ namespace App\Controllers\Client;
 use App\Models\ImagePost;
 use App\Models\Post;
 use App\Traits\CalculateDate;
+use DateTime;
 use NovaLite\Http\Controller;
 use NovaLite\Http\Request;
 use NovaLite\Http\Response;
@@ -60,7 +61,21 @@ class PostController extends Controller
 
 	public function show(string $username, string $id)
 	{
-		return view('pages.client.post');
+        $post = Post::with('user', 'image')->where('id', '=', $id)->first();
+        $date = new DateTime($post->created_at);
+        $postedOn = $date->format("g:i A - M j, Y");
+        $splitDate = explode('-', $postedOn);
+        $postedOnTime = $splitDate[0];
+        $postedOnDate = $splitDate[1];
+		return view('pages.client.post', [
+            'post' => $post,
+            'title' => $post->user->full_name . " on Z: \"" . $post->content . "\" / Z",
+            'postedDate'=> [
+                'time' => $postedOnTime,
+                'date' => $postedOnDate
+            ],
+            'returnBackLink' => $_SERVER['HTTP_REFERER']
+        ]);
 	}
 
 	public function edit(string $id)

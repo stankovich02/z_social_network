@@ -2427,8 +2427,8 @@ textarea.w-input, textarea.w-select {
 .post-body-text {
   justify-content: center;
   align-items: flex-end;
-  margin-bottom: 10px;
   color: white;
+  margin-bottom: 0;
 }
 
 .post-reactions {
@@ -3241,8 +3241,7 @@ textarea.w-input, textarea.w-select {
   border-bottom: 1px solid #88888880;
   justify-content: space-between;
   align-items: flex-start;
-  padding-top: 20px;
-  padding-bottom: 20px;
+  padding: 20px;
   display: flex;
 }
 
@@ -3281,10 +3280,19 @@ textarea.w-input, textarea.w-select {
 
 .new-comment-text {
   background-color: #0000;
-  border: 1px #000;
+  border: none;
   width: 100%;
   padding: 10px;
   font-size: 16px;
+  resize: none;
+  min-height: 50px;
+  max-height: 500px;
+  overflow: hidden;
+  color: white;
+  border-bottom-width: 0;
+}
+.new-comment-text:focus{
+    outline: none;
 }
 
 .form-4, .other-comments {
@@ -4228,9 +4236,10 @@ textarea.w-input, textarea.w-select {
   color: #88888880;
   background-color: black;
 }
-.single-post .post-image{
+.single-post .post-image, #post .post-image{
   width: 100%;
   border-radius: 20px;
+  margin-top: 10px;
 }
 #new-post-message{
   position: fixed;
@@ -4255,4 +4264,15 @@ textarea.w-input, textarea.w-select {
   color: white;
   text-decoration: none;
   font-weight: bold;
+}
+#single-post-info{
+  flex-direction: column;
+  padding: 20px 20px;
+}
+#post{
+  padding-bottom: 200px;
+}
+.returnBackLink{
+  text-decoration: none;
+  color: white;
 }

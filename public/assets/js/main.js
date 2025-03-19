@@ -35,7 +35,43 @@ document.addEventListener("click", function (event) {
         logoutWrapper.style.display = "none";
     }
 });
+function writeInputAndIcon(){
+    let form = document.querySelector(".new-post-popup-create form");
+    let fileInput = document.createElement("input");
+    fileInput.type = "file";
+    fileInput.id = "fileInput";
+    fileInput.name = "post-image";
+    fileInput.classList.add("hidden-file-input");
+    form.appendChild(fileInput);
+    let postOptions = document.querySelector(".new-post-popup-create .post-options");
+    postOptions.style.justifyContent = 'space-between';
+    let uploadPostImage = document.createElement("div");
+    uploadPostImage.classList.add("upload-post-image");
+    uploadPostImage.classList.add("w-embed");
+    uploadPostImage.classList.add("icon-embed-xsmall");
+    uploadPostImage.innerHTML = `
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                xmlns:xlink="http://www.w3.org/1999/xlink"
+                                aria-hidden="true"
+                                role="img"
+                                class="iconify iconify--carbon"
+                                width="100%"
+                                height="100%"
+                                preserveAspectRatio="xMidYMid meet"
+                                viewBox="0 0 32 32"
+                        >
+                            <path fill="currentColor" d="M19 14a3 3 0 1 0-3-3a3 3 0 0 0 3 3m0-4a1 1 0 1 1-1 1a1 1 0 0 1 1-1"></path>
+                            <path
+                                    fill="currentColor"
+                                    d="M26 4H6a2 2 0 0 0-2 2v20a2 2 0 0 0 2 2h20a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2m0 22H6v-6l5-5l5.59 5.59a2 2 0 0 0 2.82 0L21 19l5 5Zm0-4.83l-3.59-3.59a2 2 0 0 0-2.82 0L18 19.17l-5.59-5.59a2 2 0 0 0-2.82 0L6 17.17V6h20Z"
+                            ></path>
+                        </svg>
+                            `;
+    postOptions.insertAdjacentHTML('afterbegin', uploadPostImage.outerHTML);
+}
 function newPostLogic(){
+
     document.querySelector(".new-post-popup-create .upload-post-image").addEventListener("click", function () {
         document.querySelector(".new-post-popup-create #fileInput").click();
     });
@@ -93,8 +129,11 @@ function newPostLogic(){
                         success: function(){
                             uploadedPostImageDiv.remove();
                             writeInputAndIcon();
-                            postBtn.classList.add("disabled-new-post-btn");
-                            postBtn.disabled = true;
+                            let textArea = document.querySelector("#post-body-2");
+                            if(textArea.value.trim() === ""){
+                                postBtn.classList.add("disabled-new-post-btn");
+                                postBtn.disabled = true;
+                            }
                             newPostLogic();
                         },
                         error: function(err){
@@ -111,41 +150,7 @@ function newPostLogic(){
         })
     });
 }
-function writeInputAndIcon(){
-    let form = document.querySelector(".new-post-popup-create form");
-    let fileInput = document.createElement("input");
-    fileInput.type = "file";
-    fileInput.id = "fileInput";
-    fileInput.name = "post-image";
-    fileInput.classList.add("hidden-file-input");
-    form.appendChild(fileInput);
-    let postOptions = document.querySelector(".new-post-popup-create .post-options");
-    postOptions.style.justifyContent = 'space-between';
-    let uploadPostImage = document.createElement("div");
-    uploadPostImage.classList.add("upload-post-image");
-    uploadPostImage.classList.add("w-embed");
-    uploadPostImage.classList.add("icon-embed-xsmall");
-    uploadPostImage.innerHTML = `
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                xmlns:xlink="http://www.w3.org/1999/xlink"
-                                aria-hidden="true"
-                                role="img"
-                                class="iconify iconify--carbon"
-                                width="100%"
-                                height="100%"
-                                preserveAspectRatio="xMidYMid meet"
-                                viewBox="0 0 32 32"
-                        >
-                            <path fill="currentColor" d="M19 14a3 3 0 1 0-3-3a3 3 0 0 0 3 3m0-4a1 1 0 1 1-1 1a1 1 0 0 1 1-1"></path>
-                            <path
-                                    fill="currentColor"
-                                    d="M26 4H6a2 2 0 0 0-2 2v20a2 2 0 0 0 2 2h20a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2m0 22H6v-6l5-5l5.59 5.59a2 2 0 0 0 2.82 0L21 19l5 5Zm0-4.83l-3.59-3.59a2 2 0 0 0-2.82 0L18 19.17l-5.59-5.59a2 2 0 0 0-2.82 0L6 17.17V6h20Z"
-                            ></path>
-                        </svg>
-                            `;
-    postOptions.insertAdjacentHTML('afterbegin', uploadPostImage.outerHTML);
-}
+
 function sendPost(){
     document.querySelector("#popupPostBtn").addEventListener("click",function (){
         const textarea = document.querySelector("#post-body-2");
@@ -284,16 +289,18 @@ function sendPost(){
                 const popupWrapper = document.querySelector("#new-post-popup-wrapper");
                 popupWrapper.style.display = "none";
                 document.body.style.overflow = "auto";
-                let newPostMessage = document.createElement('div')
-                newPostMessage.id = "new-post-message";
-                newPostMessage.innerHTML = `<p>Your post was sent.</p><a href="${post.post_link}">View</a>`;
-                document.body.appendChild(newPostMessage);
-                setTimeout(function (){
-                    newPostMessage.classList.add('show-new-post-message');
-                },200);
-                setTimeout(function (){
-                    newPostMessage.remove();
-                }, 6000);
+                if(!document.querySelector("#posts")){
+                    let newPostMessage = document.createElement('div')
+                    newPostMessage.id = "new-post-message";
+                    newPostMessage.innerHTML = `<p>Your post was sent.</p><a href="${post.post_link}">View</a>`;
+                    document.body.appendChild(newPostMessage);
+                    setTimeout(function (){
+                        newPostMessage.classList.add('show-new-post-message');
+                    },200);
+                    setTimeout(function (){
+                        newPostMessage.remove();
+                    }, 6000);
+                }
             },
             error: function (err){
                 console.log(err)

@@ -52,7 +52,7 @@
         <div id="posts">
             @foreach($posts as $index => $post)
                 @if(!in_array($post->user->id, session()->get('user')->blocked_users) && $post->user->id !== session()->get('user')->id)
-                    <div class="single-post" data-id="{{$post->id}}">
+                    <a href="{{route('post', ['username' => $post->user->username, 'id' => $post->id])}}" class="single-post" data-id="{{$post->id}}">
                         <div class="post-more-options-wrapper">
                             <div class="more-options w-embed post-more-options">
                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--ph more-opt-ic" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 256">
@@ -165,9 +165,8 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 @endif
-
             @endforeach
         </div>
     </section>
@@ -227,8 +226,6 @@
                 >
                     <textarea class="textarea">Post your reply</textarea>
                 </form>
-                <div class="w-form-done"><div>Thank you! Your submission has been received!</div></div>
-                <div class="w-form-fail"><div>Oops! Something went wrong while submitting the form.</div></div>
             </div>
         </div>
         <div class="reply-to-comment-btn-wrapper"><a href="#" class="reply-comment disabled-new-comment w-button">Reply</a></div>
@@ -286,8 +283,6 @@
             >
                 <input class="search-people-chat-input w-input" maxlength="256" name="search-people" data-name="search-people" placeholder="Search people" type="text" id="search-people" />
             </form>
-            <div class="w-form-done"><div>Thank you! Your submission has been received!</div></div>
-            <div class="w-form-fail"><div>Oops! Something went wrong while submitting the form.</div></div>
         </div>
         <div class="last-chats-wrapper">
             <div class="single-last-chat-user">
@@ -514,8 +509,6 @@
                     >
                         <textarea id="biography" name="biography" data-name="biography" autofocus="autofocus" class="bio-input w-input"></textarea>
                     </form>
-                    <div class="w-form-done"><div>Thank you! Your submission has been received!</div></div>
-                    <div class="w-form-fail"><div>Oops! Something went wrong while submitting the form.</div></div>
                 </div>
             </div>
             <a href="#" class="skip-profile-btn w-button">Skip for now</a><a href="#" class="next-profile-btn w-button">Next</a>
@@ -671,8 +664,6 @@
                 >
                     <input class="current-name-input w-input" maxlength="256" name="current-fullname" data-name="current-fullname" placeholder="Marko Stankovic" type="text" id="current-fullname" />
                 </form>
-                <div class="w-form-done"><div>Thank you! Your submission has been received!</div></div>
-                <div class="w-form-fail"><div>Oops! Something went wrong while submitting the form.</div></div>
             </div>
         </div>
         <div class="current-bio-wrapper">
@@ -692,8 +683,6 @@
                 >
                     <textarea class="current-biography-input">Ovo je moja biografija</textarea>
                 </form>
-                <div class="w-form-done"><div>Thank you! Your submission has been received!</div></div>
-                <div class="w-form-fail"><div>Oops! Something went wrong while submitting the form.</div></div>
             </div>
         </div>
     </div>

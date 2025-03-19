@@ -54,8 +54,6 @@
                     >
                         <input class="search-input w-input" maxlength="256" name="message-search" data-name="message-search" placeholder="Search Direct Messages" type="text" id="message-search" />
                     </form>
-                    <div class="w-form-done"><div>Thank you! Your submission has been received!</div></div>
-                    <div class="w-form-fail"><div>Oops! Something went wrong while submitting the form.</div></div>
                 </div>
             </div>
         </div>
@@ -192,8 +190,6 @@
                 >
                     <input class="type-message-input w-input" maxlength="256" name="new-message-text" data-name="new-message-text" placeholder="Start a new message" type="text" id="new-message-text" />
                 </form>
-                <div class="w-form-done"><div>Thank you! Your submission has been received!</div></div>
-                <div class="w-form-fail"><div>Oops! Something went wrong while submitting the form.</div></div>
             </div>
             <div class="send-message-icon can-send-icon w-embed">
                 <svg
