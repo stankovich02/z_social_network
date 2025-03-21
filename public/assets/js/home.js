@@ -1,8 +1,7 @@
 document.addEventListener("click", function (event) {
     if (event.target.parentElement.classList.contains("post-more-options")) {
         const chooseOption = event.target.parentElement.parentElement.querySelector(".choose-post-option");
-
-        if(chooseOption.style.display === "block"){
+        if(chooseOption.style.display === "block" || chooseOption.style.display === "block!important"){
             chooseOption.style.display = "none!important";
         }
         else{
@@ -71,18 +70,42 @@ document.addEventListener("click", function (event) {
             url: `/posts/${postId}/like`,
             type: "POST",
             success: function(data){
+                let postLikesStats = event.target.parentElement.parentElement.querySelector(".post-reaction-stats-text");
                 if(icon.classList.contains("fa-regular")){
                     icon.classList.remove("fa-regular");
                     icon.classList.add("fa-solid");
                     icon.classList.add("likedPost");
+                    postLikesStats.classList.add("likedPost");
                 }
                 else{
                     icon.classList.remove("fa-solid");
                     icon.classList.remove("likedPost");
+                    postLikesStats.classList.remove("likedPost");
                     icon.classList.add("fa-regular");
                 }
-                let postLikesStats = event.target.parentElement.parentElement.querySelector(".post-reaction-stats-text");
+
                 postLikesStats.textContent = data.likes > 0 ? data.likes : "";
+            },
+        })
+    }
+    if(event.target.parentElement.parentElement.classList.contains("post-reposted-stats")){
+        let icon = event.target;
+        let postId = icon.parentElement.getAttribute("data-id");
+        $.ajax({
+            url: `/posts/${postId}/repost`,
+            type: "POST",
+            success: function(data){
+                let postRepostedStats = event.target.parentElement.parentElement.querySelector(".post-reaction-stats-text");
+                if(icon.classList.contains("repostedPost")){
+                    icon.classList.remove("repostedPost");
+                    postRepostedStats.classList.remove("repostedPost");
+                }
+                else{
+                    icon.classList.add("repostedPost");
+                    postRepostedStats.classList.add("repostedPost");
+                }
+
+                postRepostedStats.textContent = data.reposts > 0 ? data.reposts : "";
             },
         })
     }
@@ -312,25 +335,25 @@ function feedSendPost(){
                     }
                     newPostHtml += `<div class="post-reactions">
                     <div class="post-comment-stats">
-                        <div class="post-stats-icon">
+                        <div class="post-stats-icon" data-id="${post.id}">
                             <i class="fa-regular fa-comment post-ic"></i>
                         </div>
                         <div class="post-reaction-stats-text"></div>
                     </div>
                     <div class="post-reposted-stats">
-                        <div class="post-stats-icon">
+                        <div class="post-stats-icon" data-id="${post.id}">
                              <i class="fa-solid fa-retweet post-ic"></i>
                         </div>
                         <div class="post-reaction-stats-text"></div>
                     </div>
                     <div class="post-likes-stats">
-                        <div class="post-stats-icon">
+                        <div class="post-stats-icon" data-id="${post.id}">
                              <i class="fa-regular fa-heart post-ic"></i>
                         </div>
                         <div class="post-reaction-stats-text"></div>
                     </div>
                     <div class="post-views-stats">
-                        <div class="post-stats-icon">
+                        <div class="post-stats-icon" data-id="${post.id}">
                              <i class="fa-solid fa-chart-simple post-ic"></i>
                         </div>
                         <div class="post-reaction-stats-text"></div>

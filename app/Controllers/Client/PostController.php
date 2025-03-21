@@ -6,6 +6,7 @@ use App\Models\ImagePost;
 use App\Models\LikedPost;
 use App\Models\Notification;
 use App\Models\Post;
+use App\Models\RepostedPost;
 use App\Traits\CalculateDate;
 use DateTime;
 use NovaLite\Database\Database;
@@ -13,6 +14,7 @@ use NovaLite\Http\Controller;
 use NovaLite\Http\RedirectResponse;
 use NovaLite\Http\Request;
 use NovaLite\Http\Response;
+use NovaLite\Views\View;
 
 class PostController extends Controller
 {
@@ -27,7 +29,7 @@ class PostController extends Controller
 		//
 	}
 
-	public function store(Request $request)
+	public function store(Request $request) : Response
 	{
 		$newPost = $request->getAll();
         $newPost['user_id'] = session()->get('user')->id;
@@ -63,11 +65,15 @@ class PostController extends Controller
         ]);
 	}
 
-	public function show(string $username, string $id)
+	public function show(string $username, string $id) : View
 	{
         $post = Post::with('user', 'image')->where('id', '=', $id)->first();
         $post->number_of_likes = $post->likesCount($post->id);
         $post->user_liked = LikedPost::where('user_id', '=', session()->get('user')->id)
+            ->where('post_id', '=', $post->id)
+            ->count();
+        $post->number_of_reposts = $post->repostsCount($post->id);
+        $post->user_reposted = RepostedPost::where('user_id', '=', session()->get('user')->id)
             ->where('post_id', '=', $post->id)
             ->count();
         $date = new DateTime($post->created_at);
@@ -96,7 +102,7 @@ class PostController extends Controller
 		//
 	}
 
-	public function destroy(string $id)
+	public function destroy(string $id) : void
 	{
         $post = Post::with('image')->where('id', '=', $id)->first();
         if($post->image){
@@ -113,13 +119,13 @@ class PostController extends Controller
             $post->save();
         }
     }
-    public function likePost(string $id)
+    public function likePost(string $id) : Response
     {
         $alreadyLiked = LikedPost::where('user_id', '=', session()->get('user')->id)
             ->where('post_id', '=', $id)
             ->first();
         if($alreadyLiked){
-            Database::table('liked_posts')
+            Database::table(LikedPost::TABLE)
                      ->where('post_id', '=', $id)
                      ->where('user_id', '=', session()->get('user')->id)
                      ->delete();
@@ -151,6 +157,47 @@ class PostController extends Controller
         $numOfLikes = LikedPost::where('post_id', '=', $id)->count();
         return response()->json([
             'likes' => $numOfLikes
+        ]);
+    }
+
+    public function repostPost(string $id) : Response
+    {
+        $alreadyReposted = RepostedPost::where('user_id', '=', session()->get('user')->id)
+            ->where('post_id', '=', $id)
+            ->first();
+        if($alreadyReposted){
+            Database::table(RepostedPost::TABLE)
+                ->where('post_id', '=', $id)
+                ->where('user_id', '=', session()->get('user')->id)
+                ->delete();
+        }
+        else{
+            $repostedPost = [
+                'user_id' => session()->get('user')->id,
+                'post_id' => $id
+            ];
+            RepostedPost::create($repostedPost);
+            $post = Post::with('user')->where('id', '=', $id)->first();
+            if($post->user_id !== session()->get('user')->id){
+                $newNotification = [
+                    'notification_type_id' => Notification::NOTIFICATION_TYPE_REPOST,
+                    'user_id' => session()->get('user')->id,
+                    'target_user_id' => $post->user->id,
+                    'link' => route('post', ['username' => $post->user->username, 'id' => $post->id])
+                ];
+                $notificationExist = Notification::where('notification_type_id', '=', $newNotification['notification_type_id'])
+                    ->where('user_id', '=', $newNotification['user_id'])
+                    ->where('target_user_id', '=', $newNotification['target_user_id'])
+                    ->where('link', '=', $newNotification['link'])
+                    ->first();
+                if(!$notificationExist){
+                    Notification::create($newNotification);
+                }
+            }
+        }
+        $numOfReposts = RepostedPost::where('post_id', '=', $id)->count();
+        return response()->json([
+            'reposts' => $numOfReposts
         ]);
     }
     public function navigateToPost(string $id) : Response

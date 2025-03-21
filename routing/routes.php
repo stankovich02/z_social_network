@@ -34,6 +34,7 @@ Router::middleware([\App\Middlewares\IsLoggedIn::class])->group(function () {
         Router::post('/register-view', 'registerView')->name('register-view');
         Router::get('/posts/navigate/{id}', 'navigateToPost')->name('posts.navigate');
         Router::post("/posts/{id}/like", 'likePost')->name('posts.like');
+        Router::post("/posts/{id}/repost", 'repostPost')->name('posts.repost');
     });
 
 

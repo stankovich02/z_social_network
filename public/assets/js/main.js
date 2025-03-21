@@ -198,25 +198,25 @@ function sendPost(){
                     }
                     newPostHtml += `<div class="post-reactions">
                     <div class="post-comment-stats">
-                        <div class="post-stats-icon">
+                        <div class="post-stats-icon" data-id="${post.id}">
                             <i class="fa-regular fa-comment post-ic"></i>
                         </div>
                         <div class="post-reaction-stats-text"></div>
                     </div>
                     <div class="post-reposted-stats">
-                        <div class="post-stats-icon">
+                        <div class="post-stats-icon" data-id="${post.id}">
                              <i class="fa-solid fa-retweet post-ic"></i>
                         </div>
                         <div class="post-reaction-stats-text"></div>
                     </div>
                     <div class="post-likes-stats">
-                        <div class="post-stats-icon">
+                        <div class="post-stats-icon" data-id="${post.id}">
                              <i class="fa-regular fa-heart post-ic"></i>
                         </div>
                         <div class="post-reaction-stats-text"></div>
                     </div>
                     <div class="post-views-stats">
-                        <div class="post-stats-icon">
+                        <div class="post-stats-icon" data-id="${post.id}">
                              <i class="fa-solid fa-chart-simple post-ic"></i>
                         </div>
                         <div class="post-reaction-stats-text"></div>

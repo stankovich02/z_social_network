@@ -6,10 +6,11 @@ use App\Models\User;
 use NovaLite\Database\Database;
 use NovaLite\Http\Controller;
 use NovaLite\Http\Request;
+use NovaLite\Views\View;
 
 class ExploreController extends Controller
 {
-    public function index() : string
+    public function index() : View
     {
         return view('pages.client.explore');
     }

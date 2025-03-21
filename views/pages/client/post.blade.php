@@ -49,22 +49,22 @@
         </div>
         <div class="post-reactions single-post-reactions">
             <div class="post-comment-stats single-post-comment-stats">
-                <div class="post-stats-icon singe-post-stats-icon">
+                <div class="post-stats-icon singe-post-stats-icon" data-id="{{$post->id}}">
                     <i class="fa-regular fa-comment post-ic"></i>
                 </div>
                 <div class="post-reaction-stats-text"></div>
             </div>
             <div class="post-reposted-stats single-post-reposted-stats">
-                <div class="post-stats-icon singe-post-stats-icon">
-                        <i class="fa-solid fa-retweet post-ic"></i>
+                <div class="post-stats-icon singe-post-stats-icon" data-id="{{$post->id}}">
+                    <i class="{{$post->user_reposted ? "repostedPost" : ""}} fa-solid fa-retweet post-ic"></i>
                 </div>
-                <div class="post-reaction-stats-text"></div>
+                <div class="post-reaction-stats-text {{$post->user_reposted ? "repostedPost" : ""}}">{{$post->number_of_reposts > 0 ? $post->number_of_reposts : ""}}</div>
             </div>
             <div class="post-likes-stats single-post-likes-stats">
                 <div class="post-stats-icon singe-post-stats-icon" data-id="{{$post->id}}">
                     <i class="{{$post->user_liked ? "fa-solid likedPost" : "fa-regular"}} fa-heart post-ic"></i>
                 </div>
-                <div class="post-reaction-stats-text">{{$post->number_of_likes > 0 ? $post->number_of_likes : ""}}</div>
+                <div class="post-reaction-stats-text {{$post->user_liked ? "likedPost" : ""}}">{{$post->number_of_likes > 0 ? $post->number_of_likes : ""}}</div>
             </div>
         </div>
 

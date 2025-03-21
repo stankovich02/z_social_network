@@ -9,6 +9,9 @@ use NovaLite\Database\Relations\HasOne;
 
 class Post extends Model
 {
+    const ORIGINAL_POST = 'original_post';
+    const REPOSTED_POST = 'reposted_post';
+
 	const TABLE = 'posts';
 
     protected string $table = self::TABLE;
@@ -30,8 +33,16 @@ class Post extends Model
     {
         return $this->hasMany(LikedPost::class, 'post_id', 'id');
     }
+    public function reposts() : HasMany
+    {
+        return $this->hasMany(RepostedPost::class, 'post_id', 'id');
+    }
     public function likesCount(int $id) : int
     {
         return LikedPost::where('post_id', '=', $id)->count();
+    }
+    public function repostsCount(int $id) : int
+    {
+        return RepostedPost::where('post_id', '=', $id)->count();
     }
 }

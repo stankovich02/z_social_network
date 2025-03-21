@@ -8,7 +8,7 @@ use NovaLite\Http\Request;
 
 class UserController extends Controller
 {
-    public function blockUser(Request $request)
+    public function blockUser(Request $request) : void
     {
         $blockedUserId = $request->input('user_id');
         $userId = session()->get('user')->id;
