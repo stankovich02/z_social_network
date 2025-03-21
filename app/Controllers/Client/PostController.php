@@ -65,9 +65,26 @@ class PostController extends Controller
         ]);
 	}
 
-	public function show(string $username, string $id) : View
+	public function show(string $id,Request $request,string $username = null) : View|Response
 	{
         $post = Post::with('user', 'image')->where('id', '=', $id)->first();
+        if($request->isAjax()){
+            $post->created_at = $this->calculatePostedDate($post->created_at);
+            return response()->json([
+                'post' => [
+                    'id' => $post->id,
+                    'user' => [
+                        'id' => $post->user->id,
+                        'photo' => asset('assets/img/users/' . $post->user->photo),
+                        'username' => $post->user->username,
+                        'full_name' => $post->user->full_name,
+                    ],
+                    'image' => $post->image = [] ? asset('assets/img/posts/' . $post->image[0]->image) : null,
+                    'created_at' => $this->calculatePostedDate($post->created_at),
+                    'content' => $post->content ?? null,
+                ]
+            ]);
+        }
         $post->number_of_likes = $post->likesCount($post->id);
         $post->user_liked = LikedPost::where('user_id', '=', session()->get('user')->id)
             ->where('post_id', '=', $post->id)

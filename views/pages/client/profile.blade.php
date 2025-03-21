@@ -110,7 +110,7 @@
                     </div>
                     <div class="post-reactions">
                         <div class="post-comment-stats">
-                            <div class="post-stats-icon">
+                            <div class="post-stats-icon" data-id="{{$post->post->id}}">
                                 <i class="fa-regular fa-comment post-ic"></i>
                             </div>
                             <div class="post-reaction-stats-text"></div>
@@ -171,7 +171,7 @@
                             </div>
                             <div class="post-reactions">
                                 <div class="post-comment-stats">
-                                    <div class="post-stats-icon">
+                                    <div class="post-stats-icon" data-id="{{$post->id}}">
                                         <i class="fa-regular fa-comment post-ic"></i>
                                     </div>
                                     <div class="post-reaction-stats-text"></div>

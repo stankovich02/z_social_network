@@ -34,6 +34,14 @@ document.addEventListener("click", function (event) {
     if (!loggedInUserInfo.contains(event.target)) {
         logoutWrapper.style.display = "none";
     }
+    if(event.target.parentElement.classList.contains("close-icon")){
+        let popup = document.querySelectorAll(".popup-wrapper");
+        popup.forEach(popup => {
+            popup.style.display = "none";
+            document.body.style.overflow = "auto";
+        })
+
+    }
 });
 function writeInputAndIcon(){
     let form = document.querySelector(".new-post-popup-create form");

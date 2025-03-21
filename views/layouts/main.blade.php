@@ -75,6 +75,62 @@
             </div>
         </div>
     </div>
+    <div class="popup-wrapper" id="new-comment-popup-wrapper">
+        <div class="new-comment-popup">
+            <div class="close-icon w-embed">
+                <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        xmlns:xlink="http://www.w3.org/1999/xlink"
+                        aria-hidden="true"
+                        role="img"
+                        class="iconify iconify--ic"
+                        width="100%"
+                        height="100%"
+                        preserveAspectRatio="xMidYMid meet"
+                        viewBox="0 0 24 24"
+                >
+                    <path fill="currentColor" d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12z"></path>
+                </svg>
+            </div>
+            <div class="commented-on-info">
+                <div class="comment-on-user-img">
+                    <img src="" loading="lazy" alt="" class="user-image" />
+                    <div class="vertical-line"></div>
+                </div>
+                <div class="comment-body">
+                    <div class="comment-on-user-info">
+                        <div class="commented-on-fullname"></div>
+                        <div class="commented-on-username"></div>
+                        <div class="dot">·</div>
+                        <div class="commented-on-comment-time"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="replying-to-info">
+                <div class="vertical-line replying-ver-line"></div>
+                <div class="replying-to-text-wrapper">
+                    <div class="replying-to-text">Replying to <span class="text-span-5"></span></div>
+                </div>
+            </div>
+            <div class="reply-to-new-comment">
+                <img src="{{asset('assets/img/users/' . session()->get('user')->photo)}}" loading="lazy" alt="" class="user-image" />
+                <div class="reply-to-new-comment-form w-form">
+                    <form
+                            id="email-form-3"
+                            name="email-form-3"
+                            data-name="Email Form 3"
+                            method="get"
+                            data-wf-page-id="67b61da06092cd17329df273"
+                            data-wf-element-id="2cc73505-ac04-73da-213e-eb7c1247c255"
+                            data-turnstile-sitekey="0x4AAAAAAAQTptj2So4dx43e"
+                    >
+                        <textarea class="textarea" placeholder="Post your reply"></textarea>
+                    </form>
+                </div>
+            </div>
+            <div class="reply-to-comment-btn-wrapper"><a href="#" class="reply-comment disabled-new-comment w-button">Reply</a></div>
+        </div>
+    </div>
     <script src="{{asset('assets/js/webflow.a0aa6ca1.8803622a53cb8314.js')}}" type="text/javascript"></script>
     <script src="{{asset("assets/js/main.js")}}"></script>
 </body>

@@ -109,6 +109,46 @@ document.addEventListener("click", function (event) {
             },
         })
     }
+    if(event.target.parentElement.parentElement.classList.contains("post-comment-stats")){
+        let popupWrapper = document.querySelector("#new-comment-popup-wrapper");
+        popupWrapper.style.display = "block";
+        document.body.overflow = "hidden";
+        let icon = event.target;
+        let postId = icon.parentElement.getAttribute("data-id");
+        $.ajax({
+            url: `/posts/${postId}`,
+            type: "GET",
+            success: function(data){
+                let commentOnUserImg = popupWrapper.querySelector(".comment-on-user-img img")
+                let commentOnUserFullName = popupWrapper.querySelector(".commented-on-fullname");
+                let commentOnUserUsername = popupWrapper.querySelector(".commented-on-username");
+                let postCreatedTime = popupWrapper.querySelector(".commented-on-comment-time");
+                let commentBody = popupWrapper.querySelector(".comment-body");
+                let replyingTo = popupWrapper.querySelector(".replying-to-text span");
+                commentOnUserImg.src = data.post.user.photo;
+                commentOnUserFullName.textContent = data.post.user.full_name;
+                commentOnUserUsername.textContent = "@" + data.post.user.username;
+                postCreatedTime.textContent = data.post.created_at;
+                if(popupWrapper.querySelector("#commentOnPostContent")){
+                    let commentOnPostContent = popupWrapper.querySelector("#commentOnPostContent");
+                    if(data.post.content){
+                        commentOnPostContent.innerHTML = data.post.content;
+                    }
+                    else{
+                        commentOnPostContent.remove();
+                    }
+                }
+                else{
+                    commentBody.innerHTML += `<div class="comment-body" id="commentOnPostContent">${data.post.content}</div>`;
+                }
+
+                replyingTo.textContent = "@" + data.post.user.username;
+            },
+            error: function (err){
+                console.log(err)
+            }
+        })
+    }
 
 });
 /*document.addEventListener("DOMContentLoaded", function () {
