@@ -111,8 +111,6 @@ document.addEventListener("click", function (event) {
     }
     if(event.target.parentElement.parentElement.classList.contains("post-comment-stats")){
         let popupWrapper = document.querySelector("#new-comment-popup-wrapper");
-        popupWrapper.style.display = "block";
-        document.body.overflow = "hidden";
         let icon = event.target;
         let postId = icon.parentElement.getAttribute("data-id");
         $.ajax({
@@ -129,20 +127,33 @@ document.addEventListener("click", function (event) {
                 commentOnUserFullName.textContent = data.post.user.full_name;
                 commentOnUserUsername.textContent = "@" + data.post.user.username;
                 postCreatedTime.textContent = data.post.created_at;
-                if(popupWrapper.querySelector("#commentOnPostContent")){
-                    let commentOnPostContent = popupWrapper.querySelector("#commentOnPostContent");
+                let commentOnPostContent = popupWrapper.querySelector("#commentOnPostContent");
+                if(commentOnPostContent){
+                    commentOnPostContent.innerHTML = '';
                     if(data.post.content){
                         commentOnPostContent.innerHTML = data.post.content;
                     }
-                    else{
-                        commentOnPostContent.remove();
+                    if(data.post.image){
+                        commentOnPostContent.innerHTML += `<img src="${data.post.image}" alt="post-image" class="post-comment-image">`;
                     }
                 }
                 else{
-                    commentBody.innerHTML += `<div class="comment-body" id="commentOnPostContent">${data.post.content}</div>`;
+                    let commentContentDiv = document.createElement('div');
+                    commentContentDiv.className = "comment-body";
+                    commentContentDiv.id = "commentOnPostContent";
+                    if(data.post.content){
+                        commentContentDiv.innerHTML += data.post.content;
+                    }
+                    if(data.post.image){
+                        commentContentDiv.innerHTML += `<img src="${data.post.image}" alt="post-image" class="post-comment-image">`;
+                    }
+                    commentBody.appendChild(commentContentDiv);
                 }
-
                 replyingTo.textContent = "@" + data.post.user.username;
+                let replyBtn = document.querySelector("#replyBtn");
+                replyBtn.setAttribute("data-id", postId);
+                popupWrapper.style.display = "block";
+                document.body.style.overflow = "hidden";
             },
             error: function (err){
                 console.log(err)
@@ -456,4 +467,43 @@ document.querySelector("#feedNewPost .new-post-body").addEventListener("keyup", 
     postBtn.disabled = this.value.trim() === "";
     this.value.trim() === "" ? postBtn.classList.add("disabled-new-post-btn") : postBtn.classList.remove("disabled-new-post-btn");
 });
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelector("#newCommentTextArea").addEventListener("keyup", function () {
+        const replyBtn = document.querySelector("#replyBtn");
+        replyBtn.disabled = this.value.trim() === "";
+        this.value.trim() === "" ? replyBtn.classList.add("disabled-new-comment") : replyBtn.classList.remove("disabled-new-comment");
+    });
+    document.querySelector("#replyBtn").addEventListener("click", function () {
+        const comment = document.querySelector("#newCommentTextArea").value;
+        const postId = this.getAttribute("data-id");
+        $.ajax({
+            url: `/posts/${postId}/comment`,
+            type: "POST",
+            data: {
+                comment: comment
+            },
+            success: function(data){
+                document.querySelector("#new-comment-popup-wrapper").style.display = "none";
+                document.body.style.overflow = "auto";
+                document.querySelector("#newCommentTextArea").value = "";
+                document.querySelector("#replyBtn").classList.add("disabled-new-comment");
+                document.querySelector("#replyBtn").disabled = true;
+                let newCommentMessage = document.createElement('div')
+                newCommentMessage.id = "new-comment-message";
+                newCommentMessage.innerHTML = `<p>Your comment was sent.</p><a href="${data.post_link}">View</a>`;
+                localStorage.setItem('commentID', data.comment_id);
+                document.body.appendChild(newCommentMessage);
+                setTimeout(function (){
+                    newCommentMessage.classList.add('show-new-comment-message');
+                },200);
+                setTimeout(function (){
+                    newCommentMessage.remove();
+                }, 6000);
+            },
+            error: function(err){
+                console.log(err);
+            }
+        })
+    });
+})
 

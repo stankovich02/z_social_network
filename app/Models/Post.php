@@ -45,4 +45,13 @@ class Post extends Model
     {
         return RepostedPost::where('post_id', '=', $id)->count();
     }
+    public function comments() : HasMany
+    {
+        return $this->hasMany(Comment::class, 'post_id', 'id');
+    }
+
+    public function commentsCount(int $id) : int
+    {
+        return Comment::where('post_id', '=', $id)->count();
+    }
 }

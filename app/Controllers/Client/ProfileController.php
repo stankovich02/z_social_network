@@ -54,6 +54,7 @@ class ProfileController extends Controller
                 $mergedPost->user_reposted = RepostedPost::where('user_id', '=', session()->get('user')->id)
                     ->where('post_id', '=', $mergedPost->id)
                     ->count();
+                $mergedPost->number_of_comments = $mergedPost->commentsCount($mergedPost->id);
             }
             if($mergedPost->type == Post::REPOSTED_POST) {
                 $mergedPost->post = Post::with('user','image')->where('id', '=', $mergedPost->post_id)->first();
@@ -66,6 +67,7 @@ class ProfileController extends Controller
                 $mergedPost->post->user_reposted = RepostedPost::where('user_id', '=', session()->get('user')->id)
                     ->where('post_id', '=', $mergedPost->post->id)
                     ->count();
+                $mergedPost->post->number_of_comments = $mergedPost->post->commentsCount($mergedPost->post->id);
             }
         }
         $countPosts = count($mergedPosts);
@@ -77,8 +79,7 @@ class ProfileController extends Controller
             'posts' => $mergedPosts,
             'numOfPosts' => $numOfPosts,
             'joinedDate' => $joinedDate,
-            'user' => $user,
-            'returnBackLink' => $_SERVER['HTTP_REFERER']
+            'user' => $user
         ]);
     }
 }

@@ -2452,13 +2452,6 @@ textarea.w-input, textarea.w-select {
 .single-post-comment-stats,.single-post-reposted-stats,.single-post-likes-stats{
   width: 25%;
 }
-.post-comment-stats {
-  grid-column-gap: 5px;
-  grid-row-gap: 5px;
-  align-items: center;
-/*  width: 25%;*/
-  display: flex;
-}
 
 .post-stats-icon {
   flex-direction: column;
@@ -2480,7 +2473,7 @@ textarea.w-input, textarea.w-select {
   font-weight: 400;
 }
 
-.post-reposted-stats, .post-likes-stats, .post-views-stats {
+.post-reposted-stats, .post-likes-stats, .post-views-stats, .post-comment-stats {
   grid-column-gap: 2px;
   grid-row-gap: 5px;
   align-items: center;
@@ -4242,12 +4235,12 @@ textarea.w-input, textarea.w-select {
   color: #88888880;
   background-color: black;
 }
-.single-post .post-image, #post .post-image{
+.single-post .post-image, #post .post-image, .post-comment-image{
   max-width: 100%;
   border-radius: 20px;
   margin-top: 10px;
 }
-#new-post-message{
+#new-post-message, #new-comment-message{
   position: fixed;
   display: flex;
   background-color: #009dff;
@@ -4259,14 +4252,14 @@ textarea.w-input, textarea.w-select {
   opacity: 0;
   transition: all 1.5s;
 }
-#new-post-message.show-new-post-message{
+#new-post-message.show-new-post-message, #new-comment-message.show-new-comment-message{
   opacity: 1;
 }
-#new-post-message p{
+#new-post-message p, #new-comment-message p{
   margin-right: 10px;
   margin-bottom: 0;
 }
-#new-post-message a{
+#new-post-message a, #new-comment-message a{
   color: white;
   text-decoration: none;
   font-weight: bold;
@@ -4285,13 +4278,13 @@ textarea.w-input, textarea.w-select {
 .post-reactions i,.post-reaction-stats-text{
   transition: all 0.5s;
 }
-.post-comment-stats i:hover{
+.post-comment-stats:hover{
   color: #009dff;
 }
-.post-reposted-stats i:hover, .repostedPost{
+.post-reposted-stats:hover, .repostedPost{
   color: #33f63a;
 }
-.post-likes-stats i:hover, .likedPost{
+.post-likes-stats:hover, .likedPost{
   color: #ff008c;
 }
 .post-views-stats:hover{
@@ -4338,4 +4331,7 @@ textarea.w-input, textarea.w-select {
 }
 .reply-to-new-comment-form textarea:focus{
   outline: none;
+}
+#new-comment-popup-wrapper .new-comment-popup{
+  margin-top: 5%;
 }

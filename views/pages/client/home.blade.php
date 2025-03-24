@@ -89,7 +89,7 @@
                                     <div class="post-stats-icon" data-id="{{$post->id}}">
                                         <i class="fa-regular fa-comment post-ic"></i>
                                     </div>
-                                    <div class="post-reaction-stats-text"></div>
+                                    <div class="post-reaction-stats-text">{{$post->number_of_comments > 0 ? $post->number_of_comments : ""}}</div>
                                 </div>
                                 <div class="post-reposted-stats">
                                     <div class="post-stats-icon" data-id="{{$post->id}}">

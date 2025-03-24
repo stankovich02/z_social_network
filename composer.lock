@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "99d88108a200dcc66e045cf1d5c85dda",
+    "content-hash": "7a8a388738a659b75008a784aa7b0e22",
     "packages": [
         {
             "name": "carbonphp/carbon-doctrine-types",
@@ -937,16 +937,16 @@
         },
         {
             "name": "novalite/framework",
-            "version": "v1.0.24",
+            "version": "v1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stankovich02/novalite.git",
-                "reference": "0f3e7d74aa5a878b227bfee6e58802ebdb124177"
+                "reference": "b697e3e488b17e467e7a16aa968e35dc8026cc75"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stankovich02/novalite/zipball/0f3e7d74aa5a878b227bfee6e58802ebdb124177",
-                "reference": "0f3e7d74aa5a878b227bfee6e58802ebdb124177",
+                "url": "https://api.github.com/repos/stankovich02/novalite/zipball/b697e3e488b17e467e7a16aa968e35dc8026cc75",
+                "reference": "b697e3e488b17e467e7a16aa968e35dc8026cc75",
                 "shasum": ""
             },
             "require": {
@@ -971,9 +971,9 @@
             "description": "The NovaLite Framework",
             "support": {
                 "issues": "https://github.com/stankovich02/novalite/issues",
-                "source": "https://github.com/stankovich02/novalite/tree/v1.0.24"
+                "source": "https://github.com/stankovich02/novalite/tree/v1.0.0"
             },
-            "time": "2025-03-20T09:35:19+00:00"
+            "time": "2025-03-24T17:50:41+00:00"
         },
         {
             "name": "phpmailer/phpmailer",

@@ -2,6 +2,7 @@
 
 namespace App\Controllers\Client;
 
+use App\Models\Comment;
 use App\Models\ImagePost;
 use App\Models\LikedPost;
 use App\Models\Notification;
@@ -67,7 +68,7 @@ class PostController extends Controller
 
 	public function show(string $id,Request $request,string $username = null) : View|Response
 	{
-        $post = Post::with('user', 'image')->where('id', '=', $id)->first();
+        $post = Post::with('user', 'image','comments','comments.user')->where('id', '=', $id)->first();
         if($request->isAjax()){
             $post->created_at = $this->calculatePostedDate($post->created_at);
             return response()->json([
@@ -79,7 +80,7 @@ class PostController extends Controller
                         'username' => $post->user->username,
                         'full_name' => $post->user->full_name,
                     ],
-                    'image' => $post->image = [] ? asset('assets/img/posts/' . $post->image[0]->image) : null,
+                    'image' => $post->image ? asset('assets/img/posts/' . $post->image[0]->image) : null,
                     'created_at' => $this->calculatePostedDate($post->created_at),
                     'content' => $post->content ?? null,
                 ]
@@ -93,19 +94,19 @@ class PostController extends Controller
         $post->user_reposted = RepostedPost::where('user_id', '=', session()->get('user')->id)
             ->where('post_id', '=', $post->id)
             ->count();
+        $post->number_of_comments = $post->commentsCount($post->id);
         $date = new DateTime($post->created_at);
         $postedOn = $date->format("g:i A - M j, Y");
         $splitDate = explode('-', $postedOn);
         $postedOnTime = $splitDate[0];
         $postedOnDate = $splitDate[1];
+        foreach ($post->comments as $comment) {
+            $comment->created_at = $this->calculatePostedDate($comment->created_at);
+        }
 		return view('pages.client.post', [
             'post' => $post,
             'title' => $post->user->full_name . " on Z: \"" . $post->content . "\" / Z",
-            'postedDate'=> [
-                'time' => $postedOnTime,
-                'date' => $postedOnDate
-            ],
-            'returnBackLink' => $_SERVER['HTTP_REFERER']
+            'postedDate'=> ['time' => $postedOnTime, 'date' => $postedOnDate]
         ]);
 	}
 

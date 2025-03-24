@@ -28,6 +28,7 @@ class HomeController extends Controller
             $post->user_reposted = RepostedPost::where('user_id', '=', session()->get('user')->id)
                                       ->where('post_id', '=', $post->id)
                                       ->count();
+            $post->number_of_comments = $post->commentsCount($post->id);
         }
         return view('pages.client.home', [
             'posts' => $posts,

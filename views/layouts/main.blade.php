@@ -124,11 +124,11 @@
                             data-wf-element-id="2cc73505-ac04-73da-213e-eb7c1247c255"
                             data-turnstile-sitekey="0x4AAAAAAAQTptj2So4dx43e"
                     >
-                        <textarea class="textarea" placeholder="Post your reply"></textarea>
+                        <textarea id="newCommentTextArea" placeholder="Post your reply"></textarea>
                     </form>
                 </div>
             </div>
-            <div class="reply-to-comment-btn-wrapper"><a href="#" class="reply-comment disabled-new-comment w-button">Reply</a></div>
+            <div class="reply-to-comment-btn-wrapper"><button class="reply-comment disabled-new-comment w-button" id="replyBtn" disabled>Reply</button></div>
         </div>
     </div>
     <script src="{{asset('assets/js/webflow.a0aa6ca1.8803622a53cb8314.js')}}" type="text/javascript"></script>

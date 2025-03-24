@@ -37,6 +37,10 @@ Router::middleware([\App\Middlewares\IsLoggedIn::class])->group(function () {
         Router::post("/posts/{id}/repost", 'repostPost')->name('posts.repost');
     });
 
+    Router::controller(\App\Controllers\Client\CommentController::class)->group(function () {
+        Router::post('/posts/{id}/comment', 'store')->name('comment.store');
+    });
+
 
     Router::post('/users/block', [\App\Controllers\Client\UserController::class, 'blockUser'])->name('block-user');
 });

@@ -3,7 +3,7 @@
 @section('content')
 <section id="profile" class="content">
     <div class="top-profile-info">
-        <a href="{{$returnBackLink}}" class="returnBackLink">
+        <a href="{{$_SERVER['HTTP_REFERER']}}" class="returnBackLink">
             <div class="icon-embed-xsmall-5 w-embed">
                 <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -174,7 +174,7 @@
                                     <div class="post-stats-icon" data-id="{{$post->id}}">
                                         <i class="fa-regular fa-comment post-ic"></i>
                                     </div>
-                                    <div class="post-reaction-stats-text"></div>
+                                    <div class="post-reaction-stats-text"><div class="post-reaction-stats-text">{{$post->number_of_comments > 0 ? $post->number_of_comments : ""}}</div></div>
                                 </div>
                                 <div class="post-reposted-stats">
                                     <div class="post-stats-icon" data-id="{{$post->id}}">

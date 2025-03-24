@@ -46,4 +46,9 @@ class User extends Model
     {
         return $this->hasMany(Notification::class, 'target_user_id');
     }
+
+    public function comments() : HasMany
+    {
+        return $this->hasMany(Comment::class, 'user_id');
+    }
 }
