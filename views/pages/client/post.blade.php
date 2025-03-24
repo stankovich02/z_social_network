@@ -23,6 +23,14 @@
         <div class="text-block-3">Post</div>
     </div>
     <div class="post-info" id="single-post-info">
+       @if($reposted)
+            <div class="reposted-info">
+                <div class="icon-embed-xsmall-7 w-embed">
+                    <i class="fa-solid fa-retweet"></i>
+                </div>
+                <div><strong>You</strong> reposted</div>
+            </div>
+       @endif
         <div class="posted-by-info">
             <img src="{{asset('assets/img/users/' . $post->user->photo)}}" loading="lazy" alt="" class="user-image" />
             <div class="user-info">
@@ -35,7 +43,7 @@
                 <p class="post-body-text">{{$post->content}}</p>
            @endif
            @if($post->image)
-                <img src="{{asset('assets/img/posts/' . $post->image[0]->image)}}" loading="lazy" alt="" class="post-image" />
+                <img src="{{asset('assets/img/posts/' . $post->image->image)}}" loading="lazy" alt="" class="post-image" />
            @endif
         </div>
         <div class="posted-date-wrapper">
@@ -52,7 +60,7 @@
                 <div class="post-stats-icon singe-post-stats-icon" data-id="{{$post->id}}">
                     <i class="fa-regular fa-comment post-ic"></i>
                 </div>
-                <div class="post-reaction-stats-text"></div>
+                <div class="post-reaction-stats-text">{{$post->number_of_comments > 0 ? $post->number_of_comments : ""}}</div>
             </div>
             <div class="post-reposted-stats single-post-reposted-stats">
                 <div class="post-stats-icon singe-post-stats-icon" data-id="{{$post->id}}">

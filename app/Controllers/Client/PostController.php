@@ -7,12 +7,12 @@ use App\Models\ImagePost;
 use App\Models\LikedPost;
 use App\Models\Notification;
 use App\Models\Post;
+use App\Models\PostNotification;
 use App\Models\RepostedPost;
 use App\Traits\CalculateDate;
 use DateTime;
 use NovaLite\Database\Database;
 use NovaLite\Http\Controller;
-use NovaLite\Http\RedirectResponse;
 use NovaLite\Http\Request;
 use NovaLite\Http\Response;
 use NovaLite\Views\View;
@@ -49,7 +49,7 @@ class PostController extends Controller
         $post = Post::with('user', 'image')->where('id', '=', $post->id)->first();
         $image = null;
         if($post->image){
-                $image = asset('assets/img/posts/' .$post->image[0]->image);
+                $image = asset('assets/img/posts/' .$post->image->image);
         }
         return response()->json([
             'id' => $post->id,
@@ -70,7 +70,6 @@ class PostController extends Controller
 	{
         $post = Post::with('user', 'image','comments','comments.user')->where('id', '=', $id)->first();
         if($request->isAjax()){
-            $post->created_at = $this->calculatePostedDate($post->created_at);
             return response()->json([
                 'post' => [
                     'id' => $post->id,
@@ -80,7 +79,7 @@ class PostController extends Controller
                         'username' => $post->user->username,
                         'full_name' => $post->user->full_name,
                     ],
-                    'image' => $post->image ? asset('assets/img/posts/' . $post->image[0]->image) : null,
+                    'image' => $post->image ? asset('assets/img/posts/' . $post->image->image) : null,
                     'created_at' => $this->calculatePostedDate($post->created_at),
                     'content' => $post->content ?? null,
                 ]
@@ -100,13 +99,17 @@ class PostController extends Controller
         $splitDate = explode('-', $postedOn);
         $postedOnTime = $splitDate[0];
         $postedOnDate = $splitDate[1];
+        $reposted = RepostedPost::where('user_id', '=', session()->get('user')->id)
+                                ->where('post_id', '=', $post->id)
+                                ->count();
         foreach ($post->comments as $comment) {
             $comment->created_at = $this->calculatePostedDate($comment->created_at);
         }
 		return view('pages.client.post', [
             'post' => $post,
             'title' => $post->user->full_name . " on Z: \"" . $post->content . "\" / Z",
-            'postedDate'=> ['time' => $postedOnTime, 'date' => $postedOnDate]
+            'postedDate'=> ['time' => $postedOnTime, 'date' => $postedOnDate],
+            'reposted' => $reposted > 0,
         ]);
 	}
 
@@ -124,7 +127,7 @@ class PostController extends Controller
 	{
         $post = Post::with('image')->where('id', '=', $id)->first();
         if($post->image){
-            unlink(public_path('assets/img/posts/' . $post->image[0]->image));
+            unlink(public_path('assets/img/posts/' . $post->image->image));
         }
 		Post::delete($id);
 	}
@@ -169,6 +172,15 @@ class PostController extends Controller
                     ->first();
                 if(!$notificationExist){
                     Notification::create($newNotification);
+                    $insertedId = Notification::where('notification_type_id', '=', $newNotification['notification_type_id'])
+                        ->where('user_id', '=', $newNotification['user_id'])
+                        ->where('target_user_id', '=', $newNotification['target_user_id'])
+                        ->where('link', '=', $newNotification['link'])
+                        ->first()->id;
+                    PostNotification::create([
+                        'post_id' => $post->id,
+                        'notification_id' => $insertedId
+                    ]);
                 }
             }
         }
@@ -210,6 +222,15 @@ class PostController extends Controller
                     ->first();
                 if(!$notificationExist){
                     Notification::create($newNotification);
+                    $insertedId = Notification::where('notification_type_id', '=', $newNotification['notification_type_id'])
+                        ->where('user_id', '=', $newNotification['user_id'])
+                        ->where('target_user_id', '=', $newNotification['target_user_id'])
+                        ->where('link', '=', $newNotification['link'])
+                        ->first()->id;
+                    PostNotification::create([
+                        'post_id' => $post->id,
+                        'notification_id' => $insertedId
+                    ]);
                 }
             }
         }

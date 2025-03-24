@@ -16,7 +16,7 @@ class HomeController extends Controller
     use CalculateDate;
     public function index() : View
     {
-        $posts = Post::with('user','images')->orderBy('id', 'desc')->get();
+        $posts = Post::with('user','image')->orderBy('id', 'desc')->get();
         foreach ($posts as $post) {
             $post->created_at = $this->calculatePostedDate($post->created_at);
             $post->number_of_likes = $post->likesCount($post->id);

@@ -131,7 +131,7 @@ document.addEventListener("click", function (event) {
                 if(commentOnPostContent){
                     commentOnPostContent.innerHTML = '';
                     if(data.post.content){
-                        commentOnPostContent.innerHTML = data.post.content;
+                        commentOnPostContent.innerHTML = `<p>${data.post.content}</p>`;
                     }
                     if(data.post.image){
                         commentOnPostContent.innerHTML += `<img src="${data.post.image}" alt="post-image" class="post-comment-image">`;
@@ -142,7 +142,7 @@ document.addEventListener("click", function (event) {
                     commentContentDiv.className = "comment-body";
                     commentContentDiv.id = "commentOnPostContent";
                     if(data.post.content){
-                        commentContentDiv.innerHTML += data.post.content;
+                        commentContentDiv.innerHTML += `<p>${data.post.content}</p>`;
                     }
                     if(data.post.image){
                         commentContentDiv.innerHTML += `<img src="${data.post.image}" alt="post-image" class="post-comment-image">`;

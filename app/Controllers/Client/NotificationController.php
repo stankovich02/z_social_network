@@ -2,15 +2,26 @@
 
 namespace App\Controllers\Client;
 
+use App\Models\ImagePost;
 use App\Models\Notification;
+use App\Traits\CalculateDate;
 use NovaLite\Http\Controller;
 use NovaLite\Views\View;
 
 class NotificationController extends Controller
 {
+    use CalculateDate;
     public function index() : View
     {
-        $userNotifications = Notification::with('user', 'notificationType', 'post')->where('target_user_id', '=', session()->get('user')->id)->orderBy('id', 'desc')->get();
+        $userNotifications = Notification::with('user', 'notificationType','post_notification','post_comment_notification','post_notification.post','post_comment_notification.comment')->where('target_user_id', '=', session()->get('user')->id)->orderBy('id', 'desc')->get();
+        foreach ($userNotifications as $notification) {
+            if($notification->notification_type_id === Notification::NOTIFICATION_TYPE_COMMENT) {
+                $notification->post_comment_notification->comment->created_at = $this->calculatePostedDate($notification->post_comment_notification->comment->created_at);
+            }
+            if($notification->notification_type_id === Notification::NOTIFICATION_TYPE_LIKE || $notification->notification_type_id === Notification::NOTIFICATION_TYPE_REPOST) {
+                $notification->post_notification->post->image = ImagePost::where('post_id', '=',$notification->post_notification->post->id)->count();
+            }
+        }
         return view('pages.client.notifications',[
             'notifications' => $userNotifications
         ]);

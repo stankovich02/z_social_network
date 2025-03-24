@@ -2657,8 +2657,22 @@ textarea.w-input, textarea.w-select {
   align-items: flex-start;
   padding: 20px;
   display: flex;
+  width: 100%;
 }
-
+.single-notification .single-comment{
+  padding: 0;
+  border: none;
+}
+.single-notification .single-comment .commented-by-fullname, .single-comment .comment-body{
+  color: white;
+}
+.single-notification .single-comment .commented-by-username{
+    color: #fff6;
+  font-weight: normal;
+}
+.show-all-post{
+  margin-bottom: 0;
+}
 .single-comment.p-x-none {
   padding-left: 0;
   padding-right: 0;
@@ -3279,7 +3293,7 @@ textarea.w-input, textarea.w-select {
   background-color: #0000;
   border: none;
   width: 100%;
-  padding: 10px;
+  padding-left: 10px;
   font-size: 16px;
   resize: none;
   min-height: 50px;
@@ -4275,16 +4289,28 @@ textarea.w-input, textarea.w-select {
   text-decoration: none;
   color: white;
 }
+.comments-on-comment-stats,.liked-on-comment-stats{
+  cursor: pointer;
+}
 .post-reactions i,.post-reaction-stats-text{
   transition: all 0.5s;
 }
 .post-comment-stats:hover{
   color: #009dff;
 }
+.comment-stats-icon i:hover {
+  color: #009dff;
+}
+.comment-stats-icon i{
+  transition: all 0.5s;
+}
+.liked-on-comment-stats i:hover {
+  color: #ff008c;
+}
 .post-reposted-stats:hover, .repostedPost{
   color: #33f63a;
 }
-.post-likes-stats:hover, .likedPost{
+.post-likes-stats:hover, .likedPost, .liked-on-comment-stats:hover{
   color: #ff008c;
 }
 .post-views-stats:hover{

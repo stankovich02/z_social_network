@@ -141,7 +141,7 @@ document.addEventListener("click", function (event) {
                 if(commentOnPostContent){
                     commentOnPostContent.innerHTML = '';
                     if(data.post.content){
-                        commentOnPostContent.innerHTML = data.post.content;
+                        commentOnPostContent.innerHTML = `<p>${data.post.content}</p>`;
                     }
                     if(data.post.image){
                         commentOnPostContent.innerHTML += `<img src="${data.post.image}" alt="post-image" class="post-comment-image">`;
@@ -152,7 +152,7 @@ document.addEventListener("click", function (event) {
                     commentContentDiv.className = "comment-body";
                     commentContentDiv.id = "commentOnPostContent";
                     if(data.post.content){
-                        commentContentDiv.innerHTML += data.post.content;
+                        commentContentDiv.innerHTML += `<p>${data.post.content}</p>`;
                     }
                     if(data.post.image){
                         commentContentDiv.innerHTML += `<img src="${data.post.image}" alt="post-image" class="post-comment-image">`;
@@ -186,10 +186,23 @@ document.addEventListener("DOMContentLoaded", function () {
             data: {
                 comment: comment
             },
-            success: function(){
+            success: function(data){
+                document.querySelector("#new-comment-popup-wrapper").style.display = "none";
+                document.body.style.overflow = "auto";
                 document.querySelector("#newCommentTextArea").value = "";
                 document.querySelector("#replyBtn").classList.add("disabled-new-comment");
                 document.querySelector("#replyBtn").disabled = true;
+                let newCommentMessage = document.createElement('div')
+                newCommentMessage.id = "new-comment-message";
+                newCommentMessage.innerHTML = `<p>Your comment was sent.</p><a href="${data.post_link}">View</a>`;
+                localStorage.setItem('commentID', data.comment_id);
+                document.body.appendChild(newCommentMessage);
+                setTimeout(function (){
+                    newCommentMessage.classList.add('show-new-comment-message');
+                },200);
+                setTimeout(function (){
+                    newCommentMessage.remove();
+                }, 6000);
             },
             error: function(err){
                 console.log(err);

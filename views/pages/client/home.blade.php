@@ -73,10 +73,12 @@
                                 <div class="posted-on-date-text">{{$post->created_at}}</div>
                             </div>
                             <div class="post-body">
-                                <p class="post-body-text">{{$post->content}}</p>
+                                @if($post->content)
+                                    <p class="post-body-text">{{$post->content}}</p>
+                                @endif
                                 @if($post->image)
                                     <img
-                                            src="{{asset('assets/img/posts/' . $post->image[0]->image)}}"
+                                            src="{{asset('assets/img/posts/' . $post->image->image)}}"
                                             loading="lazy"
                                             sizes="100vw"
                                             alt=""

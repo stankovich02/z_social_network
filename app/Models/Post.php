@@ -25,9 +25,9 @@ class Post extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-    public function image() : HasMany
+    public function image() : HasOne
     {
-        return $this->hasMany(ImagePost::class, 'post_id', 'id');
+        return $this->hasOne(ImagePost::class, 'post_id', 'id');
     }
     public function likes() : HasMany
     {

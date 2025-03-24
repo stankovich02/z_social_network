@@ -43,10 +43,21 @@ document.addEventListener("click", function (event) {
                 if(icon.classList.contains("repostedPost")){
                     icon.classList.remove("repostedPost");
                     postRepostedStats.classList.remove("repostedPost");
+                    let repostedInfoDiv = document.querySelector(`.reposted-info`);
+                    repostedInfoDiv.remove();
                 }
                 else{
                     icon.classList.add("repostedPost");
                     postRepostedStats.classList.add("repostedPost");
+                    let repostedInfoDiv = document.createElement("div");
+                    repostedInfoDiv.classList.add("reposted-info");
+                    repostedInfoDiv.innerHTML = `<div class="icon-embed-xsmall-7 w-embed">
+                                                    <i class="fa-solid fa-retweet"></i>
+                                                 </div>
+                                                 <div><strong>You</strong> reposted</div>`;
+                    let singlePostInfoDiv = document.querySelector(`#single-post-info`);
+                    singlePostInfoDiv.insertAdjacentHTML('afterbegin', repostedInfoDiv.outerHTML);
+
                 }
 
                 postRepostedStats.textContent = data.reposts > 0 ? data.reposts : "";

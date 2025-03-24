@@ -100,7 +100,7 @@
                         @endif
                         @if($post->post->image)
                             <img
-                                    src="{{asset('assets/img/posts/' . $post->post->image[0]->image)}}"
+                                    src="{{asset('assets/img/posts/' . $post->post->image->image)}}"
                                     loading="lazy"
                                     sizes="100vw"
                                     alt=""
@@ -161,7 +161,7 @@
                                 <p class="post-body-text">{{$post->content}}</p>
                                 @if($post->image)
                                     <img
-                                            src="{{asset('assets/img/posts/' . $post->image[0]->image)}}"
+                                            src="{{asset('assets/img/posts/' . $post->image->image)}}"
                                             loading="lazy"
                                             sizes="100vw"
                                             alt=""

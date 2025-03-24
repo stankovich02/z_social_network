@@ -4,6 +4,8 @@ namespace App\Models;
 
 use NovaLite\Database\Model;
 use NovaLite\Database\Relations\BelongsTo;
+use NovaLite\Database\Relations\HasMany;
+use NovaLite\Database\Relations\HasOne;
 
 class Notification extends Model
 {
@@ -38,5 +40,14 @@ class Notification extends Model
     public function targetUser() : BelongsTo
     {
         return $this->belongsTo(User::class, 'target_user_id');
+    }
+
+    public function post_notification() : HasOne
+    {
+        return $this->hasOne(PostNotification::class, 'notification_id', 'id');
+    }
+    public function post_comment_notification() : HasOne
+    {
+        return $this->hasOne(PostCommentNotification::class, 'notification_id', 'id');
     }
 }
