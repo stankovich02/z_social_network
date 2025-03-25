@@ -18,6 +18,6 @@ class create_notification_types_table
 
 	public function down() : void
 	{
-		Schema::drop('notification_types');
+		Schema::drop(\App\Models\NotificationType::TABLE);
 	}
 }

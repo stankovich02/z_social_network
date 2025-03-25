@@ -18,6 +18,6 @@ class create_posts_table
 
 	public function down() : void
 	{
-		Schema::drop('posts');
+		Schema::drop(\App\Models\Post::TABLE);
 	}
 }

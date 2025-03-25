@@ -51,7 +51,7 @@
         </div>
         <div id="posts">
             @foreach($posts as $index => $post)
-                @if(!in_array($post->user->id, session()->get('user')->blocked_users) && $post->user->id !== session()->get('user')->id)
+                @if(!in_array($post->user->id, $blockedUsers) && $post->user->id !== session()->get('user')->id)
                     <div class="single-post" data-id="{{$post->id}}">
                         <div class="post-more-options-wrapper">
                             <div class="more-options w-embed post-more-options">

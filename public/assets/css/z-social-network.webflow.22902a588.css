@@ -2734,9 +2734,11 @@ textarea.w-input, textarea.w-select {
   margin-top: 10px;
   display: flex;
 }
-
+.comment-reactions i,.comment-reactions-stats-num{
+  transition: all 0.5s;
+}
 .comments-on-comment-stats, .liked-on-comment-stats {
-  grid-column-gap: 5px;
+  grid-column-gap: 1px;
   grid-row-gap: 5px;
   align-items: center;
   width: 25%;
@@ -4257,7 +4259,7 @@ textarea.w-input, textarea.w-select {
   border-radius: 20px;
   margin-top: 10px;
 }
-#new-post-message, #new-comment-message{
+#new-post-message, #new-comment-message, #deleted-message{
   position: fixed;
   display: flex;
   background-color: #009dff;
@@ -4267,12 +4269,12 @@ textarea.w-input, textarea.w-select {
   padding: 10px 20px;
   border-radius: 5px;
   opacity: 0;
-  transition: all 1.5s;
+  transition: all 1s;
 }
-#new-post-message.show-new-post-message, #new-comment-message.show-new-comment-message{
+#new-post-message.show-new-post-message, #new-comment-message.show-new-comment-message, #deleted-message.show-deleted-message{
   opacity: 1;
 }
-#new-post-message p, #new-comment-message p{
+#new-post-message p, #new-comment-message p, #deleted-message p{
   margin-right: 10px;
   margin-bottom: 0;
 }
@@ -4313,7 +4315,7 @@ textarea.w-input, textarea.w-select {
 .post-reposted-stats:hover, .repostedPost{
   color: #33f63a;
 }
-.post-likes-stats:hover, .likedPost, .liked-on-comment-stats:hover{
+.post-likes-stats:hover, .likedPost, .liked-on-comment-stats:hover, .likedComment{
   color: #ff008c;
 }
 .post-views-stats:hover{
@@ -4363,4 +4365,48 @@ textarea.w-input, textarea.w-select {
 }
 #new-comment-popup-wrapper .new-comment-popup{
   margin-top: 5%;
+}
+#delete-wrapper{
+  display: none;
+}
+#delete-popup{
+  z-index: 60;
+  background-color: #000;
+  border-radius: 20px;
+  padding: 30px;
+  width: 300px;
+  position: fixed;
+  inset: 50% 0 auto 50%;
+  transform: translate(-50%, -50%);
+  display: block;
+  flex-direction: column;
+}
+#delete-popup h3{
+  margin-top: 0;
+}
+#delete-popup p{
+  color: #fff6;
+  font-size: 15px;
+}
+#delete-popup .deletePopupBtn{
+  width: 100%;
+  margin-bottom: 10px;
+  font-weight: 700;
+  padding: 10px 0;
+  border-radius: 30px;
+  transition: all 0.5s;
+}
+#delete-popup #confirmDelete{
+  background-color: rgb(244, 33, 46);
+  margin-top: 20px;
+}
+#delete-popup #confirmDelete:hover{
+    background-color: rgb(220, 30, 41);
+}
+#delete-popup #cancelDelete{
+  background-color: black;
+  border: 1px solid white;
+}
+#delete-popup #cancelDelete:hover{
+  background-color: rgba(239,243,244,0.1);
 }

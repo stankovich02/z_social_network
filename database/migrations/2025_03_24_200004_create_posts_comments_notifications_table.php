@@ -17,6 +17,6 @@ class create_posts_comments_notifications_table
 
 	public function down() : void
 	{
-		Schema::drop('posts_comments_notifications');
+		Schema::drop(\App\Models\PostCommentNotification::TABLE);
 	}
 }

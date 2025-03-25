@@ -7,7 +7,7 @@ class create_image_posts_table
 {
 	public function up() : void
 	{
-		Schema::create('image_posts', function (Migration $table) {
+		Schema::create(\App\Models\ImagePost::TABLE, function (Migration $table) {
 			$table->id();
             $table->string('image');
 			$table->timestamps();
@@ -18,6 +18,6 @@ class create_image_posts_table
 
 	public function down() : void
 	{
-		Schema::drop('image_posts');
+		Schema::drop(\App\Models\ImagePost::TABLE);
 	}
 }

@@ -18,6 +18,6 @@ class create_comments_table
 
 	public function down() : void
 	{
-		Schema::drop('comments');
+		Schema::drop(\App\Models\Comment::TABLE);
 	}
 }

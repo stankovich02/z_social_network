@@ -7,7 +7,7 @@ class create_blocked_users_table
 {
 	public function up() : void
 	{
-		Schema::create('blocked_users', function (Migration $table) {
+		Schema::create(\App\Models\BlockedUser::TABLE, function (Migration $table) {
 			$table->foreignId('blocked_by_user_id')->references('users')->onDelete('cascade');
             $table->foreignId('blocked_user_id')->references('users')->onDelete('cascade');
 			$table->timestamps();
@@ -18,6 +18,6 @@ class create_blocked_users_table
 
 	public function down() : void
 	{
-		Schema::drop('blocked_users');
+		Schema::drop(\App\Models\BlockedUser::TABLE);
 	}
 }

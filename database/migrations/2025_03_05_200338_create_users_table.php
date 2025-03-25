@@ -7,7 +7,7 @@ class create_users_table
 {
 	public function up() : void
 	{
-		Schema::create('users', function (Migration $table) {
+		Schema::create(\App\Models\User::TABLE, function (Migration $table) {
 			$table->id();
             $table->string('full_name', 50);
             $table->string('username', 50)->unique();
@@ -26,6 +26,6 @@ class create_users_table
 
 	public function down() : void
 	{
-		Schema::drop('users');
+		Schema::drop(\App\Models\User::TABLE);
 	}
 }

@@ -4,6 +4,7 @@ namespace App\Controllers\Client;
 
 use App\Models\Comment;
 use App\Models\ImagePost;
+use App\Models\LikedComment;
 use App\Models\LikedPost;
 use App\Models\Notification;
 use App\Models\Post;
@@ -68,7 +69,7 @@ class PostController extends Controller
 
 	public function show(string $id,Request $request,string $username = null) : View|Response
 	{
-        $post = Post::with('user', 'image','comments','comments.user')->where('id', '=', $id)->first();
+        $post = Post::with('user', 'image','comments','comments.likes','comments.user')->where('id', '=', $id)->first();
         if($request->isAjax()){
             return response()->json([
                 'post' => [
@@ -105,9 +106,19 @@ class PostController extends Controller
         $post->comments = array_reverse($post->comments);
         foreach ($post->comments as $comment) {
             $comment->created_at = $this->calculatePostedDate($comment->created_at);
+            $comment->userLiked = LikedComment::where('user_id', '=', session()->get('user')->id)
+                                ->where('comment_id', '=', $comment->id)
+                                ->count();
         }
+        $blockedUsers = array_column(
+            Database::table('blocked_users')
+                ->where('blocked_by_user_id', '=', session()->get('user')->id)
+                ->get(),
+            'blocked_user_id'
+        );
 		return view('pages.client.post', [
             'post' => $post,
+            'blockedUsers' => $blockedUsers,
             'title' => $post->user->full_name . " on Z: \"" . $post->content . "\" / Z",
             'postedDate'=> ['time' => $postedOnTime, 'date' => $postedOnDate],
             'reposted' => $reposted > 0,

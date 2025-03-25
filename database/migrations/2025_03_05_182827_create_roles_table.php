@@ -16,6 +16,6 @@ class create_roles_table
 
 	public function down() : void
 	{
-		Schema::drop('roles');
+		Schema::drop(\App\Models\Role::TABLE);
 	}
 }

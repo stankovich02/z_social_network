@@ -7,7 +7,7 @@ class create_notifications_table
 {
 	public function up() : void
 	{
-		Schema::create('notifications', function (Migration $table) {
+		Schema::create(\App\Models\Notification::TABLE, function (Migration $table) {
 			$table->id();
             $table->foreignId('notification_type_id')->references('notification_types')->onDelete('cascade');
             $table->foreignId('user_id')->references('users')->onDelete('cascade');
@@ -19,6 +19,6 @@ class create_notifications_table
 
 	public function down() : void
 	{
-		Schema::drop('notifications');
+		Schema::drop(\App\Models\Notification::TABLE);
 	}
 }

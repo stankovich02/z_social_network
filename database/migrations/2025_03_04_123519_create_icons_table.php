@@ -19,6 +19,6 @@ class create_icons_table
 
 	public function down() : void
 	{
-		Schema::drop('icons');
+		Schema::drop(\App\Models\Icon::TABLE);
 	}
 }

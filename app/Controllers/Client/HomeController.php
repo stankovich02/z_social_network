@@ -8,6 +8,7 @@ use App\Models\Post;
 use App\Models\RepostedPost;
 use App\Models\User;
 use App\Traits\CalculateDate;
+use NovaLite\Database\Database;
 use NovaLite\Http\Controller;
 use NovaLite\Views\View;
 
@@ -30,8 +31,15 @@ class HomeController extends Controller
                                       ->count();
             $post->number_of_comments = $post->commentsCount($post->id);
         }
+        $blockedUsers = array_column(
+            Database::table('blocked_users')
+                ->where('blocked_by_user_id', '=', session()->get('user')->id)
+                ->get(),
+            'blocked_user_id'
+        );
         return view('pages.client.home', [
             'posts' => $posts,
+            'blockedUsers' => $blockedUsers,
         ]);
     }
 }

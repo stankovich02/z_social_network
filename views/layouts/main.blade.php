@@ -131,6 +131,15 @@
             <div class="reply-to-comment-btn-wrapper"><button class="reply-comment disabled-new-comment w-button" id="replyBtn" disabled>Reply</button></div>
         </div>
     </div>
+    <div class="popup-wrapper" id="delete-wrapper">
+        <div id="delete-popup">
+            <h3>Delete post?</h3>
+            <p>This can’t be undone and it will be removed from your profile, the timeline of any accounts that follow you, and from search results.</p>
+            <button id="confirmDelete" class="deletePopupBtn">Delete</button>
+            <button id="cancelDelete" class="deletePopupBtn">Cancel</button>
+        </div>
+    </div>
+
     <script src="{{asset('assets/js/webflow.a0aa6ca1.8803622a53cb8314.js')}}" type="text/javascript"></script>
     <script src="{{asset("assets/js/main.js")}}"></script>
 </body>

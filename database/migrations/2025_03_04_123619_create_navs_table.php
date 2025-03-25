@@ -19,6 +19,6 @@ class create_navs_table
 
 	public function down() : void
 	{
-		Schema::drop('navs');
+		Schema::drop(\App\Models\Nav::TABLE);
 	}
 }

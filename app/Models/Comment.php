@@ -4,6 +4,7 @@ namespace App\Models;
 
 use NovaLite\Database\Model;
 use NovaLite\Database\Relations\BelongsTo;
+use NovaLite\Database\Relations\HasMany;
 
 class Comment extends Model
 {
@@ -21,5 +22,9 @@ class Comment extends Model
     public function post() : BelongsTo
     {
         return $this->belongsTo(Post::class);
+    }
+    public function likes() : HasMany
+    {
+        return $this->hasMany(LikedComment::class, 'comment_id');
     }
 }

@@ -7,7 +7,7 @@ class create_reposted_posts_table
 {
 	public function up() : void
 	{
-		Schema::create('reposted_posts', function (Migration $table) {
+		Schema::create(\App\Models\RepostedPost::TABLE, function (Migration $table) {
             $table->foreignId('user_id')->references('users')->onDelete('cascade');
             $table->foreignId('post_id')->references('posts')->onDelete('cascade');
             $table->timestamps();
@@ -17,6 +17,6 @@ class create_reposted_posts_table
 
 	public function down() : void
 	{
-		Schema::drop('reposted_posts');
+		Schema::drop(\App\Models\RepostedPost::TABLE);
 	}
 }

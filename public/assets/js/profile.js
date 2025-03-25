@@ -48,26 +48,49 @@ document.addEventListener("click", function (event) {
     }
     if (event.target.classList.contains("delete-post")) {
         const postId = event.target.getAttribute("data-id");
-        $.ajax({
-            url: "/posts/" + postId,
-            type: "DELETE",
-            success: function(){
-                event.target.parentElement.parentElement.parentElement.remove();
-                let numOfPosts = document.querySelector(".num-of-posts");
-                let numOfPostsText = numOfPosts.textContent;
-                let numOfPostsArr = numOfPostsText.split(" ");
-                let numOfPostsNum = parseInt(numOfPostsArr[0]);
-                numOfPostsNum--;
-                if(numOfPostsNum === 1){
-                    numOfPosts.textContent = numOfPostsNum + " post";
+        const deletePopupWrapper = document.querySelector("#delete-wrapper");
+        const confirmDelete = document.querySelector("#confirmDelete");
+        const cancelDelete = document.querySelector("#cancelDelete");
+        deletePopupWrapper.style.display = "block";
+        document.body.style.overflow = "hidden";
+        confirmDelete.addEventListener("click", function () {
+            $.ajax({
+                url: "/posts/" + postId,
+                type: "DELETE",
+                success: function(){
+                    event.target.parentElement.parentElement.parentElement.remove();
+                    let numOfPosts = document.querySelector(".num-of-posts");
+                    let numOfPostsText = numOfPosts.textContent;
+                    let numOfPostsArr = numOfPostsText.split(" ");
+                    let numOfPostsNum = parseInt(numOfPostsArr[0]);
+                    numOfPostsNum--;
+                    if(numOfPostsNum === 1){
+                        numOfPosts.textContent = numOfPostsNum + " post";
+                    }
+                    else{
+                        numOfPosts.textContent = numOfPostsNum + " posts";
+                    }
+                    deletePopupWrapper.style.display = "none";
+                    document.body.style.overflow = "auto";
+                    let newPostMessage = document.createElement('div')
+                    newPostMessage.id = "deleted-message";
+                    newPostMessage.innerHTML = `<p>Your post was deleted</p>`;
+                    document.body.appendChild(newPostMessage);
+                    setTimeout(function (){
+                        newPostMessage.classList.add('show-deleted-message');
+                    },50);
+                    setTimeout(function (){
+                        newPostMessage.remove();
+                    }, 4000);
+                },
+                error: function(err){
+                    console.log(err);
                 }
-                else{
-                    numOfPosts.textContent = numOfPostsNum + " posts";
-                }
-            },
-            error: function(err){
-                console.log(err);
-            }
+            })
+        })
+        cancelDelete.addEventListener("click", function () {
+            deletePopupWrapper.style.display = "none";
+            document.body.style.overflow = "auto";
         })
     }
     if(event.target.parentElement.parentElement.classList.contains("post-likes-stats")){

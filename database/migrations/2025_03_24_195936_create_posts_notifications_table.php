@@ -17,6 +17,6 @@ class create_posts_notifications_table
 
 	public function down() : void
 	{
-		Schema::drop('posts_notifications');
+		Schema::drop(\App\Models\PostNotification::TABLE);
 	}
 }

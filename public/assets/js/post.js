@@ -20,18 +20,69 @@ document.addEventListener("click", function (event) {
     }
     if (event.target.classList.contains("delete-comment")) {
         const commentId = event.target.getAttribute("data-id");
-        $.ajax({
-            url: `/posts/${commentId}/comment`,
-            type: "DELETE",
-            success: function(){
-                event.target.parentElement.parentElement.parentElement.remove();
-            },
-            error: function(err){
-                console.log(err);
-            }
+        const deletePopupWrapper = document.querySelector("#delete-wrapper");
+        const confirmDelete = document.querySelector("#confirmDelete");
+        const cancelDelete = document.querySelector("#cancelDelete");
+        deletePopupWrapper.style.display = "block";
+        document.body.style.overflow = "hidden";
+        confirmDelete.addEventListener("click", function () {
+            $.ajax({
+                url: `/posts/${commentId}/comment`,
+                type: "DELETE",
+                success: function(data){
+                    event.target.parentElement.parentElement.parentElement.remove();
+                    deletePopupWrapper.style.display = "none";
+                    document.body.style.overflow = "auto";
+                    let deleteMessage = document.createElement('div')
+                    deleteMessage.id = "deleted-message";
+                    deleteMessage.innerHTML = `<p>Your comment was deleted</p>`;
+                    document.body.appendChild(deleteMessage);
+                    let commentCount = document.querySelector(".single-post-comment-stats .post-reaction-stats-text");
+                    commentCount.innerHTML = data.numOfComments > 0 ? data.numOfComments : "";
+                    setTimeout(function (){
+                        deleteMessage.classList.add('show-deleted-message');
+                    },50);
+
+                    setTimeout(function (){
+                        deleteMessage.remove();
+                    }, 4000);
+                },
+                error: function(err){
+                    console.log(err);
+                }
+            })
+        })
+        cancelDelete.addEventListener("click", function () {
+            deletePopupWrapper.style.display = "none";
+            document.body.style.overflow = "auto";
         })
     }
+    if(event.target.parentElement.parentElement.classList.contains("liked-on-comment-stats")){
+        let icon = event.target;
+        let commentId = icon.parentElement.getAttribute("data-cid");
+        let postId = icon.parentElement.getAttribute("data-pid");
+        $.ajax({
+            url: `/posts/${postId}/comment/${commentId}/like`,
+            type: "POST",
+            success: function(data){
+                let commentLikesStats = event.target.parentElement.parentElement.querySelector(".comment-reactions-stats-num");
+                if(icon.classList.contains("fa-regular")){
+                    icon.classList.remove("fa-regular");
+                    icon.classList.add("fa-solid");
+                    icon.classList.add("likedComment");
+                    commentLikesStats.classList.add("likedComment");
+                }
+                else{
+                    icon.classList.remove("fa-solid");
+                    icon.classList.remove("likedComment");
+                    icon.classList.add("fa-regular");
+                    commentLikesStats.classList.remove("likedComment");
+                }
 
+                commentLikesStats.textContent = data.likes > 0 ? data.likes : "";
+            },
+        })
+    }
     if(event.target.parentElement.parentElement.classList.contains("post-likes-stats")){
         let icon = event.target;
         let postId = icon.parentElement.getAttribute("data-id");
@@ -136,19 +187,22 @@ document.querySelector("#postReplyComment").addEventListener("click", function()
                             <div class="comment-stats-icon w-embed">
                                 <i class="fa-regular fa-comment post-ic"></i>
                             </div>
-                            <div class="comment-rections-stats-num"></div>
+                            <div class="comment-reactions-stats-num"></div>
                         </div>
                         <div class="liked-on-comment-stats">
                             <div class="comment-stats-icon w-embed">
                                 <i class="fa-regular fa-heart post-ic"></i>
                             </div>
-                            <div class="comment-rections-stats-num"></div>
+                            <div class="comment-reactions-stats-num"></div>
                         </div>
                     </div>
                 </div>
             `;
             let otherComments = document.querySelector(".other-comments");
             otherComments.insertAdjacentHTML('afterbegin', singleComment.outerHTML);
+            let commentCount = document.querySelector(".single-post-comment-stats .post-reaction-stats-text");
+            commentCount.innerHTML = comment.numOfComments > 0 ? comment.numOfComments : "";
+
         },
         error: function(err){
             console.log(err);

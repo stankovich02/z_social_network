@@ -45,7 +45,7 @@
                         <img src="{{asset('assets/img/users/' . $notification->user->photo)}}" loading="lazy" alt="" class="user-image" />
                         <div class="text-block"><strong>{{$notification->user->full_name}}</strong> liked your post</div>
                         @if($notification->post_notification->post->content)
-                            <div class="liked-post-info">{{$notification->post_notification->post->content}}</div>
+                            <div class="liked-post-info">{{strlen($notification->post_notification->post->content) > 100 ? substr($notification->post_notification->post->content,0,100) . "..." : $notification->post_notification->post->content}}</div>
                         @endif
                         @if($notification->post_notification->post->image)
                             <p data-link="{{$notification->link}}" class="show-all-post">Show all</p>
@@ -71,7 +71,7 @@
                         <img src="{{asset('assets/img/users/' . $notification->user->photo)}}" loading="lazy" alt="" class="user-image" />
                         <div class="text-block"><strong>{{$notification->user->full_name}}</strong> reposted your post</div>
                         @if($notification->post_notification->post->content)
-                            <div class="liked-post-info">{{$notification->post_notification->post->content}}</div>
+                            <div class="liked-post-info">{{strlen($notification->post_notification->post->content) > 100 ? substr($notification->post_notification->post->content,0,100) . "..." : $notification->post_notification->post->content}}</div>
                         @endif
                         @if($notification->post_notification->post->image)
                             <a href="{{$notification->link}}" class="show-all-post">Show all</a>
@@ -94,16 +94,37 @@
                                     <div class="comment-stats-icon w-embed">
                                         <i class="fa-regular fa-comment post-ic"></i>
                                     </div>
-                                    <div class="comment-rections-stats-num"></div>
+                                    <div class="comment-reactions-stats-num"></div>
                                 </div>
                                 <div class="liked-on-comment-stats">
                                     <div class="comment-stats-icon w-embed">
                                         <i class="fa-regular fa-heart post-ic"></i>
                                     </div>
-                                    <div class="comment-rections-stats-num"></div>
+                                    <div class="comment-reactions-stats-num"></div>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                @elseif($notification->notification_type_id === \App\Models\Notification::NOTIFICATION_TYPE_LIKED_REPLY)
+                    <div class="heart-icon w-embed">
+                        <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                xmlns:xlink="http://www.w3.org/1999/xlink"
+                                aria-hidden="true"
+                                role="img"
+                                class="iconify iconify--fe"
+                                width="100%"
+                                height="100%"
+                                preserveAspectRatio="xMidYMid meet"
+                                viewBox="0 0 24 24"
+                        >
+                            <path fill="currentColor" fill-rule="evenodd" d="M12 20c-2.205-.48-9-4.24-9-11a5 5 0 0 1 9-3a5 5 0 0 1 9 3c0 6.76-6.795 10.52-9 11"></path>
+                        </svg>
+                    </div>
+                    <div class="liked-info">
+                        <img src="{{asset('assets/img/users/' . $notification->user->photo)}}" loading="lazy" alt="" class="user-image" />
+                        <div class="text-block"><strong>{{$notification->user->full_name}}</strong> liked your reply</div>
+                        <div class="liked-post-info">{{$notification->post_comment_notification->comment->content}}</div>
                     </div>
                 @endif
             </div>

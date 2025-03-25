@@ -17,6 +17,6 @@ class create_liked_posts_table
 
 	public function down() : void
 	{
-		Schema::drop('liked_posts');
+		Schema::drop(\App\Models\LikedPost::TABLE);
 	}
 }

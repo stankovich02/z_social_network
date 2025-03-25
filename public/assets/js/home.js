@@ -1,24 +1,44 @@
 document.addEventListener("click", function (event) {
     if (event.target.parentElement.classList.contains("post-more-options")) {
         const chooseOption = event.target.parentElement.parentElement.querySelector(".choose-post-option");
-        if(chooseOption.style.display === "block" || chooseOption.style.display === "block!important"){
-            chooseOption.style.display = "none!important";
-        }
-        else{
-            chooseOption.style.display = "block!important";
-        }
+
+        chooseOption.style.display = (chooseOption.style.display === "block") ? "none" : "block";
     }
     if (event.target.classList.contains("delete-post")) {
         const postId = event.target.getAttribute("data-id");
-        $.ajax({
-            url: "/posts/" + postId,
-            type: "DELETE",
-            success: function(){
-                event.target.parentElement.parentElement.parentElement.remove();
-            },
-            error: function(err){
-                console.log(err);
-            }
+        const deletePopupWrapper = document.querySelector("#delete-wrapper");
+        const confirmDelete = document.querySelector("#confirmDelete");
+        const cancelDelete = document.querySelector("#cancelDelete");
+        confirmDelete.dataset.id = postId;
+        deletePopupWrapper.style.display = "block";
+        document.body.style.overflow = "hidden";
+        confirmDelete.addEventListener("click", function () {
+            $.ajax({
+                url: "/posts/" + postId,
+                type: "DELETE",
+                success: function(){
+                    event.target.parentElement.parentElement.parentElement.remove();
+                    deletePopupWrapper.style.display = "none";
+                    document.body.style.overflow = "auto";
+                    let newPostMessage = document.createElement('div')
+                    newPostMessage.id = "deleted-message";
+                    newPostMessage.innerHTML = `<p>Your post was deleted</p>`;
+                    document.body.appendChild(newPostMessage);
+                    setTimeout(function (){
+                        newPostMessage.classList.add('show-deleted-message');
+                    },50);
+                    setTimeout(function (){
+                        newPostMessage.remove();
+                    }, 4000);
+                },
+                error: function(err){
+                    console.log(err);
+                }
+            })
+        })
+        cancelDelete.addEventListener("click", function () {
+            deletePopupWrapper.style.display = "none";
+            document.body.style.overflow = "auto";
         })
     }
     if(!event.target.classList.contains("more-opt-ic")){
@@ -194,18 +214,6 @@ document.addEventListener("click", function (event) {
         observer.observe(post);
     });
 });*/
-const postMoreOptionsBlock = document.querySelectorAll(".post-more-options");
-postMoreOptionsBlock.forEach(postMoreOption => {
-    postMoreOption.addEventListener("click", function () {
-            const chooseOption = this.parentElement.querySelector(".choose-post-option");
-            if(chooseOption.style.display === "block"){
-                chooseOption.style.display = "none";
-            }
-            else{
-                chooseOption.style.display = "block";
-            }
-    })
-});
 const blockUserBtns = document.querySelectorAll(".block-user");
 blockUserBtns.forEach(blockUserBtn => {
     blockUserBtn.addEventListener("click", function () {
