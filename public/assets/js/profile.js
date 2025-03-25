@@ -233,3 +233,26 @@ document.addEventListener("DOMContentLoaded", function () {
         })
     });
 })
+
+if(document.querySelector(".block-user")){
+    let blockUserBtns = document.querySelectorAll(".block-user");
+    blockUserBtns.forEach(blockUserBtn => {
+        blockUserBtn.addEventListener("click", function (){
+            const userId = this.getAttribute("data-id");
+            $.ajax({
+                url: "/users/block",
+                type: "POST",
+                data: {
+                    user_id: userId
+                },
+                success: function(){
+                    let returnBackLink = document.querySelector(".returnBackLink");
+                    returnBackLink.click();
+                },
+                error: function(err){
+                    console.log(err);
+                }
+            })
+        })
+    });
+}

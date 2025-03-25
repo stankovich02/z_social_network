@@ -4164,6 +4164,15 @@ textarea.w-input, textarea.w-select {
 .upload-post-image{
   cursor: pointer;
 }
+.upload-post-image i{
+  font-size: 20px;
+  padding: 10px;
+  border-radius: 50%;
+  transition: all 0.5s;
+}
+.upload-post-image i:hover{
+  background-color: rgba(29,155,240,0.1);
+}
 .hidden-file-input{
   display: none;
 }
@@ -4278,6 +4287,9 @@ textarea.w-input, textarea.w-select {
   margin-right: 10px;
   margin-bottom: 0;
 }
+#deleted-message p{
+  margin-right: 0;
+}
 #new-post-message a, #new-comment-message a{
   color: white;
   text-decoration: none;
@@ -4286,6 +4298,7 @@ textarea.w-input, textarea.w-select {
 #single-post-info{
   flex-direction: column;
   padding: 20px 20px;
+  position: relative;
 }
 #post{
   padding-bottom: 200px;

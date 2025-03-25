@@ -71,6 +71,10 @@ class CommentController extends Controller
     public function destroy(string $id) : Response
     {
         $postId = Comment::where('id', '=', $id)->first()->post_id;
+        $notificationForDelete = PostCommentNotification::where('comment_id', '=', $id)->get();
+        foreach ($notificationForDelete as $notification){
+            Notification::delete($notification->notification_id);
+        }
         Comment::delete($id);
         $post = Post::with('comments')->where('id', '=', $postId)->first();
         return response()->json([

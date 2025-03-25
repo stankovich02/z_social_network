@@ -17,6 +17,7 @@ document.addEventListener("click", function (event) {
         document.querySelectorAll(".choose-comment-option").forEach(chooseOption => {
             chooseOption.style.display = "none";
         })
+        document.querySelector(".choose-post-option").style.display = "none";
     }
     if (event.target.classList.contains("delete-comment")) {
         const commentId = event.target.getAttribute("data-id");
@@ -210,7 +211,7 @@ document.querySelector("#postReplyComment").addEventListener("click", function()
     })
 });
 
-const blockUserBtns = document.querySelectorAll(".block-user");
+const blockUserBtns = document.querySelectorAll(".other-comments .block-user");
 blockUserBtns.forEach(blockUserBtn => {
     blockUserBtn.addEventListener("click", function () {
         const userId = this.getAttribute("data-id");
@@ -229,3 +230,63 @@ blockUserBtns.forEach(blockUserBtn => {
         })
     })
 });
+
+let postMoreOptions = document.querySelector(".post-more-options");
+postMoreOptions.addEventListener("click", function (){
+    const chooseOption = this.parentElement.parentElement.querySelector(".choose-post-option");
+
+    chooseOption.style.display = (chooseOption.style.display === "block") ? "none" : "block";
+})
+
+if(document.querySelector(".delete-post")){
+    let deletePost = document.querySelector(".delete-post");
+    deletePost.addEventListener("click", function (){
+        const postId = this.getAttribute("data-id");
+        const deletePopupWrapper = document.querySelector("#delete-wrapper");
+        const confirmDelete = document.querySelector("#confirmDelete");
+        const cancelDelete = document.querySelector("#cancelDelete");
+        deletePopupWrapper.style.display = "block";
+        document.body.style.overflow = "hidden";
+        confirmDelete.addEventListener("click", function () {
+            $.ajax({
+                url: "/posts/" + postId,
+                type: "DELETE",
+                success: function(){
+                    deletePopupWrapper.style.display = "none";
+                    document.body.style.overflow = "auto";
+                    let returnBackLink = document.querySelector(".returnBackLink");
+                    returnBackLink.click();
+                },
+                error: function(err){
+                    console.log(err);
+                }
+            })
+        })
+        cancelDelete.addEventListener("click", function () {
+            deletePopupWrapper.style.display = "none";
+            document.body.style.overflow = "auto";
+        })
+    })
+}
+
+if(document.querySelector("#single-post-info .block-user")){
+    let blockUser = document.querySelector("#single-post-info .block-user");
+    blockUser.addEventListener("click", function (){
+        const userId = this.getAttribute("data-id");
+        $.ajax({
+            url: "/users/block",
+            type: "POST",
+            data: {
+                user_id: userId
+            },
+            success: function(){
+                let returnBackLink = document.querySelector(".returnBackLink");
+                returnBackLink.click();
+            },
+            error: function(err){
+                console.log(err);
+            }
+        })
+    })
+}
+

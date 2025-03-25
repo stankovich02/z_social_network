@@ -88,7 +88,8 @@
                                 <div class="commented-on-date-text">{{$notification->post_comment_notification->comment->created_at}}</div>
                             </div>
                             <div class="replying-to">Replying to <span class="text-span">&#64;{{session()->get('user')->username}}</span></div>
-                            <div class="comment-body">{{$notification->post_comment_notification->comment->content}}</div>
+                            <div class="comment-body">{{strlen($notification->post_comment_notification->comment->content) > 100 ? substr($notification->post_comment_notification->comment->content,0,100) . "..." : $notification->post_comment_notification->comment->content}}</div>
+
                             <div class="comment-reactions">
                                 <div class="comments-on-comment-stats">
                                     <div class="comment-stats-icon w-embed">

@@ -14,6 +14,7 @@ use App\Traits\CalculateDate;
 use DateTime;
 use NovaLite\Database\Database;
 use NovaLite\Http\Controller;
+use NovaLite\Http\RedirectResponse;
 use NovaLite\Http\Request;
 use NovaLite\Http\Response;
 use NovaLite\Views\View;
@@ -67,7 +68,7 @@ class PostController extends Controller
         ]);
 	}
 
-	public function show(string $id,Request $request,string $username = null) : View|Response
+	public function show(string $id,Request $request,string $username = null) : View|Response|RedirectResponse
 	{
         $post = Post::with('user', 'image','comments','comments.likes','comments.user')->where('id', '=', $id)->first();
         if($request->isAjax()){
@@ -85,6 +86,15 @@ class PostController extends Controller
                     'content' => $post->content ?? null,
                 ]
             ]);
+        }
+        $blockedUsers = array_column(
+            Database::table('blocked_users')
+                ->where('blocked_by_user_id', '=', session()->get('user')->id)
+                ->get(),
+            'blocked_user_id'
+        );
+        if(in_array($post->user->id, $blockedUsers)){
+            return redirect()->to('home');
         }
         $post->number_of_likes = $post->likesCount($post->id);
         $post->user_liked = LikedPost::where('user_id', '=', session()->get('user')->id)
@@ -110,12 +120,6 @@ class PostController extends Controller
                                 ->where('comment_id', '=', $comment->id)
                                 ->count();
         }
-        $blockedUsers = array_column(
-            Database::table('blocked_users')
-                ->where('blocked_by_user_id', '=', session()->get('user')->id)
-                ->get(),
-            'blocked_user_id'
-        );
 		return view('pages.client.post', [
             'post' => $post,
             'blockedUsers' => $blockedUsers,
@@ -140,6 +144,10 @@ class PostController extends Controller
         $post = Post::with('image')->where('id', '=', $id)->first();
         if($post->image){
             unlink(public_path('assets/img/posts/' . $post->image->image));
+        }
+        $notificationsForDelete = PostNotification::where('post_id', '=', $id)->get();
+        foreach ($notificationsForDelete as $notification){
+            Notification::delete($notification->notification_id);
         }
 		Post::delete($id);
 	}

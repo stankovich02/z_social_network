@@ -58,12 +58,13 @@ function writeInputAndIcon(){
     uploadPostImage.classList.add("w-embed");
     uploadPostImage.classList.add("icon-embed-xsmall");
     uploadPostImage.innerHTML = `
-                            <svg
+<i class="fa-regular fa-image"></i>
+                            <!--<svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 xmlns:xlink="http://www.w3.org/1999/xlink"
                                 aria-hidden="true"
                                 role="img"
-                                class="iconify iconify--carbon"
+                                class="iconify iconify&#45;&#45;carbon"
                                 width="100%"
                                 height="100%"
                                 preserveAspectRatio="xMidYMid meet"
@@ -74,7 +75,7 @@ function writeInputAndIcon(){
                                     fill="currentColor"
                                     d="M26 4H6a2 2 0 0 0-2 2v20a2 2 0 0 0 2 2h20a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2m0 22H6v-6l5-5l5.59 5.59a2 2 0 0 0 2.82 0L21 19l5 5Zm0-4.83l-3.59-3.59a2 2 0 0 0-2.82 0L18 19.17l-5.59-5.59a2 2 0 0 0-2.82 0L6 17.17V6h20Z"
                             ></path>
-                        </svg>
+                        </svg>-->
                             `;
     postOptions.insertAdjacentHTML('afterbegin', uploadPostImage.outerHTML);
 }
