@@ -7,11 +7,13 @@ use App\Models\Notification;
 use App\Models\Post;
 use App\Models\PostCommentNotification;
 use App\Models\PostNotification;
+use App\Traits\CalculateDate;
 use NovaLite\Http\Controller;
 use NovaLite\Http\Request;
 
 class CommentController extends Controller
 {
+    use CalculateDate;
     public function store(string $id, Request $request)
     {
         $comment = $request->input('comment');
@@ -20,8 +22,10 @@ class CommentController extends Controller
             'user_id' => session()->get('user')->id,
             'content' => $comment
         ];
+
         Comment::create($newComment);
-        $insertedId = Comment::where('user_id', '=', $newComment['user_id'])->where('content', '=', $newComment['content'])->first()->id;
+        $lastComment = Comment::where('user_id', '=', $newComment['user_id'])->where('content', '=', $newComment['content'])->first();
+        $insertedId = $lastComment->id;
         $post = Post::with('user')->where('id', '=', $id)->first();
         if($post->user_id !== session()->get('user')->id){
             $newNotification = [
@@ -35,10 +39,23 @@ class CommentController extends Controller
                 ->where('user_id', '=', $newNotification['user_id'])
                 ->where('target_user_id', '=', $newNotification['target_user_id'])
                 ->where('link', '=', $newNotification['link'])
+                ->orderBy('id', 'desc')
                 ->first()->id;
             PostCommentNotification::create([
                 'comment_id' => $insertedId,
                 'notification_id' => $notificationId
+            ]);
+        }
+        if($request->input('singlePost')){
+            return response()->json([
+                'id' => $insertedId,
+                'content' => $comment,
+                'created_at' => $this->calculatePostedDate($lastComment->created_at),
+                'user' => [
+                    'photo' => asset('assets/img/users/' . session()->get('user')->photo),
+                    'username' => session()->get('user')->username,
+                    'full_name' => session()->get('user')->full_name,
+                ]
             ]);
         }
         return response()->json([
@@ -46,5 +63,10 @@ class CommentController extends Controller
             'post_link' => route('post', ['username' => $post->user->username, 'id' => $post->id]),
         ]);
 
+    }
+
+    public function destroy(string $id) : void
+    {
+        Comment::delete($id);
     }
 }

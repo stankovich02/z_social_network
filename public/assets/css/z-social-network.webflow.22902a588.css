@@ -2657,6 +2657,7 @@ textarea.w-input, textarea.w-select {
   align-items: flex-start;
   padding: 20px;
   display: flex;
+  position: relative;
   width: 100%;
 }
 .single-notification .single-comment{
@@ -2691,12 +2692,14 @@ textarea.w-input, textarea.w-select {
 
 .commented-by-username {
   font-size: 16px;
-  font-weight: 700;
+  font-weight: normal;
+  color: #fff6;
 }
 
 .commented-by-fullname {
-  color: #fff6;
+  color: white;
   font-size: 16px;
+  font-weight: 700;
 }
 
 .commented-on-date {
@@ -4203,7 +4206,7 @@ textarea.w-input, textarea.w-select {
     height: 1rem;
     margin-right: 5px;
 }
-.post-more-options-wrapper{
+.post-more-options-wrapper,.comment-more-options-wrapper{
   position: absolute;
   top: 5px;
   right: 5px;
@@ -4212,7 +4215,7 @@ textarea.w-input, textarea.w-select {
   align-items: end;
 
 }
-.choose-post-option{
+.choose-post-option,.choose-comment-option{
   box-shadow: rgba(255, 255, 255, 0.2) 0 0 15px, rgba(255, 255, 255, 0.15) 0 0 3px 1px;
   background-color: black;
   border-radius: 16px;
@@ -4224,28 +4227,28 @@ textarea.w-input, textarea.w-select {
   z-index: 5;
   display: none;
 }
-.choose-post-option:hover{
+.choose-post-option:hover,.choose-comment-option:hover{
   background-color: #111212;
 }
-.single-post-option{
+.single-post-option,.single-comment-option{
   cursor: pointer;
   display: flex;
   align-items: center;
 }
-.delete-post{
+.delete-post,.delete-comment{
     color: red;
 }
-.post-more-options{
+.post-more-options,.comment-more-options{
   color: #88888880;
   transition: all 0.5s;
   padding: 5px;
   border-radius: 50%;
 }
-.post-more-options:hover{
+.post-more-options:hover,.comment-more-options:hover{
   color: #009dff;
   background-color: #5b708366;
 }
-.non-clicked-post-more-options:hover{
+.non-clicked-post-more-options:hover,.non-clicked-comment-more-options:hover{
   color: #88888880;
   background-color: black;
 }

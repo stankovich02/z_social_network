@@ -102,6 +102,7 @@ class PostController extends Controller
         $reposted = RepostedPost::where('user_id', '=', session()->get('user')->id)
                                 ->where('post_id', '=', $post->id)
                                 ->count();
+        $post->comments = array_reverse($post->comments);
         foreach ($post->comments as $comment) {
             $comment->created_at = $this->calculatePostedDate($comment->created_at);
         }
@@ -189,7 +190,6 @@ class PostController extends Controller
             'likes' => $numOfLikes
         ]);
     }
-
     public function repostPost(string $id) : Response
     {
         $alreadyReposted = RepostedPost::where('user_id', '=', session()->get('user')->id)

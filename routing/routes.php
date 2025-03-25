@@ -39,6 +39,7 @@ Router::middleware([\App\Middlewares\IsLoggedIn::class])->group(function () {
 
     Router::controller(\App\Controllers\Client\CommentController::class)->group(function () {
         Router::post('/posts/{id}/comment', 'store')->name('comment.store');
+        Router::delete('/posts/{id}/comment', 'destroy')->name('comment.destroy');
     });
 
 
