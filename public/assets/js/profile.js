@@ -256,3 +256,116 @@ if(document.querySelector(".block-user")){
         })
     });
 }
+const setupProfileBtn = document.querySelector("#setupProfile");
+setupProfileBtn.addEventListener("click", function (){
+    const setupProfileWrapper = document.querySelector("#setupProfileWrapper");
+    setupProfileWrapper.style.display = "block";
+    let returnBackBtn = document.querySelector("#returnBackSetupProfile");
+    let closeIcon = document.querySelector("#setupProfileWrapper .close-icon");
+    let skipPictureBtn = document.querySelector(".pick-profile-picture .skip-profile-btn");
+    let skipHeaderBtn = document.querySelector(".pick-header .skip-profile-btn");
+    let skipBioBtn = document.querySelector(".describe-bio .skip-profile-btn");
+    let pickProfilePicture = document.querySelector(".pick-profile-picture");
+    let pickHeader = document.querySelector(".pick-header");
+    let describeBio = document.querySelector(".describe-bio");
+    let saveProfile = document.querySelector("#saveProfileDiv");
+    let saveProfileBtn = document.querySelector("#saveProfileDiv .save-profile-btn");
+    let popupLogo = document.querySelector("#setupProfileWrapper .top-setup-profile .popup-logo");
+    skipPictureBtn.addEventListener("click", function (){
+        pickProfilePicture.style.display = "none";
+        pickHeader.style.display = "block";
+        returnBackBtn.style.display = "block";
+    });
+    returnBackBtn.addEventListener("click", function (){
+        if(pickHeader.style.display === "block"){
+            pickHeader.style.display = "none";
+            pickProfilePicture.style.display = "flex";
+        }
+        if(describeBio.style.display === "block"){
+            describeBio.style.display = "none";
+            pickHeader.style.display = "block";
+        }
+    })
+    skipHeaderBtn.addEventListener("click", function (){
+        pickHeader.style.display = "none";
+        describeBio.style.display = "block";
+    });
+    skipBioBtn.addEventListener("click", function (){
+        describeBio.style.display = "none";
+        saveProfile.style.display = "flex";
+        popupLogo.style.display = "none";
+        returnBackBtn.style.display = "none";
+        closeIcon.style.display = "block";
+    });
+    closeIcon.addEventListener("click", function (){
+        pickProfilePicture.style.display = "flex";
+        saveProfile.style.display = "none";
+        setupProfileWrapper.style.display = "none";
+        closeIcon.style.display = "none";
+    });
+    saveProfileBtn.addEventListener("click", function (){
+        pickProfilePicture.style.display = "flex";
+        saveProfile.style.display = "none";
+        setupProfileWrapper.style.display = "none";
+        closeIcon.style.display = "none";
+    });
+})
+
+let bioTextarea= document.querySelector(".describe-bio #biography");
+bioTextarea.addEventListener("keyup", () => {
+    console.log("Aaa")
+    if(bioTextarea.value.length > 160){
+        bioTextarea.parentElement.parentElement.parentElement.querySelector(".max-num-of-letters").style.color = "red";
+    }
+    else{
+        bioTextarea.parentElement.parentElement.parentElement.querySelector(".max-num-of-letters").style.color = "#fff6";
+    }
+    const numOfCharacters = bioTextarea.parentElement.parentElement.parentElement.querySelector(".num-of-letters");
+    numOfCharacters.innerHTML = bioTextarea.value.length;
+})
+let profilePictureInput = document.querySelector("#pickProfilePicture");
+let addProfilePictureIcon = document.querySelector(".pick-profile-picture .add-new-photo-icon");
+addProfilePictureIcon.addEventListener("click", function (){
+    profilePictureInput.click();
+});
+profilePictureInput.addEventListener("change", function (){
+    let image = this.files[0];
+    let formData = new FormData();
+    formData.append("image", image);
+    $.ajax({
+        url: "/upload-user-image",
+        type: "POST",
+        processData: false,
+        contentType: false,
+        data: formData,
+        success: function(data){
+            let img = document.querySelector(".pick-picture-wrapper img");
+            img.src = data.newPhoto;
+            let profilePictureInput = document.querySelector("#pickProfilePicture");
+            profilePictureInput.value = "";
+            let removePhotoWrapper = document.querySelector(".remove-new-photo-wrapper")
+            removePhotoWrapper.style.display = "block";
+            let removePhotoIcon = document.querySelector(".pick-picture-wrapper .remove-new-photo-icon");
+            removePhotoIcon.addEventListener("click", function (){
+                $.ajax({
+                    url: "/delete-user-image?imgPath=" + encodeURIComponent(data.newPhoto) + "&oldImgPath=" + encodeURIComponent(data.oldPhoto),
+                    type: "DELETE",
+                    success: function(){
+                        img.src = data.oldPhoto;
+                        removePhotoWrapper.style.display = "none";
+                    },
+                    error: function(err){
+                        console.log(err)
+                    }
+                })
+            })
+
+        },
+        error: function(err){
+            console.log(err)
+        }
+    })
+})
+function removeProfilePicture(data){
+
+}

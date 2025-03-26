@@ -2,6 +2,7 @@
 
 use App\Controllers\Client\CommentController;
 use App\Controllers\Client\PostController;
+use App\Controllers\Client\UserController;
 use NovaLite\Routing\Router;
 
 Router::middleware([\App\Middlewares\IsNotLoggedIn::class])->group(function () {
@@ -48,7 +49,12 @@ Router::middleware([\App\Middlewares\IsLoggedIn::class])->group(function () {
     });
 
 
-    Router::post('/users/block', [\App\Controllers\Client\UserController::class, 'blockUser'])->name('block-user');
+
+    Router::controller(UserController::class)->group(function (){
+        Router::post('/users/block', 'blockUser')->name('block-user');
+        Router::post('/upload-user-image', 'uploadProfileImage')->name('upload-user-image');
+        Router::delete('/delete-user-image', 'deleteProfileImage')->name('delete-user-image');
+    });
 });
 
 

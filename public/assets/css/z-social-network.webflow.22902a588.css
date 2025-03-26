@@ -3145,6 +3145,7 @@ textarea.w-input, textarea.w-select {
   border-radius: 20px;
   font-weight: 700;
   line-height: 16px;
+  transition: all 0.5s;
 }
 
 .profile-info-detailed {
@@ -3624,7 +3625,7 @@ textarea.w-input, textarea.w-select {
 }
 
 .popup-logo {
-  width: 30px;
+  width: 40px;
   position: absolute;
   top: 20px;
   left: 50%;
@@ -3677,12 +3678,14 @@ textarea.w-input, textarea.w-select {
   font-size: 16px;
   font-weight: 700;
   position: absolute;
-  bottom: -7%;
+  bottom: -3%;
   left: 50%;
   right: 0;
   transform: translate(-50%, -50%);
 }
-
+.pick-profile-picture .skip-profile-btn{
+  bottom: -7%;
+}
 .pick-picture-wrapper {
   background-color: #000;
   border: 3px solid #fff;
@@ -3701,6 +3704,7 @@ textarea.w-input, textarea.w-select {
   width: 1.3rem;
   height: 1.3rem;
   display: flex;
+  cursor: pointer;
 }
 
 .add-new-photo-icon-wrapper {
@@ -3759,6 +3763,7 @@ textarea.w-input, textarea.w-select {
   width: 1.5rem;
   height: 1.5rem;
   display: flex;
+  cursor: pointer;
 }
 
 .pick-header {
@@ -3777,15 +3782,18 @@ textarea.w-input, textarea.w-select {
 
 .current-profile-info {
   position: relative;
+  z-index: 10;
 }
 
 .current-profile-pic {
-  opacity: .6;
+  opacity: 1;
   border-radius: 50%;
   width: 100px;
   height: 100px;
   position: absolute;
   bottom: 50px;
+  left: 10px;
+  margin-bottom: 10px;
 }
 
 .current-user-fullname {
@@ -4422,4 +4430,30 @@ textarea.w-input, textarea.w-select {
 }
 #delete-popup #cancelDelete:hover{
   background-color: rgba(239,243,244,0.1);
+}
+.setup-profile:hover{
+  background-color: rgba(239,243,244,0.1);
+}
+#setupProfileWrapper .close-icon{
+  display: none;
+}
+.describe-bio #biography{
+  resize: none;
+  background-color: #0000;
+  width: 100%;
+  min-height: 50px;
+  max-height: 500px;
+  margin-bottom: 0;
+  font-size: 16px;
+  font-weight: 400;
+  overflow: hidden;
+  color: white;
+}
+#saveProfileDiv .save-profile-logo{
+  width: 50px;
+  height: 50px;
+}
+#returnBackSetupProfile{
+  display: none;
+  cursor: pointer;
 }

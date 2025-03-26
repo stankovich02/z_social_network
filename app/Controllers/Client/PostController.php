@@ -89,8 +89,8 @@ class PostController extends Controller
         }
         $blockedUsers = array_column(
             Database::table('blocked_users')
-                ->where('blocked_by_user_id', '=', session()->get('user')->id)
-                ->get(),
+                    ->where('blocked_by_user_id', '=', session()->get('user')->id)
+                    ->get(),
             'blocked_user_id'
         );
         if(in_array($post->user->id, $blockedUsers)){

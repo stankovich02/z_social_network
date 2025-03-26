@@ -17,28 +17,26 @@ class ProfileController extends Controller
     use CalculateDate;
     public function index(string $username) : View|RedirectResponse
     {
-        $profileUser = Database::table('users')
-            ->select('id')
-            ->where('username', '=', $username)
-            ->first();
         $blockedUsers = array_column(
             Database::table('blocked_users')
                 ->where('blocked_by_user_id', '=', session()->get('user')->id)
                 ->get(),
             'blocked_user_id'
         );
-        if(in_array($profileUser->id, $blockedUsers)) {
+        $user = User::with('posts','repostedPosts','posts.image','repostedPosts.user', 'repostedPosts.post')->where('username', '=',
+            $username)->first();
+        if(in_array($user->id, $blockedUsers)) {
             return redirect()->to('home');
         }
-        $posts = Post::with('user','image')->where('user_id', '=',$profileUser->id)->orderBy('id','desc')->get();
-        $repostedPosts = RepostedPost::with('user')->where('user_id', '=',$profileUser->id)->orderBy('created_at', 'desc')->get();
-        foreach ($posts as $post) {
+        $joinedDate = date('F Y', strtotime(session()->get('user')->created_at));
+
+        foreach ($user->posts as $post) {
             $post->type = Post::ORIGINAL_POST;
         }
-        foreach ($repostedPosts as $repostedPost) {
+        foreach ($user->repostedPosts as $repostedPost) {
             $repostedPost->type = Post::REPOSTED_POST;
         }
-        $mergedPosts = array_merge($posts, $repostedPosts);
+        $mergedPosts = array_merge($user->posts, $user->repostedPosts);
         usort($mergedPosts, function ($a, $b) {
             return strtotime($b->created_at) <=> strtotime($a->created_at);
         });
@@ -72,11 +70,8 @@ class ProfileController extends Controller
         }
         $countPosts = count($mergedPosts);
         $numOfPosts = ($countPosts == 0 || $countPosts > 1) ? $countPosts . ' posts' : $countPosts . ' post';
-
-        $joinedDate = date('F Y', strtotime(session()->get('user')->created_at));
-        $user = User::where('username', '=', $username)->first();
+        $user->mergedPosts = $mergedPosts;
         return view('pages.client.profile', [
-            'posts' => $mergedPosts,
             'numOfPosts' => $numOfPosts,
             'joinedDate' => $joinedDate,
             'user' => $user

@@ -38,6 +38,11 @@ class User extends Model
     {
         return $this->hasMany(Post::class, 'user_id');
     }
+
+    public function repostedPosts() : HasMany
+    {
+        return $this->hasMany(RepostedPost::class, 'user_id');
+    }
     public function likedPosts() : HasMany
     {
         return $this->hasMany(LikedPost::class, 'user_id');
