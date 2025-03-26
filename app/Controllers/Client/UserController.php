@@ -33,6 +33,9 @@ class UserController extends Controller
         $oldPhoto = $user->photo;
         $user->photo = $newName;
         $user->save();
+        $sessionUser = session()->get('user');
+        $sessionUser->photo = $newName;
+        session()->set('user', $sessionUser);
 
         return response()->json([
             'newPhoto' => asset('assets/img/users/' . $newName),
@@ -50,7 +53,10 @@ class UserController extends Controller
         $path = public_path('assets/img/users/' . $imgName);
 
         $user = User::where('id', '=',session()->get('user')->id)->first();
+        $sessionUser = session()->get('user');
         $user->photo = $oldImgName;
+        $sessionUser->photo = $oldImgName;
+        session()->set('user', $sessionUser);
         $user->save();
 
         unlink($path);
@@ -65,9 +71,13 @@ class UserController extends Controller
         move_uploaded_file($tmpName, $path);
 
         $user = User::where('id', '=',session()->get('user')->id)->first();
+
         $oldPhoto = $user->cover_photo;
         $user->cover_photo = $newName;
         $user->save();
+        $sessionUser = session()->get('user');
+        $sessionUser->cover_photo = $newName;
+        session()->set('user', $sessionUser);
 
         return response()->json([
             'newPhoto' => asset('assets/img/users-covers/' . $newName),
@@ -85,7 +95,10 @@ class UserController extends Controller
         $path = public_path('assets/img/users-covers/' . $imgName);
 
         $user = User::where('id', '=',session()->get('user')->id)->first();
+        $sessionUser = session()->get('user');
         $user->cover_photo = $oldImgName;
+        $sessionUser->cover_photo = $oldImgName;
+        session()->set('user', $sessionUser);
         $user->save();
 
         unlink($path);
@@ -94,13 +107,16 @@ class UserController extends Controller
     public function addBiography(Request $request) : Response
     {
         $biography = $request->input('biography');
-        if(strlen($biography) < 20){
+        if(strlen($biography) > 160){
             return response()->setStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY)->json([
                 'error' => 'Biography must be less than 160 characters'
             ]);
         }
         $user = User::where('id', '=',session()->get('user')->id)->first();
+        $sessionUser = session()->get('user');
         $user->biography = $biography;
+        $sessionUser->biography = $biography;
+        session()->set('user', $sessionUser);
         $user->save();
 
         return response()->json([]);

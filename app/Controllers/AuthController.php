@@ -47,7 +47,7 @@ class AuthController extends Controller
             return redirect()->back()->with('error-message', 'Username and password are required');
         }
 
-        $user = Database::table('users')->where('username', '=', $request->input('username'))->first();;
+        $user = Database::table('users')->where('username', '=', $request->input('username'))->first();
         if (!$user) {
             return redirect()->back()->with('error-message', 'Wrong credentials.');
         }

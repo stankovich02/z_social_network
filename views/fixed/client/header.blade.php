@@ -36,7 +36,7 @@
             <a href="{{route('logout')}}" id="logout-text">Logout, <span id="logged-user-fullname">{{session()->get('user')->full_name}}</span></a>
         </div>
         <div class="logged-in-user">
-            <img src="{{asset('assets/img/67b61da06092cd17329df26d/67b9c46d9abe545630bb3f09_default.jpg')}}" loading="lazy" alt="" class="user-image" />
+            <img src="{{asset('assets/img/users/' . session()->get('user')->photo)}}" loading="lazy" alt="" class="user-image" />
             <div class="logged-in-user-info">
                 <div class="user-fullname">{{session()->get('user')->full_name}}</div>
                 <div class="user-username">&#64;{{session()->get('user')->username}}</div>
