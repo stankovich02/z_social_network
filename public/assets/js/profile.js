@@ -257,6 +257,42 @@ if(document.querySelector(".block-user")){
     });
 }
 const setupProfileBtn = document.querySelector("#setupProfile");
+function nextBioBtnFunc(describeBio,saveProfile,popupLogo,returnBackBtn,closeIcon){
+    let nextBioBtn = document.querySelector(".describe-bio .next-profile-btn");
+    nextBioBtn.addEventListener("click", function (){
+        let bioTextarea = document.querySelector(".describe-bio #biography");
+        $.ajax({
+            url: "/users/biography",
+            type: "POST",
+            data: {
+                biography: bioTextarea.value
+            },
+            success: function(){
+                describeBio.style.display = "none";
+                saveProfile.style.display = "flex";
+                popupLogo.style.display = "none";
+                returnBackBtn.style.display = "none";
+                closeIcon.style.display = "block";
+                if(document.querySelector(".describe-bio .errorMsg")){
+                    document.querySelector(".describe-bio .errorMsg").remove();
+                }
+                let profileBio = document.querySelector(".profile-bio");
+                profileBio.textContent += bioTextarea.value;
+                bioTextarea.value = "";
+
+            },
+            error: function(data){
+                let describeBio = document.querySelector(".describe-bio");
+                describeBio.innerHTML += `<p class="errorMsg">${data.responseJSON.error}</p>`;
+                let numOfLetters = document.querySelector(".describe-bio .num-of-letters");
+                numOfLetters.textContent = "0";
+                typingBio();
+                nextBioBtnFunc(describeBio,saveProfile,popupLogo,returnBackBtn,closeIcon);
+            }
+        })
+
+    });
+}
 setupProfileBtn.addEventListener("click", function (){
     const setupProfileWrapper = document.querySelector("#setupProfileWrapper");
     setupProfileWrapper.style.display = "block";
@@ -271,6 +307,9 @@ setupProfileBtn.addEventListener("click", function (){
     let saveProfile = document.querySelector("#saveProfileDiv");
     let saveProfileBtn = document.querySelector("#saveProfileDiv .save-profile-btn");
     let popupLogo = document.querySelector("#setupProfileWrapper .top-setup-profile .popup-logo");
+    let nextProfileBtn = document.querySelector(".pick-profile-picture .next-profile-btn");
+    let nextHeaderBtn = document.querySelector(".pick-header .next-profile-btn");
+
     skipPictureBtn.addEventListener("click", function (){
         pickProfilePicture.style.display = "none";
         pickHeader.style.display = "block";
@@ -280,6 +319,7 @@ setupProfileBtn.addEventListener("click", function (){
         if(pickHeader.style.display === "block"){
             pickHeader.style.display = "none";
             pickProfilePicture.style.display = "flex";
+            returnBackBtn.style.display = "none";
         }
         if(describeBio.style.display === "block"){
             describeBio.style.display = "none";
@@ -296,6 +336,9 @@ setupProfileBtn.addEventListener("click", function (){
         popupLogo.style.display = "none";
         returnBackBtn.style.display = "none";
         closeIcon.style.display = "block";
+        if(document.querySelector(".describe-bio .errorMsg")){
+            document.querySelector(".describe-bio .errorMsg").remove();
+        }
     });
     closeIcon.addEventListener("click", function (){
         pickProfilePicture.style.display = "flex";
@@ -309,20 +352,44 @@ setupProfileBtn.addEventListener("click", function (){
         setupProfileWrapper.style.display = "none";
         closeIcon.style.display = "none";
     });
+    nextProfileBtn.addEventListener("click", function (){
+        pickProfilePicture.style.display = "none";
+        pickHeader.style.display = "block";
+        returnBackBtn.style.display = "block";
+    });
+    nextHeaderBtn.addEventListener("click", function (){
+        pickHeader.style.display = "none";
+        describeBio.style.display = "block";
+    });
+    nextBioBtnFunc(describeBio,saveProfile,popupLogo,returnBackBtn,closeIcon);
 })
 
-let bioTextarea= document.querySelector(".describe-bio #biography");
-bioTextarea.addEventListener("keyup", () => {
-    console.log("Aaa")
-    if(bioTextarea.value.length > 160){
-        bioTextarea.parentElement.parentElement.parentElement.querySelector(".max-num-of-letters").style.color = "red";
-    }
-    else{
-        bioTextarea.parentElement.parentElement.parentElement.querySelector(".max-num-of-letters").style.color = "#fff6";
-    }
-    const numOfCharacters = bioTextarea.parentElement.parentElement.parentElement.querySelector(".num-of-letters");
-    numOfCharacters.innerHTML = bioTextarea.value.length;
-})
+function typingBio(){
+    let bioTextarea= document.querySelector(".describe-bio #biography");
+    bioTextarea.addEventListener("keyup", () => {
+        let skipBioBtn = document.querySelector(".describe-bio .skip-profile-btn");
+        let nextBioBtn = document.querySelector(".describe-bio .next-profile-btn");
+        if(bioTextarea.value.length > 160){
+            bioTextarea.parentElement.parentElement.parentElement.querySelector(".max-num-of-letters").style.color = "red";
+        }
+        else{
+            bioTextarea.parentElement.parentElement.parentElement.querySelector(".max-num-of-letters").style.color = "#fff6";
+        }
+        if(bioTextarea.value.length > 0){
+            skipBioBtn.style.display = "none";
+            nextBioBtn.style.display = "block";
+        }
+        else{
+            skipBioBtn.style.display = "block";
+            nextBioBtn.style.display = "none";
+        }
+        const numOfCharacters = bioTextarea.parentElement.parentElement.parentElement.querySelector(".num-of-letters");
+        numOfCharacters.innerHTML = bioTextarea.value.length;
+    })
+}
+
+
+typingBio();
 let profilePictureInput = document.querySelector("#pickProfilePicture");
 let addProfilePictureIcon = document.querySelector(".pick-profile-picture .add-new-photo-icon");
 addProfilePictureIcon.addEventListener("click", function (){
@@ -340,11 +407,17 @@ profilePictureInput.addEventListener("change", function (){
         data: formData,
         success: function(data){
             let img = document.querySelector(".pick-picture-wrapper img");
+            let skipProfilePictureBtn = document.querySelector(".pick-profile-picture .skip-profile-btn");
+            let nextHeaderBtn = document.querySelector(".pick-profile-picture .next-profile-btn");
+            let profilePicture = document.querySelector("#profile .profile-info img")
             img.src = data.newPhoto;
+            profilePicture.src = data.newPhoto;
             let profilePictureInput = document.querySelector("#pickProfilePicture");
             profilePictureInput.value = "";
-            let removePhotoWrapper = document.querySelector(".remove-new-photo-wrapper")
+            let removePhotoWrapper = document.querySelector(".pick-profile-picture .remove-new-photo-wrapper")
             removePhotoWrapper.style.display = "block";
+            skipProfilePictureBtn.style.display = "none";
+            nextHeaderBtn.style.display = "block";
             let removePhotoIcon = document.querySelector(".pick-picture-wrapper .remove-new-photo-icon");
             removePhotoIcon.addEventListener("click", function (){
                 $.ajax({
@@ -352,7 +425,10 @@ profilePictureInput.addEventListener("change", function (){
                     type: "DELETE",
                     success: function(){
                         img.src = data.oldPhoto;
+                        profilePicture.src = data.oldPhoto;
                         removePhotoWrapper.style.display = "none";
+                        skipProfilePictureBtn.style.display = "block";
+                        nextHeaderBtn.style.display = "none";
                     },
                     error: function(err){
                         console.log(err)
@@ -366,6 +442,55 @@ profilePictureInput.addEventListener("change", function (){
         }
     })
 })
-function removeProfilePicture(data){
+let headerPictureInput = document.querySelector("#pickHeaderPicture");
+let addHeaderPictureIcon = document.querySelector(".pick-header .add-new-photo-icon");
+addHeaderPictureIcon.addEventListener("click", function (){
+    headerPictureInput.click();
+});
+headerPictureInput.addEventListener("change", function (){
+    let image = this.files[0];
+    let formData = new FormData();
+    formData.append("image", image);
+    $.ajax({
+        url: "/upload-cover-image",
+        type: "POST",
+        processData: false,
+        contentType: false,
+        data: formData,
+        success: function(data){
+            let img = document.querySelector(".pick-header-img-wrapper img");
+            let skipCoverPictureBtn = document.querySelector(".pick-header .skip-profile-btn");
+            let nextBioBtn = document.querySelector(".pick-header .next-profile-btn");
+            let profileCover = document.querySelector("#profile .profile-banner")
+            img.src = data.newPhoto;
+            profileCover.src = data.newPhoto;
+            let coverPictureInput = document.querySelector("#pickHeaderPicture");
+            coverPictureInput.value = "";
+            let removePhotoWrapper = document.querySelector(".pick-header .remove-new-photo-wrapper")
+            removePhotoWrapper.style.display = "block";
+            skipCoverPictureBtn.style.display = "none";
+            nextBioBtn.style.display = "block";
+            let removePhotoIcon = document.querySelector(".pick-header .remove-new-photo-icon");
+            removePhotoIcon.addEventListener("click", function (){
+                $.ajax({
+                    url: "/delete-cover-image?imgPath=" + encodeURIComponent(data.newPhoto) + "&oldImgPath=" + encodeURIComponent(data.oldPhoto),
+                    type: "DELETE",
+                    success: function(){
+                        img.src = data.oldPhoto;
+                        profileCover.src = data.oldPhoto;
+                        removePhotoWrapper.style.display = "none";
+                        skipCoverPictureBtn.style.display = "block";
+                        nextBioBtn.style.display = "none";
+                    },
+                    error: function(err){
+                        console.log(err)
+                    }
+                })
+            })
 
-}
+        },
+        error: function(err){
+            console.log(err)
+        }
+    })
+})

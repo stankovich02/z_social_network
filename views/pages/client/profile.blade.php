@@ -50,9 +50,7 @@
         <div class="profile-info-detailed">
             <div class="profile-fullname">{{$user->full_name}}</div>
             <div class="profile-username">&#64;{{$user->username}}</div>
-            @if($user->biography)
-                <p class="profile-bio">{{$user->biography}}</p>
-            @endif
+            <p class="profile-bio">{{$user->biography ?? ''}}</p>
             <div class="profile-joined-date">
                 <div class="icon-embed-xsmall-6 w-embed">
                     <svg
@@ -315,6 +313,7 @@
                         class="pick-header-img"
                 />
                 <div class="add-or-remove-photo-icons">
+                    <input type="file" id="pickHeaderPicture" class="hidden-file-input" name="profile-header-picture" />
                     <div class="add-new-photo-icon-wrapper">
                         <div class="add-new-photo-icon w-embed">
                             <svg
@@ -365,7 +364,8 @@
                 <div class="current-user-fullname">Marko Stankovic</div>
                 <div class="current-user-username">@markostanke2002</div>
             </div>
-            <a href="#" class="skip-profile-btn w-button">Skip for now</a><a href="#" class="next-profile-btn w-button">Next</a>
+            <button class="skip-profile-btn w-button">Skip for now</button>
+            <button class="next-profile-btn w-button">Next</button>
         </div>
         <div class="describe-bio">
             <div class="pick-text-wrapper">
@@ -392,7 +392,8 @@
                     </form>
                 </div>
             </div>
-            <a href="#" class="skip-profile-btn w-button">Skip for now</a><a href="#" class="next-profile-btn w-button">Next</a>
+            <button class="skip-profile-btn w-button">Skip for now</button>
+            <button class="next-profile-btn w-button">Next</button>
         </div>
         <div class="save-profile" id="saveProfileDiv">
             <img src="{{asset('assets/img/logo_large.png')}}" loading="lazy" alt="" class="save-profile-logo" />

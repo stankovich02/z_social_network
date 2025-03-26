@@ -3711,8 +3711,11 @@ textarea.w-input, textarea.w-select {
   background-color: #0f1419bf;
   border-radius: 50%;
   padding: 10px;
+  transition: all 0.5s;
 }
-
+.add-new-photo-icon-wrapper:hover{
+  background-color: rgba(39,44,48,0.75);
+}
 .next-profile-btn {
   color: #000;
   text-align: center;
@@ -3726,11 +3729,13 @@ textarea.w-input, textarea.w-select {
   font-weight: 700;
   display: none;
   position: absolute;
-  bottom: -7%;
+  bottom: -3%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
-
+.pick-profile-picture .next-profile-btn{
+  bottom: -7%;
+}
 .add-or-remove-photo-icons {
   grid-column-gap: 25px;
   grid-row-gap: 25px;
@@ -3754,14 +3759,17 @@ textarea.w-input, textarea.w-select {
   border-radius: 50%;
   padding: 10px;
   display: none;
+  transition: all 0.5s;
 }
-
+.remove-new-photo-wrapper:hover{
+    background-color: rgba(39,44,48,0.75);
+}
 .remove-new-photo-icon {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.3rem;
+  height: 1.3rem;
   display: flex;
   cursor: pointer;
 }
@@ -4140,6 +4148,9 @@ textarea.w-input, textarea.w-select {
 }
 .validationError,.errorMsg{
   color: red;
+}
+.describe-bio .errorMsg{
+  margin-top: 10px;
 }
 .success-message{
   color: green;

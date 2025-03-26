@@ -39,7 +39,6 @@ class UserController extends Controller
             'oldPhoto' => asset('assets/img/users/' . $oldPhoto),
         ]);
     }
-
     public function deleteProfileImage(Request $request) : void
     {
         $imgPath = $request->query('imgPath');
@@ -55,5 +54,55 @@ class UserController extends Controller
         $user->save();
 
         unlink($path);
+    }
+    public function uploadCoverImage(Request $request) : Response
+    {
+        $image = $request->file('image');
+        $tmpName = $image->tmpName();
+        $ext = $image->extension();
+        $newName = uniqid() . '.' . $ext;
+        $path = public_path('/assets/img/users-covers/' . $newName);
+        move_uploaded_file($tmpName, $path);
+
+        $user = User::where('id', '=',session()->get('user')->id)->first();
+        $oldPhoto = $user->cover_photo;
+        $user->cover_photo = $newName;
+        $user->save();
+
+        return response()->json([
+            'newPhoto' => asset('assets/img/users-covers/' . $newName),
+            'oldPhoto' => asset('assets/img/users-covers/' . $oldPhoto),
+        ]);
+    }
+    public function deleteCoverImage(Request $request) : void
+    {
+        $imgPath = $request->query('imgPath');
+        $oldImgPath = $request->query('oldImgPath');
+        $explodedPath = explode('/', $imgPath);
+        $explodedOldPath = explode('/', $oldImgPath);
+        $imgName = end($explodedPath);
+        $oldImgName = end($explodedOldPath);
+        $path = public_path('assets/img/users-covers/' . $imgName);
+
+        $user = User::where('id', '=',session()->get('user')->id)->first();
+        $user->cover_photo = $oldImgName;
+        $user->save();
+
+        unlink($path);
+    }
+
+    public function addBiography(Request $request) : Response
+    {
+        $biography = $request->input('biography');
+        if(strlen($biography) < 20){
+            return response()->setStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY)->json([
+                'error' => 'Biography must be less than 160 characters'
+            ]);
+        }
+        $user = User::where('id', '=',session()->get('user')->id)->first();
+        $user->biography = $biography;
+        $user->save();
+
+        return response()->json([]);
     }
 }

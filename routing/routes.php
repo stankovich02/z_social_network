@@ -54,6 +54,9 @@ Router::middleware([\App\Middlewares\IsLoggedIn::class])->group(function () {
         Router::post('/users/block', 'blockUser')->name('block-user');
         Router::post('/upload-user-image', 'uploadProfileImage')->name('upload-user-image');
         Router::delete('/delete-user-image', 'deleteProfileImage')->name('delete-user-image');
+        Router::post('/upload-cover-image', 'uploadCoverImage')->name('upload-cover-image');
+        Router::delete('/delete-cover-image', 'deleteCoverImage')->name('delete-cover-image');
+        Router::post('/users/biography', 'addBiography')->name('add-biography');
     });
 });
 
