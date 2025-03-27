@@ -6,6 +6,7 @@ use App\Models\LikedPost;
 use App\Models\Post;
 use App\Models\RepostedPost;
 use App\Models\User;
+use App\Models\UserFollower;
 use App\Traits\CalculateDate;
 use NovaLite\Database\Database;
 use NovaLite\Http\Controller;
@@ -71,6 +72,16 @@ class ProfileController extends Controller
         $countPosts = count($mergedPosts);
         $numOfPosts = ($countPosts == 0 || $countPosts > 1) ? $countPosts . ' posts' : $countPosts . ' post';
         $user->mergedPosts = $mergedPosts;
+        if($user->id !== session()->get('user')->id) {
+            $userFollowLoggedInUser = UserFollower::where('user_id', '=', $user->id)
+                ->where('follower_id', '=', session()->get('user')->id)
+                ->count();
+            $user->userFollowsLoggedInUser = $userFollowLoggedInUser;
+            $loggedInUserFollowsUser = UserFollower::where('user_id', '=', session()->get('user')->id)
+                ->where('follower_id', '=', $user->id)
+                ->count();
+            $user->loggedInUserFollowsUser = $loggedInUserFollowsUser;
+        }
         return view('pages.client.profile', [
             'numOfPosts' => $numOfPosts,
             'joinedDate' => $joinedDate,

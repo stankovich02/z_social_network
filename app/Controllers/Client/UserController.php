@@ -3,7 +3,11 @@
 namespace App\Controllers\Client;
 
 use App\Models\BlockedUser;
+use App\Models\Notification;
+use App\Models\PostNotification;
 use App\Models\User;
+use App\Models\UserFollower;
+use NovaLite\Database\Database;
 use NovaLite\Http\Controller;
 use NovaLite\Http\Request;
 use NovaLite\Http\Response;
@@ -61,6 +65,45 @@ class UserController extends Controller
             'fullName' => $fullName,
             'biography' => $biography
        ]);
+    }
+
+    public function follow(int $id) : void
+    {
+        $loggedInUserId = session()->get('user')->id;
+        UserFollower::create([
+            'user_id' => $loggedInUserId,
+            'follower_id' => $id
+        ]);
+        $newNotification = [
+            'notification_type_id' => Notification::NOTIFICATION_TYPE_FOLLOW,
+            'user_id' => session()->get('user')->id,
+            'target_user_id' => $id,
+            'link' => route('profile', ['username' => session()->get('user')->username])
+        ];
+        $notificationExist = Notification::where('notification_type_id', '=', $newNotification['notification_type_id'])
+            ->where('user_id', '=', $newNotification['user_id'])
+            ->where('target_user_id', '=', $newNotification['target_user_id'])
+            ->where('link', '=', $newNotification['link'])
+            ->first();
+        if(!$notificationExist){
+            Notification::create($newNotification);
+        }
+    }
+    public function unfollow(int $id) : Response
+    {
+        Database::table(UserFollower::TABLE)
+                 ->where('user_id', '=', session()->get('user')->id)
+                 ->where('follower_id', '=', $id)
+                 ->delete();
+        $followBack = UserFollower::where('user_id', '=',$id)
+                                  ->where('follower_id', '=', session()->get('user')->id)
+                                  ->count();
+
+        return response()->json(
+            [
+                'followBack' => $followBack > 0
+            ]
+        );
     }
     public function blockUser(Request $request) : void
     {

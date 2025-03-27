@@ -193,6 +193,78 @@ document.addEventListener("click", function (event) {
             }
         })
     }
+
+    if(event.target.id === "unfollowBtn"){
+        let userId = event.target.getAttribute("data-id");
+        $.ajax({
+            url: `/users/${userId}/unfollow`,
+            type: "POST",
+            success: function(data){
+                let unfollowBtn = document.querySelector("#unfollowBtn");
+                unfollowBtn.remove();
+                if(data.followBack){
+                    document.querySelector("#other-profile-features").innerHTML +=`<button id="followBackBtn">Follow back</button>`;
+                    let followBackBtn = document.querySelector("#followBackBtn");
+                    followBackBtn.dataset.id = userId;
+                }else{
+                    document.querySelector("#other-profile-features").innerHTML +=`<button id="followBtn">Follow</button>`;
+                    let followBtn = document.querySelector("#followBtn");
+                    followBtn.dataset.id = userId;
+                }
+            },
+            error: function(err){
+                console.log(err);
+            }
+        })
+    }
+    if(event.target.id === "followBtn"){
+        let userId = event.target.getAttribute("data-id");
+        $.ajax({
+            url: `/users/${userId}/follow`,
+            type: "POST",
+            success: function(){
+                event.target.remove();
+                document.querySelector("#other-profile-features").innerHTML +=`<button id="followingBtn">Following</button>`;
+                let followingBtn = document.querySelector("#followingBtn");
+                followingBtn.dataset.id = userId;
+                followingBtn.addEventListener("mouseover", function (){
+                    followingBtn.textContent = "Unfollow";
+                    followingBtn.id = "unfollowBtn";
+                })
+                followingBtn.addEventListener("mouseout", function (){
+                    followingBtn.textContent = "Following";
+                    followingBtn.id = "followingBtn";
+                })
+            },
+            error: function(err){
+                console.log(err);
+            }
+        })
+    }
+    if(event.target.id === "followBackBtn"){
+        let userId = event.target.getAttribute("data-id");
+        $.ajax({
+            url: `/users/${userId}/follow`,
+            type: "POST",
+            success: function(){
+                event.target.remove();
+                document.querySelector("#other-profile-features").innerHTML +=`<button id="followingBtn">Following</button>`;
+                let followingBtn = document.querySelector("#followingBtn");
+                followingBtn.dataset.id = userId;
+                followingBtn.addEventListener("mouseover", function (){
+                    followingBtn.textContent = "Unfollow";
+                    followingBtn.id = "unfollowBtn";
+                })
+                followingBtn.addEventListener("mouseout", function (){
+                    followingBtn.textContent = "Following";
+                    followingBtn.id = "followingBtn";
+                })
+            },
+            error: function(err){
+                console.log(err);
+            }
+        })
+    }
 });
 document.addEventListener("DOMContentLoaded", function () {
     document.querySelector("#newCommentTextArea").addEventListener("input", function () {
@@ -447,7 +519,6 @@ function editTypingFunc(){
         bioNumOfCharacters.innerHTML = currentBioTextarea.value.length;
     })
 }
-
 typingBio();
 editTypingFunc();
 let profilePictureInput = document.querySelector("#pickProfilePicture");
@@ -718,3 +789,41 @@ saveEditeProfileBtn.addEventListener("click", function (){
         }
     })
 })
+
+let editNameInput = document.querySelector(".edit-popup .current-name-input");
+let editBioTextarea = document.querySelector(".edit-popup .current-biography-input");
+let setupBioTextarea = document.querySelector(".describe-bio #biography");
+editNameInput.addEventListener("focus", function (){
+    let editFullNameWrapper = document.querySelector(".edit-popup .current-fullname-wrapper");
+    editFullNameWrapper.style.border = "2px solid #009dff";
+})
+editNameInput.addEventListener("blur", function (){
+    let editFullNameWrapper = document.querySelector(".edit-popup .current-fullname-wrapper");
+    editFullNameWrapper.style.border = "1px solid #88888880";
+})
+editBioTextarea.addEventListener("focus", function (){
+    let editBioWrapper = document.querySelector(".edit-popup .current-bio-wrapper");
+    editBioWrapper.style.border = "2px solid #009dff";
+})
+editBioTextarea.addEventListener("blur", function (){
+    let editBioWrapper = document.querySelector(".edit-popup .current-bio-wrapper");
+    editBioWrapper.style.border = "1px solid #88888880";
+})
+setupBioTextarea.addEventListener("focus", function (){
+    let describeBioWrapper = document.querySelector("#setupProfileWrapper .bio-text");
+    describeBioWrapper.style.border = "2px solid #009dff";
+})
+setupBioTextarea.addEventListener("blur", function (){
+    let describeBioWrapper = document.querySelector("#setupProfileWrapper .bio-text");
+    describeBioWrapper.style.border = "1px solid #88888880";
+})
+let followingBtn = document.querySelector("#followingBtn");
+followingBtn.addEventListener("mouseover", function (){
+    followingBtn.textContent = "Unfollow";
+    followingBtn.id = "unfollowBtn";
+})
+followingBtn.addEventListener("mouseout", function (){
+    followingBtn.textContent = "Following";
+    followingBtn.id = "followingBtn";
+})
+

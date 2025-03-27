@@ -2368,8 +2368,9 @@ textarea.w-input, textarea.w-select {
   color: #000;
   background-color: #fff;
   border-radius: 30px;
-  padding-left: 30px;
-  padding-right: 30px;
+  padding-left: 20px;
+  padding-right: 20px;
+  font-size: 15px;
   font-weight: 700;
 }
 
@@ -4495,4 +4496,51 @@ textarea.w-input, textarea.w-select {
 #returnBackSetupProfile{
   display: none;
   cursor: pointer;
+}
+#other-profile-features{
+  position: absolute;
+  top: 5px;
+}
+#other-profile-features i{
+  padding: 10px;
+  font-size: 16px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgb(83,100,113);
+  border-radius: 50%;
+  transition: all 0.5s;
+  cursor: pointer;
+  margin-right: 5px;
+}
+#other-profile-features i:hover{
+  background-color: rgba(239,243,244,0.1);
+}
+#other-profile-features button{
+  padding: 7px 15px;
+  border-radius: 20px;
+}
+#other-profile-features #followBtn, #other-profile-features #followBackBtn{
+  background-color: white;
+  color: black;
+  font-weight: 700;
+  transition: all 0.5s;
+}
+#other-profile-features #followBtn:hover, #other-profile-features #followBackBtn:hover{
+  background-color: rgba(215,219,220);
+}
+#other-profile-features #followingBtn,#other-profile-features #unfollowingBtn{
+  background-color: black;
+  color: white;
+  border-color: rgb(83,100,113);
+}
+#other-profile-features #followingBtn,#other-profile-features #unfollowBtn{
+  width: 120px;
+  font-weight: 700;
+  border-width: 1px;
+  border-style: solid;
+}
+#other-profile-features #unfollowBtn{
+    background-color: rgba(244,33,46,0.1);
+    color: red;
+    border-color: rgb(103,7,15);
 }

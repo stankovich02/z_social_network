@@ -44,6 +44,19 @@
                 @else
                     <button class="setup-profile w-button" id="editProfile">Edit profile</button>
                 @endif
+            @else
+                <div id="other-profile-features">
+                    <i class="fa-solid fa-ellipsis more-other-profile-options"></i>
+                    <i class="fa-regular fa-envelope new-message"></i>
+                    @if($user->userFollowsLoggedInUser && !$user->loggedInUserFollowsUser)
+                        <button id="followBackBtn" data-id="{{$user->id}}">Follow back</button>
+                    @elseif($user->loggedInUserFollowsUser)
+                        <button id="followingBtn" data-id="{{$user->id}}">Following</button>
+                    @else
+                        <button id="followBtn" data-id="{{$user->id}}">Follow</button>
+                    @endif
+
+                </div>
             @endif
         </div>
         <div class="profile-info-detailed">

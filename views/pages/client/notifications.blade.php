@@ -74,7 +74,7 @@
                             <div class="liked-post-info">{{strlen($notification->post_notification->post->content) > 100 ? substr($notification->post_notification->post->content,0,100) . "..." : $notification->post_notification->post->content}}</div>
                         @endif
                         @if($notification->post_notification->post->image)
-                            <a href="{{$notification->link}}" class="show-all-post">Show all</a>
+                            <p data-link="{{$notification->link}}" class="show-all-post">Show all</p>
                         @endif
                     </div>
                 @elseif($notification->notification_type_id === \App\Models\Notification::NOTIFICATION_TYPE_COMMENT)

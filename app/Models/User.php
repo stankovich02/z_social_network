@@ -59,4 +59,12 @@ class User extends Model
     {
         return $this->hasMany(LikedComment::class, 'user_id');
     }
+    public function following() : HasMany
+    {
+        return $this->hasMany(UserFollower::class, 'user_id');
+    }
+    public function followers() : HasMany
+    {
+        return $this->hasMany(UserFollower::class, 'follower_id');
+    }
 }
