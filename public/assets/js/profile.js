@@ -202,6 +202,14 @@ document.addEventListener("click", function (event) {
             success: function(data){
                 let unfollowBtn = document.querySelector("#unfollowBtn");
                 unfollowBtn.remove();
+                let followersStats = document.querySelector("#profile .followers-stats")
+                followersStats.innerHTML = `${data.numOfFollowers} `;
+                if(data.numOfFollowers !== 1){
+                    followersStats.innerHTML += `<span class="text-span-3">Followers</span>`;
+                }
+                else{
+                    followersStats.innerHTML += `<span class="text-span-3">Follower</span>`;
+                }
                 if(data.followBack){
                     document.querySelector("#other-profile-features").innerHTML +=`<button id="followBackBtn">Follow back</button>`;
                     let followBackBtn = document.querySelector("#followBackBtn");
@@ -222,9 +230,17 @@ document.addEventListener("click", function (event) {
         $.ajax({
             url: `/users/${userId}/follow`,
             type: "POST",
-            success: function(){
+            success: function(data){
                 event.target.remove();
                 document.querySelector("#other-profile-features").innerHTML +=`<button id="followingBtn">Following</button>`;
+                let followersStats = document.querySelector("#profile .followers-stats")
+                followersStats.innerHTML = `${data.numOfFollowers} `;
+                if(data.numOfFollowers !== 1){
+                    followersStats.innerHTML += `<span class="text-span-3">Followers</span>`;
+                }
+                else{
+                    followersStats.innerHTML += `<span class="text-span-3">Follower</span>`;
+                }
                 let followingBtn = document.querySelector("#followingBtn");
                 followingBtn.dataset.id = userId;
                 followingBtn.addEventListener("mouseover", function (){
@@ -246,9 +262,17 @@ document.addEventListener("click", function (event) {
         $.ajax({
             url: `/users/${userId}/follow`,
             type: "POST",
-            success: function(){
+            success: function(data){
                 event.target.remove();
                 document.querySelector("#other-profile-features").innerHTML +=`<button id="followingBtn">Following</button>`;
+                let followersStats = document.querySelector("#profile .followers-stats")
+                followersStats.innerHTML = `${data.numOfFollowers} `;
+                if(data.numOfFollowers !== 1){
+                    followersStats.innerHTML += `<span class="text-span-3">Followers</span>`;
+                }
+                else{
+                    followersStats.innerHTML += `<span class="text-span-3">Follower</span>`;
+                }
                 let followingBtn = document.querySelector("#followingBtn");
                 followingBtn.dataset.id = userId;
                 followingBtn.addEventListener("mouseover", function (){
@@ -818,12 +842,14 @@ setupBioTextarea.addEventListener("blur", function (){
     describeBioWrapper.style.border = "1px solid #88888880";
 })
 let followingBtn = document.querySelector("#followingBtn");
-followingBtn.addEventListener("mouseover", function (){
-    followingBtn.textContent = "Unfollow";
-    followingBtn.id = "unfollowBtn";
-})
-followingBtn.addEventListener("mouseout", function (){
-    followingBtn.textContent = "Following";
-    followingBtn.id = "followingBtn";
-})
+if(followingBtn){
+    followingBtn.addEventListener("mouseover", function (){
+        followingBtn.textContent = "Unfollow";
+        followingBtn.id = "unfollowBtn";
+    })
+    followingBtn.addEventListener("mouseout", function (){
+        followingBtn.textContent = "Following";
+        followingBtn.id = "followingBtn";
+    })
+}
 

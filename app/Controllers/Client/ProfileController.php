@@ -24,7 +24,7 @@ class ProfileController extends Controller
                 ->get(),
             'blocked_user_id'
         );
-        $user = User::with('posts','repostedPosts','posts.image','repostedPosts.user', 'repostedPosts.post')->where('username', '=',
+        $user = User::with('posts','repostedPosts','posts.image','repostedPosts.user', 'repostedPosts.post', 'following', 'followers')->where('username', '=',
             $username)->first();
         if(in_array($user->id, $blockedUsers)) {
             return redirect()->to('home');

@@ -3131,7 +3131,7 @@ textarea.w-input, textarea.w-select {
 
 .profile-image {
   z-index: 5;
-  border: 2px solid #000;
+  border: 5px solid #000;
   border-radius: 50%;
   width: 150px;
   height: 150px;
@@ -4518,6 +4518,7 @@ textarea.w-input, textarea.w-select {
 #other-profile-features button{
   padding: 7px 15px;
   border-radius: 20px;
+  transition: all 0.3s;
 }
 #other-profile-features #followBtn, #other-profile-features #followBackBtn{
   background-color: white;
@@ -4543,4 +4544,18 @@ textarea.w-input, textarea.w-select {
     background-color: rgba(244,33,46,0.1);
     color: red;
     border-color: rgb(103,7,15);
+}
+#username-and-follows-info{
+  display: flex;
+  align-items: center;
+}
+#username-and-follows-info #followsBackInfo{
+  margin-top: 5px;
+  margin-left: 10px;
+  font-size: 11px;
+  line-height: 17px;
+  background-color: rgb(32, 35, 39);
+  color: rgb(113, 118, 123);
+  padding: 0 5px;
+  border-radius: 2px;
 }

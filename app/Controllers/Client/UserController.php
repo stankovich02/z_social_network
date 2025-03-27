@@ -67,7 +67,7 @@ class UserController extends Controller
        ]);
     }
 
-    public function follow(int $id) : void
+    public function follow(int $id) : Response
     {
         $loggedInUserId = session()->get('user')->id;
         UserFollower::create([
@@ -88,6 +88,10 @@ class UserController extends Controller
         if(!$notificationExist){
             Notification::create($newNotification);
         }
+        $user = User::with('followers')->where('id', '=', $id)->first();
+        return response()->json([
+            'numOfFollowers' => count($user->followers),
+        ]);
     }
     public function unfollow(int $id) : Response
     {
@@ -98,10 +102,11 @@ class UserController extends Controller
         $followBack = UserFollower::where('user_id', '=',$id)
                                   ->where('follower_id', '=', session()->get('user')->id)
                                   ->count();
-
+        $user = User::with('followers')->where('id', '=', $id)->first();
         return response()->json(
             [
-                'followBack' => $followBack > 0
+                'followBack' => $followBack > 0,
+                'numOfFollowers' => count($user->followers),
             ]
         );
     }

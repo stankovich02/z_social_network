@@ -22,8 +22,8 @@
                     </svg>
                 </div>
                 <div class="follower-info">
-                    <img src="{{asset('assets/img/67b61da06092cd17329df26d/67b9c46d9abe545630bb3f09_default.jpg')}}" loading="lazy" alt="" class="follower-image" />
-                    <div class="text-block"><strong>Marko Stankovic</strong> followed you</div>
+                    <img src="{{asset('assets/img/users/' . $notification->user->photo)}}" loading="lazy" alt="" class="follower-image user-image" />
+                    <div class="text-block"><strong>{{$notification->user->full_name}}</strong> followed you</div>
                 </div>
                 @elseif($notification->notification_type_id === \App\Models\Notification::NOTIFICATION_TYPE_LIKE)
                     <div class="heart-icon w-embed">
