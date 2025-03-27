@@ -41,10 +41,12 @@
                     alt=""
                     class="profile-image"
             />
-            @if(!$user->biography && $user->photo === 'default.jpg' && $user->cover_photo === 'default-cover.jpg')
-                <button class="setup-profile w-button" id="setupProfile">Set up profile</button>
-            @else
-                <button class="setup-profile w-button" id="editProfile">Edit profile</button>
+            @if($user->username === session()->get('user')->username)
+                @if(!$user->biography && $user->photo === 'default.jpg' && $user->cover_photo === 'default-cover.jpg')
+                    <button class="setup-profile w-button" id="setupProfile">Set up profile</button>
+                @else
+                    <button class="setup-profile w-button" id="editProfile">Edit profile</button>
+                @endif
             @endif
         </div>
         <div class="profile-info-detailed">
@@ -361,8 +363,8 @@
                         alt=""
                         class="current-profile-pic"
                 />
-                <div class="current-user-fullname">Marko Stankovic</div>
-                <div class="current-user-username">@markostanke2002</div>
+                <div class="current-user-fullname"></div>
+                <div class="current-user-username"></div>
             </div>
             <button class="skip-profile-btn w-button">Skip for now</button>
             <button class="next-profile-btn w-button">Next</button>
@@ -398,7 +400,7 @@
         <div class="save-profile" id="saveProfileDiv">
             <img src="{{asset('assets/img/logo_large.png')}}" loading="lazy" alt="" class="save-profile-logo" />
             <div class="save-text">Click to save updates</div>
-            <a href="#" class="save-profile-btn w-button">Save</a>
+            <button class="save-profile-btn w-button">Save</button>
         </div>
     </div>
 </div>
@@ -421,23 +423,18 @@
                 </svg>
             </div>
             <div class="edit-text">Edit profile</div>
-            <a href="#" class="save-edited-profile w-button">Save</a>
+            <button class="save-edited-profile w-button" data-id="{{$user->id}}">Save</button>
         </div>
         <div class="pick-header-img-wrapper">
             <img
-                    src="{{asset('67b61da06092cd17329df26d/67c473d4f5982184597bce10_black-pick-header.jpg')}}"
+                    src="{{asset('assets/img/users-covers/' . $user->cover_photo)}}"
                     loading="lazy"
                     sizes="100vw"
-                    srcset="
-                            {{asset('67b61da06092cd17329df26d/67c473d4f5982184597bce10_black-pick-header-p-500.jpg')}}   500w,
-                            {{asset('67b61da06092cd17329df26d/67c473d4f5982184597bce10_black-pick-header-p-800.jpg')}}   800w,
-                            {{asset('67b61da06092cd17329df26d/67c473d4f5982184597bce10_black-pick-header-p-1080.jpg')}} 1080w,
-                            {{asset('67b61da06092cd17329df26d/67c473d4f5982184597bce10_black-pick-header.jpg')}}        1280w
-                        "
                     alt=""
                     class="pick-header-img"
             />
             <div class="add-or-remove-photo-icons">
+                <input type="file" id="editHeaderPicture" class="hidden-file-input" name="cover-picture" />
                 <div class="add-new-photo-icon-wrapper">
                     <div class="add-new-photo-icon w-embed">
                         <svg
@@ -479,17 +476,14 @@
         </div>
         <div class="edit-profile-pic">
             <img
-                    src="{{asset('67b61da06092cd17329df26d/67c2d609910d0c9573de80d1_default-avatar-icon-of-social-media-user-vector.jpg')}}"
+                    src="{{asset('assets/img/users/' . $user->photo)}}"
                     loading="lazy"
                     sizes="100vw"
-                    srcset="
-                            {{asset('67b61da06092cd17329df26d/67c2d609910d0c9573de80d1_default-avatar-icon-of-social-media-user-vector-p-500.jpg')}} 500w,
-                            {{asset('67b61da06092cd17329df26d/67c2d609910d0c9573de80d1_default-avatar-icon-of-social-media-user-vector.jpg')}}       980w
-                        "
                     alt=""
                     class="current-profile-pic"
             />
             <div class="add-or-remove-photo-icons edit-profile-img-icon">
+                <input type="file" id="editProfilePicture" class="hidden-file-input" name="profile-picture" />
                 <div class="add-new-photo-icon-wrapper">
                     <div class="add-new-photo-icon w-embed">
                         <svg
@@ -532,7 +526,7 @@
         <div class="current-fullname-wrapper">
             <div class="input-info">
                 <div class="name-text">Name</div>
-                <div class="num-of-characters">0 / 50</div>
+                <div class="max-num-of-characters"><span class="num-of-characters">0</span> / 50</div>
             </div>
             <div class="form-block-3 w-form">
                 <form
@@ -544,14 +538,15 @@
                         data-wf-element-id="e3fc05a5-9080-97fa-ad0e-a98918343e4d"
                         data-turnstile-sitekey="0x4AAAAAAAQTptj2So4dx43e"
                 >
-                    <input class="current-name-input w-input" maxlength="256" name="current-fullname" data-name="current-fullname" placeholder="Marko Stankovic" type="text" id="current-fullname" />
+                    <input class="current-name-input" name="current-fullname" data-name="current-fullname" type="text" id="current-fullname" value="{{$user->full_name}}"/>
                 </form>
             </div>
         </div>
+        <p class="errorMsg" id="editFullNameError"></p>
         <div class="current-bio-wrapper">
             <div class="input-info">
                 <div class="name-text">Bio</div>
-                <div class="num-of-characters">0 / 160</div>
+                <div class="max-num-of-characters"><span class="num-of-characters">0</span> / 160</div>
             </div>
             <div class="form-block-3 w-form">
                 <form
@@ -563,10 +558,11 @@
                         data-wf-element-id="d72bb7c7-1537-77a7-9fbb-77d5964488a8"
                         data-turnstile-sitekey="0x4AAAAAAAQTptj2So4dx43e"
                 >
-                    <textarea class="current-biography-input">Ovo je moja biografija</textarea>
+                    <textarea class="current-biography-input">{{$user->biography}}</textarea>
                 </form>
             </div>
         </div>
+        <p class="errorMsg" id="editError"></p>
     </div>
 </div>
     <script src="{{asset('assets/js/profile.js')}}"></script>

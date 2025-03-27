@@ -472,13 +472,13 @@ function feedWriteInputAndIcon(){
                             `;
     postOptions.insertAdjacentHTML('afterbegin', uploadPostImage.outerHTML);
 }
-document.querySelector("#feedNewPost .new-post-body").addEventListener("keyup", function () {
+document.querySelector("#feedNewPost .new-post-body").addEventListener("input", function () {
     const postBtn = document.querySelector("#feedPostBtn");
     postBtn.disabled = this.value.trim() === "";
     this.value.trim() === "" ? postBtn.classList.add("disabled-new-post-btn") : postBtn.classList.remove("disabled-new-post-btn");
 });
 document.addEventListener("DOMContentLoaded", function () {
-    document.querySelector("#newCommentTextArea").addEventListener("keyup", function () {
+    document.querySelector("#newCommentTextArea").addEventListener("input", function () {
         const replyBtn = document.querySelector("#replyBtn");
         replyBtn.disabled = this.value.trim() === "";
         this.value.trim() === "" ? replyBtn.classList.add("disabled-new-comment") : replyBtn.classList.remove("disabled-new-comment");

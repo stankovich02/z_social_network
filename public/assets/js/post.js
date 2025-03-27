@@ -1,4 +1,4 @@
-document.querySelector(".new-comment-text").addEventListener("keyup", function () {
+document.querySelector(".new-comment-text").addEventListener("input", function () {
     const postBtn = document.querySelector(".reply-comment");
     postBtn.disabled = this.value.trim() === "";
     this.value.trim() === "" ? postBtn.classList.add("disabled-new-comment") : postBtn.classList.remove("disabled-new-comment");

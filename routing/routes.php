@@ -52,6 +52,7 @@ Router::middleware([\App\Middlewares\IsLoggedIn::class])->group(function () {
 
     Router::controller(UserController::class)->group(function (){
         Router::post('/users/block', 'blockUser')->name('block-user');
+        Router::patch('/users/{id}/update', 'update')->name('users.update');
         Router::post('/upload-user-image', 'uploadProfileImage')->name('upload-user-image');
         Router::delete('/delete-user-image', 'deleteProfileImage')->name('delete-user-image');
         Router::post('/upload-cover-image', 'uploadCoverImage')->name('upload-cover-image');

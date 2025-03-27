@@ -26,7 +26,7 @@ class NotificationController extends Controller
             'notifications' => $userNotifications
         ]);
     }
-    public function read(string $id) : void
+    public function read(int $id) : void
     {
         $notification = Notification::where('id', '=', $id)->first();
         $notification->is_read = 1;

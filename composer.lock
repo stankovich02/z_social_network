@@ -606,7 +606,7 @@
         },
         {
             "name": "illuminate/macroable",
-            "version": "v12.3.0",
+            "version": "v12.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/macroable.git",
@@ -937,16 +937,16 @@
         },
         {
             "name": "novalite/framework",
-            "version": "v1.0.8",
+            "version": "v1.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stankovich02/novalite.git",
-                "reference": "312a4b299d633456119b2c5acb0848fda382a4d6"
+                "reference": "8dcab736e0f1cec7e46a2c994f06b40368a6d309"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stankovich02/novalite/zipball/312a4b299d633456119b2c5acb0848fda382a4d6",
-                "reference": "312a4b299d633456119b2c5acb0848fda382a4d6",
+                "url": "https://api.github.com/repos/stankovich02/novalite/zipball/8dcab736e0f1cec7e46a2c994f06b40368a6d309",
+                "reference": "8dcab736e0f1cec7e46a2c994f06b40368a6d309",
                 "shasum": ""
             },
             "require": {
@@ -971,9 +971,9 @@
             "description": "The NovaLite Framework",
             "support": {
                 "issues": "https://github.com/stankovich02/novalite/issues",
-                "source": "https://github.com/stankovich02/novalite/tree/v1.0.8"
+                "source": "https://github.com/stankovich02/novalite/tree/v1.0.9"
             },
-            "time": "2025-03-26T17:34:49+00:00"
+            "time": "2025-03-27T11:32:26+00:00"
         },
         {
             "name": "phpmailer/phpmailer",

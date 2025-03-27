@@ -264,7 +264,7 @@ function sendPost(){
 }
 sendPost();
 newPostLogic();
-document.querySelector("#popupFormBlock #post-body-2").addEventListener("keyup", function () {
+document.querySelector("#popupFormBlock #post-body-2").addEventListener("input", function () {
     const postBtn = document.querySelector("#popupPostBtn");
     postBtn.disabled = this.value.trim() === "";
     this.value.trim() === "" ? postBtn.classList.add("disabled-new-post-btn") : postBtn.classList.remove("disabled-new-post-btn");

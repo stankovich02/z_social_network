@@ -68,7 +68,7 @@ class PostController extends Controller
         ]);
 	}
 
-	public function show(string $id,Request $request,string $username = null) : View|Response|RedirectResponse
+	public function show(int $id,Request $request,string $username = null) : View|Response|RedirectResponse
 	{
         $post = Post::with('user', 'image','comments','comments.likes','comments.user')->where('id', '=', $id)->first();
         if($request->isAjax()){
@@ -129,17 +129,17 @@ class PostController extends Controller
         ]);
 	}
 
-	public function edit(string $id)
+	public function edit(int $id)
 	{
 		//
 	}
 
-	public function update(Request $request, string $id)
+	public function update(Request $request, int $id)
 	{
 		//
 	}
 
-	public function destroy(string $id) : void
+	public function destroy(int $id) : void
 	{
         $post = Post::with('image')->where('id', '=', $id)->first();
         if($post->image){
@@ -160,7 +160,7 @@ class PostController extends Controller
             $post->save();
         }
     }
-    public function likePost(string $id) : Response
+    public function likePost(int $id) : Response
     {
         $alreadyLiked = LikedPost::where('user_id', '=', session()->get('user')->id)
             ->where('post_id', '=', $id)
@@ -209,7 +209,7 @@ class PostController extends Controller
             'likes' => $numOfLikes
         ]);
     }
-    public function repostPost(string $id) : Response
+    public function repostPost(int $id) : Response
     {
         $alreadyReposted = RepostedPost::where('user_id', '=', session()->get('user')->id)
             ->where('post_id', '=', $id)
@@ -258,7 +258,7 @@ class PostController extends Controller
             'reposts' => $numOfReposts
         ]);
     }
-    public function navigateToPost(string $id) : Response
+    public function navigateToPost(int $id) : Response
     {
         $post = Post::with('user')->where('id', '=',$id)->first();
         return response()->json([

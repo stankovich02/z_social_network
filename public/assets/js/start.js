@@ -32,7 +32,7 @@ registerInputs.forEach(input => {
 })
 const fullNameInput = document.querySelector("#register-fullname");
 const usernameInput = document.querySelector("#register-username")
-fullNameInput.addEventListener("keyup", () => {
+fullNameInput.addEventListener("input", () => {
     if(fullNameInput.value.length >= 50){
         fullNameInput.parentElement.querySelector(".num-of-characters").style.color = "red";
     }
@@ -42,7 +42,7 @@ fullNameInput.addEventListener("keyup", () => {
     const numOfCharacters = fullNameInput.parentElement.querySelector(".current-num-of-characters");
     numOfCharacters.innerHTML = fullNameInput.value.length;
 })
-usernameInput.addEventListener("keyup", () => {
+usernameInput.addEventListener("input", () => {
     if(usernameInput.value.length >= 50){
         usernameInput.parentElement.querySelector(".num-of-characters").style.color = "red";
     }

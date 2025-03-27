@@ -17,7 +17,7 @@ use NovaLite\Http\Response;
 class CommentController extends Controller
 {
     use CalculateDate;
-    public function store(string $id, Request $request)
+    public function store(int $id, Request $request)
     {
         $comment = $request->input('comment');
         $newComment = [
@@ -68,7 +68,7 @@ class CommentController extends Controller
         ]);
 
     }
-    public function destroy(string $id) : Response
+    public function destroy(int $id) : Response
     {
         $postId = Comment::where('id', '=', $id)->first()->post_id;
         $notificationForDelete = PostCommentNotification::where('comment_id', '=', $id)->get();
