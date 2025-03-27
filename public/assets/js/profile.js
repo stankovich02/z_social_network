@@ -366,15 +366,17 @@ if(setupProfileBtn){
         nextBioBtnFunc(describeBio,saveProfile,popupLogo,returnBackBtn,closeIcon);
     })
 }
-editProfileBtn.addEventListener("click", function (){
-    let editProfileWrapper = document.querySelector("#editProfileWrapper");
-    editProfileWrapper.style.display = "block";
-    let closeIcon = document.querySelector("#editProfileWrapper .close-icon");
-    closeIcon.addEventListener("click", function (){
-        editProfileWrapper.style.display = "none";
-    })
+if(editProfileBtn){
+    editProfileBtn.addEventListener("click", function (){
+        let editProfileWrapper = document.querySelector("#editProfileWrapper");
+        editProfileWrapper.style.display = "block";
+        let closeIcon = document.querySelector("#editProfileWrapper .close-icon");
+        closeIcon.addEventListener("click", function (){
+            editProfileWrapper.style.display = "none";
+        })
 
-});
+    });
+}
 function typingBio(){
     let bioTextarea= document.querySelector(".describe-bio #biography");
     bioTextarea.addEventListener("input", () => {
@@ -565,8 +567,8 @@ editHeaderPictureInput.addEventListener("change", function (){
         contentType: false,
         data: formData,
         success: function(data){
-            let img = document.querySelector(".edit-popup .pick-header-img-wrapper img");
-            img.src = data.newPhoto;
+            let img = document.querySelector(".edit-popup .pick-header-img-wrapper .pick-header-img");
+            img.style.backgroundImage = `url(${data.newPhoto})`;
             let coverPictureInput = document.querySelector("#editHeaderPicture");
             coverPictureInput.value = "";
             let removePhotoWrapper = document.querySelector(".edit-popup .pick-header-img-wrapper .remove-new-photo-wrapper")
@@ -577,7 +579,7 @@ editHeaderPictureInput.addEventListener("change", function (){
                     url: "/delete-cover-image?imgPath=" + encodeURIComponent(data.newPhoto) + "&oldImgPath=" + encodeURIComponent(data.oldPhoto) + "&edit=true",
                     type: "DELETE",
                     success: function(){
-                        img.src = data.oldPhoto;
+                        img.style.backgroundImage = `url(${data.oldPhoto})`;
                         removePhotoWrapper.style.display = "none";
                     },
                     error: function(err){
@@ -603,12 +605,12 @@ headerPictureInput.addEventListener("change", function (){
         contentType: false,
         data: formData,
         success: function(data){
-            let img = document.querySelector(".pick-header-img-wrapper img");
+            let img = document.querySelector("#setupProfileWrapper .pick-header-img-wrapper .pick-header-img");
             let skipCoverPictureBtn = document.querySelector(".pick-header .skip-profile-btn");
             let nextBioBtn = document.querySelector(".pick-header .next-profile-btn");
             let profileCover = document.querySelector("#profile .profile-banner")
-            img.src = data.newPhoto;
-            profileCover.src = data.newPhoto;
+            img.style.backgroundImage = `url(${data.newPhoto})`;
+            profileCover.style.backgroundImage = `url(${data.newPhoto})`;
             let coverPictureInput = document.querySelector("#pickHeaderPicture");
             coverPictureInput.value = "";
             let removePhotoWrapper = document.querySelector(".pick-header .remove-new-photo-wrapper")
@@ -621,8 +623,8 @@ headerPictureInput.addEventListener("change", function (){
                     url: "/delete-cover-image?imgPath=" + encodeURIComponent(data.newPhoto) + "&oldImgPath=" + encodeURIComponent(data.oldPhoto),
                     type: "DELETE",
                     success: function(){
-                        img.src = data.oldPhoto;
-                        profileCover.src = data.oldPhoto;
+                        img.style.backgroundImage = `url(${data.oldPhoto})`;
+                        profileCover.style.backgroundImage = `url(${data.oldPhoto})`;
                         removePhotoWrapper.style.display = "none";
                         skipCoverPictureBtn.style.display = "block";
                         nextBioBtn.style.display = "none";
@@ -643,7 +645,8 @@ headerPictureInput.addEventListener("change", function (){
 let saveEditeProfileBtn = document.querySelector(".edit-popup .save-edited-profile");
 saveEditeProfileBtn.addEventListener("click", function (){
     let userId = this.getAttribute("data-id");
-    let coverImage = document.querySelector(".edit-popup .pick-header-img-wrapper img").src;
+    let coverImage = document.querySelector(".edit-popup .pick-header-img-wrapper .pick-header-img");
+    coverImage = coverImage.style.backgroundImage.slice(5, -2);
     let profileImage = document.querySelector(".edit-popup .edit-profile-pic img").src;
     let fullName = document.querySelector(".edit-popup .current-name-input").value;
     let biography = document.querySelector(".edit-popup .current-biography-input").value;
@@ -669,10 +672,12 @@ saveEditeProfileBtn.addEventListener("click", function (){
             let removeCoverPhotoWrapper = document.querySelector(".edit-popup .pick-header-img-wrapper .remove-new-photo-wrapper");
             let removeProfilePictureWrapper = document.querySelector(".edit-popup .edit-profile-pic .remove-new-photo-wrapper");
             let allPostsFullNames = document.querySelectorAll(".post-info-and-body .posted-by-fullname");
-            coverPicture.src = data.coverImage;
+            let loggedOutFullName = document.querySelector("#logout-text #logged-user-fullname");
+            coverPicture.style.backgroundImage = `url(${data.coverImage})`;
             profilePicture.src = data.profileImage;
             profileFullName.textContent = data.fullName;
             topFullNameText.textContent = data.fullName;
+            loggedOutFullName.textContent = data.fullName;
             biography.textContent = data.biography;
             loggedInImg.src = data.profileImage;
             loggedInFullName.textContent = data.fullName;

@@ -25,13 +25,10 @@
             <div class="num-of-posts">{{$numOfPosts}}</div>
         </div>
     </div>
-    <img
-            src="{{asset('assets/img/users-covers/'. $user->cover_photo)}}"
-            loading="lazy"
-            sizes="100vw"
-            alt=""
+    <div
+            style="background-image: url('{{asset("assets/img/users-covers/". $user->cover_photo)}}');"
             class="profile-banner"
-    />
+    ></div>
     <div class="profile-info">
         <div class="image-and-setup">
             <img
@@ -307,13 +304,10 @@
                 <div class="pick-desc">People who visit your profile will see it. Show your style.</div>
             </div>
             <div class="pick-header-img-wrapper">
-                <img
-                        src="{{asset('assets/img/users-covers/' . $user->cover_photo)}}"
-                        loading="lazy"
-                        sizes="100vw"
-                        alt=""
+                <div
+                        style="background-image: url('{{asset('assets/img/users-covers/' . $user->cover_photo)}}')"
                         class="pick-header-img"
-                />
+                ></div>
                 <div class="add-or-remove-photo-icons">
                     <input type="file" id="pickHeaderPicture" class="hidden-file-input" name="profile-header-picture" />
                     <div class="add-new-photo-icon-wrapper">
@@ -426,13 +420,10 @@
             <button class="save-edited-profile w-button" data-id="{{$user->id}}">Save</button>
         </div>
         <div class="pick-header-img-wrapper">
-            <img
-                    src="{{asset('assets/img/users-covers/' . $user->cover_photo)}}"
-                    loading="lazy"
-                    sizes="100vw"
-                    alt=""
+            <div
+                    style="background-image: url('{{asset('assets/img/users-covers/' . $user->cover_photo)}}')"
                     class="pick-header-img"
-            />
+            ></div>
             <div class="add-or-remove-photo-icons">
                 <input type="file" id="editHeaderPicture" class="hidden-file-input" name="cover-picture" />
                 <div class="add-new-photo-icon-wrapper">
