@@ -225,7 +225,7 @@ blockUserBtns.forEach(blockUserBtn => {
                 user_id: userId
             },
             success: function(){
-                blockUserBtn.parentElement.parentElement.parentElement.remove();
+
             },
             error: function(err){
                 console.log(err);

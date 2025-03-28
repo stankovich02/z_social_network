@@ -93,7 +93,13 @@ class PostController extends Controller
                     ->get(),
             'blocked_user_id'
         );
-        if(in_array($post->user->id, $blockedUsers)){
+        $usersWhoBlockLoggedInUser = array_column(
+            Database::table('blocked_users')
+                ->where('blocked_user_id', '=', session()->get('user')->id)
+                ->get(),
+            'blocked_by_user_id'
+        );
+        if(in_array($post->user->id, $blockedUsers) || in_array($post->user->id, $usersWhoBlockLoggedInUser)){
             return redirect()->to('home');
         }
         $post->number_of_likes = $post->likesCount($post->id);
@@ -123,6 +129,7 @@ class PostController extends Controller
 		return view('pages.client.post', [
             'post' => $post,
             'blockedUsers' => $blockedUsers,
+            'usersWhoBlockLoggedInUser' => $usersWhoBlockLoggedInUser,
             'title' => $post->user->full_name . " on Z: \"" . $post->content . "\" / Z",
             'postedDate'=> ['time' => $postedOnTime, 'date' => $postedOnDate],
             'reposted' => $reposted > 0,

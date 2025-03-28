@@ -2,6 +2,7 @@
 
 namespace App\Controllers\Client;
 
+use App\Models\BlockedUser;
 use App\Models\LikedPost;
 use App\Models\Post;
 use App\Models\RepostedPost;
@@ -26,7 +27,10 @@ class ProfileController extends Controller
         );
         $user = User::with('posts','repostedPosts','posts.image','repostedPosts.user', 'repostedPosts.post', 'following', 'followers')->where('username', '=',
             $username)->first();
-        if(in_array($user->id, $blockedUsers)) {
+        $userBlockedLoggedInUser = BlockedUser::where('blocked_user_id', '=', session()->get('user')->id)
+            ->where('blocked_by_user_id', '=', $user->id)
+            ->count();
+        if(in_array($user->id, $blockedUsers) || $userBlockedLoggedInUser) {
             return redirect()->to('home');
         }
         $joinedDate = date('F Y', strtotime(session()->get('user')->created_at));
@@ -85,6 +89,38 @@ class ProfileController extends Controller
         return view('pages.client.profile', [
             'numOfPosts' => $numOfPosts,
             'joinedDate' => $joinedDate,
+            'user' => $user
+        ]);
+    }
+
+    public function followers(string $username) : View
+    {
+        $user = User::with('followers', 'followers.user')
+                    ->where('username', '=', $username)
+                    ->first();
+
+        $userFollowing = array_column(
+            Database::table(UserFollower::TABLE)
+                ->where('user_id', '=', session()->get('user')->id)
+                ->get(),
+            'follower_id'
+        );
+        foreach ($user->followers as $follower) {
+            $follower->user->loggedInUserFollowsFollower = in_array($follower->user->id, $userFollowing);
+
+        }
+        return view('pages.client.profile.followers', [
+            'user' => $user
+        ]);
+    }
+
+    public function following(string $username) : View
+    {
+        $user = User::with('following', 'following.follower')
+                    ->where('username', '=', $username)
+                    ->first();
+
+        return view('pages.client.profile.following', [
             'user' => $user
         ]);
     }

@@ -49,11 +49,11 @@
                     <i class="fa-solid fa-ellipsis more-other-profile-options"></i>
                     <i class="fa-regular fa-envelope new-message"></i>
                     @if($user->userFollowsLoggedInUser && !$user->loggedInUserFollowsUser)
-                        <button id="followBackBtn" data-id="{{$user->id}}">Follow back</button>
+                        <button class="followBackBtn" data-id="{{$user->id}}">Follow back</button>
                     @elseif($user->loggedInUserFollowsUser)
-                        <button id="followingBtn" data-id="{{$user->id}}">Following</button>
+                        <button class="followingBtn" data-id="{{$user->id}}">Following</button>
                     @else
-                        <button id="followBtn" data-id="{{$user->id}}">Follow</button>
+                        <button class="followBtn" data-id="{{$user->id}}">Follow</button>
                     @endif
 
                 </div>
@@ -64,7 +64,7 @@
             <div id="username-and-follows-info">
                 <div class="profile-username">&#64;{{$user->username}}</div>
                 @if($user->userFollowsLoggedInUser)
-                    <div id="followsBackInfo">Follows you</div>
+                    <div class="followsBackInfo">Follows you</div>
                 @endif
 </div>
 
@@ -91,8 +91,8 @@
 <div class="joined-date-text">Joined {{$joinedDate}}</div>
 </div>
 <div class="follow-stats">
-<div class="following-stats">{{count($user->following)}} <span class="text-span-2">Following</span></div>
-<div class="followers-stats">{{count($user->followers)}} <span class="text-span-3">{{count($user->followers) !== 1 ? "Followers" : "Follower"}}</span></div>
+<a href="{{route('profile.following', ['username' => $user->username])}}" class="following-stats">{{count($user->following)}} <span class="text-span-2">Following</span></a>
+<a href="{{route('profile.followers', ['username' => $user->username])}}" class="followers-stats">{{count($user->followers)}} <span class="text-span-3">{{count($user->followers) !== 1 ? "Followers" : "Follower"}}</span></a>
 </div>
 </div>
 </div>

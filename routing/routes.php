@@ -23,7 +23,6 @@ Router::middleware([\App\Middlewares\IsLoggedIn::class])->group(function () {
 
     Router::get('/logout', [\App\Controllers\AuthController::class, 'logout'])->name('logout');
     Router::get('/search', [\App\Controllers\Client\ExploreController::class, 'search'])->name('search');
-    Router::get('/{username}', [\App\Controllers\Client\ProfileController::class, 'index'])->name('profile');
 
 
     Router::post('/upload-post-image', [\App\Controllers\Client\ImageController::class, 'uploadPostImage'])->name('upload-post-image');
@@ -61,6 +60,13 @@ Router::middleware([\App\Middlewares\IsLoggedIn::class])->group(function () {
         Router::delete('/delete-cover-image', 'deleteCoverImage')->name('delete-cover-image');
         Router::post('/users/biography', 'addBiography')->name('add-biography');
     });
+
+    Router::controller(\App\Controllers\Client\ProfileController::class)->group(function (){
+        Router::get('/{username}','index')->name('profile');
+        Router::get('/{username}/followers','followers')->name('profile.followers');
+        Router::get('/{username}/following','following')->name('profile.following');
+    });
+
 });
 
 

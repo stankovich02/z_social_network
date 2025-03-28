@@ -2441,7 +2441,7 @@ textarea.w-input, textarea.w-select {
   margin-top: 15px;
   display: flex;
 }
-.post-reactions .post-stats-icon{
+.post-comment-stats,.post-reposted-stats,.post-likes-stats{
   cursor: pointer;
 }
 .post-reactions.single-post-reactions {
@@ -3111,7 +3111,9 @@ textarea.w-input, textarea.w-select {
   font-weight: 700;
   line-height: 20px;
 }
-
+.top-username-text{
+  color: #fff6;
+}
 .num-of-posts {
   color: #fff6;
   margin-top: 5px;
@@ -3206,8 +3208,15 @@ textarea.w-input, textarea.w-select {
 
 .following-stats {
   font-weight: 700;
+  border-bottom: 1px solid black;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none;
+  color: white;
 }
-
+.following-stats:hover{
+  border-bottom: 1px solid white;
+}
 .text-span-2 {
   color: #fff6;
   font-weight: 400;
@@ -3215,8 +3224,15 @@ textarea.w-input, textarea.w-select {
 
 .followers-stats {
   font-weight: 700;
+  border-bottom: 1px solid black;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none;
+  color: white;
 }
-
+.followers-stats:hover{
+  border-bottom: 1px solid white;
+}
 .text-span-3 {
   color: #fff6;
   font-weight: 400;
@@ -4269,9 +4285,14 @@ textarea.w-input, textarea.w-select {
   display: flex;
   flex-direction: column;
   align-items: end;
-
 }
-.choose-post-option,.choose-comment-option{
+.single-follower-more-options-wrapper{
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  position: relative;
+}
+.choose-post-option,.choose-comment-option, .choose-follower-option{
   box-shadow: rgba(255, 255, 255, 0.2) 0 0 15px, rgba(255, 255, 255, 0.15) 0 0 3px 1px;
   background-color: black;
   border-radius: 16px;
@@ -4283,10 +4304,22 @@ textarea.w-input, textarea.w-select {
   z-index: 5;
   display: none;
 }
-.choose-post-option:hover,.choose-comment-option:hover{
+.choose-follower-option{
+  box-shadow: rgba(255, 255, 255, 0.2) 0 0 15px, rgba(255, 255, 255, 0.15) 0 0 3px 1px;
+  background-color: black;
+  border-radius: 16px;
+  padding: 10px;
+  width: 200px;
+  font-weight: bold;
+  position: absolute;
+  top: 0;
+  z-index: 5;
+  display: none;
+}
+.choose-post-option:hover,.choose-comment-option:hover, .choose-follower-option:hover{
   background-color: #111212;
 }
-.single-post-option,.single-comment-option{
+.single-post-option,.single-comment-option, .single-follower-option{
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -4294,13 +4327,13 @@ textarea.w-input, textarea.w-select {
 .delete-post,.delete-comment{
     color: red;
 }
-.post-more-options,.comment-more-options{
+.post-more-options,.comment-more-options,.single-follower-more-options{
   color: #88888880;
   transition: all 0.5s;
   padding: 5px;
   border-radius: 50%;
 }
-.post-more-options:hover,.comment-more-options:hover{
+.post-more-options:hover,.comment-more-options:hover, .single-follower-more-options:hover{
   color: #009dff;
   background-color: #5b708366;
 }
@@ -4515,41 +4548,41 @@ textarea.w-input, textarea.w-select {
 #other-profile-features i:hover{
   background-color: rgba(239,243,244,0.1);
 }
-#other-profile-features button{
-  padding: 7px 15px;
+#other-profile-features button, #following button, #followers button{
+  padding: 5px 12px;
   border-radius: 20px;
   transition: all 0.3s;
 }
-#other-profile-features #followBtn, #other-profile-features #followBackBtn{
+ .followBtn, .followBackBtn{
   background-color: white;
   color: black;
   font-weight: 700;
   transition: all 0.5s;
 }
-#other-profile-features #followBtn:hover, #other-profile-features #followBackBtn:hover{
+.followBtn:hover,.followBackBtn:hover{
   background-color: rgba(215,219,220);
 }
-#other-profile-features #followingBtn,#other-profile-features #unfollowingBtn{
+.followingBtn,.unfollowingBtn{
   background-color: black;
   color: white;
   border-color: rgb(83,100,113);
 }
-#other-profile-features #followingBtn,#other-profile-features #unfollowBtn{
+.followingBtn,.unfollowBtn, .followBackBtn{
   width: 120px;
   font-weight: 700;
   border-width: 1px;
   border-style: solid;
 }
-#other-profile-features #unfollowBtn{
-    background-color: rgba(244,33,46,0.1);
-    color: red;
-    border-color: rgb(103,7,15);
+.unfollowBtn{
+  background-color: rgba(244,33,46,0.1);
+  color: red;
+  border-color: rgb(103,7,15);
 }
 #username-and-follows-info{
   display: flex;
   align-items: center;
 }
-#username-and-follows-info #followsBackInfo{
+.followsBackInfo{
   margin-top: 5px;
   margin-left: 10px;
   font-size: 11px;
@@ -4558,4 +4591,66 @@ textarea.w-input, textarea.w-select {
   color: rgb(113, 118, 123);
   padding: 0 5px;
   border-radius: 2px;
+}
+#filterWrapper{
+  width: 100%;
+  display: flex;
+  border-bottom: 1px solid #88888880;
+}
+#filterWrapper .filterLink{
+  width: 50%;
+  text-align: center;
+  font-size: 15px;
+  transition: all 0.3s;
+  cursor: pointer;
+  padding: 20px 0 15px 0;
+}
+#filterWrapper .filterLink a{
+  color: #fff6;
+  text-decoration: none;
+  padding: 20px 0 15px 0;
+}
+#filterWrapper .filterLink .activeFollowFilter{
+  border-bottom: 3px solid #009dff;
+  color: white;
+  font-weight: 700;
+}
+#filterWrapper .filterLink:hover{
+  background-color: rgba(231,233,234,0.1);
+}
+.single-following-user, .single-follower-user{
+  display: flex;
+  padding: 15px;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+.single-following-user:hover,.single-follower-user{
+  background-color: rgba(255,255,255,0.03);
+}
+.user-following-information,.user-follower-information{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+  margin-left: 10px;
+}
+.user-following-fullname-and-username,.user-follower-fullname-and-username{
+  width: 70%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.user-follower-fullname-and-username .followsBackInfo{
+  margin-top: 0;
+}
+.user-following-fullname-and-username .user-following-fullname, .user-follower-fullname-and-username .user-follower-fullname{
+  font-weight: 700;
+  width: 100%;
+}
+.user-following-fullname-and-username .user-following-username,.user-follower-fullname-and-username .user-follower-username{
+  color: #fff6;
+}
+.user-following-bio, .user-follower-bio{
+  margin-top: 5px;
 }

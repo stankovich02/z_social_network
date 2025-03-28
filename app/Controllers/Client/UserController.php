@@ -66,7 +66,6 @@ class UserController extends Controller
             'biography' => $biography
        ]);
     }
-
     public function follow(int $id) : Response
     {
         $loggedInUserId = session()->get('user')->id;
@@ -118,6 +117,24 @@ class UserController extends Controller
             'blocked_by_user_id' => $userId,
             'blocked_user_id' => $blockedUserId
         ]);
+        $blockedUserFollowsLoggedInUser = UserFollower::where('user_id', '=', $blockedUserId)
+            ->where('follower_id', '=', $userId)
+            ->count();
+        if($blockedUserFollowsLoggedInUser){
+            Database::table(UserFollower::TABLE)
+                ->where('user_id', '=', $blockedUserId)
+                ->where('follower_id', '=', $userId)
+                ->delete();
+        }
+        $loggedInUserFollowsBlockedUser = UserFollower::where('user_id', '=', $userId)
+            ->where('follower_id', '=', $blockedUserId)
+            ->count();
+        if($loggedInUserFollowsBlockedUser){
+            Database::table(UserFollower::TABLE)
+                ->where('user_id', '=', $userId)
+                ->where('follower_id', '=', $blockedUserId)
+                ->delete();
+        }
     }
     public function uploadProfileImage(Request $request) : Response
     {

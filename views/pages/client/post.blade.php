@@ -111,7 +111,7 @@
     </div>
     <div class="other-comments">
         @foreach($post->comments as $comment)
-            @if(!in_array($comment->user->id, $blockedUsers))
+            @if(!in_array($comment->user->id, $blockedUsers) && !in_array($comment->user->id, $usersWhoBlockLoggedInUser))
                 <div class="single-comment">
                     <div class="comment-more-options-wrapper">
                         <div class="more-options w-embed comment-more-options">

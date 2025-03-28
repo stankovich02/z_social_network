@@ -2,6 +2,7 @@
 
 namespace App\Controllers\Client;
 
+use App\Models\BlockedUser;
 use App\Models\LikedPost;
 use App\Models\Nav;
 use App\Models\Post;
@@ -18,6 +19,7 @@ class HomeController extends Controller
     public function index() : View
     {
         $posts = Post::with('user','image')->orderBy('id', 'desc')->get();
+
         foreach ($posts as $post) {
             $post->created_at = $this->calculatePostedDate($post->created_at);
             $post->number_of_likes = $post->likesCount($post->id);
@@ -37,9 +39,16 @@ class HomeController extends Controller
                 ->get(),
             'blocked_user_id'
         );
+        $usersWhoBlockLoggedInUser = array_column(
+            Database::table('blocked_users')
+                ->where('blocked_user_id', '=', session()->get('user')->id)
+                ->get(),
+            'blocked_by_user_id'
+        );
         return view('pages.client.home', [
             'posts' => $posts,
             'blockedUsers' => $blockedUsers,
+            'usersWhoBlockLoggedInUser' => $usersWhoBlockLoggedInUser,
         ]);
     }
 }
