@@ -238,6 +238,19 @@ function sendPost(){
                     writeInputAndIcon();
                     newPostLogic();
                 }
+                let numOfPosts = document.querySelector(".num-of-posts");
+                if(numOfPosts){
+                    let numOfPostsText = numOfPosts.textContent;
+                    let numOfPostsArr = numOfPostsText.split(" ");
+                    let numOfPostsNum = parseInt(numOfPostsArr[0]);
+                    numOfPostsNum++;
+                    if(numOfPostsNum === 1){
+                        numOfPosts.textContent = numOfPostsNum + " post";
+                    }
+                    else{
+                        numOfPosts.textContent = numOfPostsNum + " posts";
+                    }
+                }
                 document.querySelector("#popupPostBtn").classList.add("disabled-new-post-btn");
                 document.querySelector("#popupPostBtn").disabled = true;
                 const popupWrapper = document.querySelector("#new-post-popup-wrapper");
