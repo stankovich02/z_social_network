@@ -245,11 +245,11 @@ function sendPost(){
                 document.body.style.overflow = "auto";
                 if(!document.querySelector("#posts")){
                     let newPostMessage = document.createElement('div')
-                    newPostMessage.id = "new-post-message";
+                    newPostMessage.id = "message-popup";
                     newPostMessage.innerHTML = `<p>Your post was sent.</p><a href="${post.post_link}">View</a>`;
                     document.body.appendChild(newPostMessage);
                     setTimeout(function (){
-                        newPostMessage.classList.add('show-new-post-message');
+                        newPostMessage.classList.add('show-message-popup');
                     },200);
                     setTimeout(function (){
                         newPostMessage.remove();

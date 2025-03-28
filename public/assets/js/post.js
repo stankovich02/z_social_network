@@ -21,42 +21,17 @@ document.addEventListener("click", function (event) {
     }
     if (event.target.classList.contains("delete-comment")) {
         const commentId = event.target.getAttribute("data-id");
-        const deletePopupWrapper = document.querySelector("#delete-wrapper");
-        const confirmDelete = document.querySelector("#confirmDelete");
-        const cancelDelete = document.querySelector("#cancelDelete");
-        deletePopupWrapper.style.display = "block";
+        const actionPopupWrapper = document.querySelector("#action-popup-wrapper");
+        const confirmDelete = document.querySelector("#doActionBtn");
+        confirmDelete.className = "deleteCommentPopupBtn";
+        confirmDelete.textContent = "Delete";
+        confirmDelete.setAttribute("data-id", commentId);
+        let popupHeading = document.querySelector("#action-popup-wrapper h3");
+        popupHeading.textContent = "Delete post?";
+        let popupText = document.querySelector("#action-popup-wrapper p");
+        popupText.textContent = "This can’t be undone and it will be removed from your profile, the timeline of any accounts that follow you, and from search results.";
+        actionPopupWrapper.style.display = "block";
         document.body.style.overflow = "hidden";
-        confirmDelete.addEventListener("click", function () {
-            $.ajax({
-                url: `/posts/${commentId}/comment`,
-                type: "DELETE",
-                success: function(data){
-                    event.target.parentElement.parentElement.parentElement.remove();
-                    deletePopupWrapper.style.display = "none";
-                    document.body.style.overflow = "auto";
-                    let deleteMessage = document.createElement('div')
-                    deleteMessage.id = "deleted-message";
-                    deleteMessage.innerHTML = `<p>Your comment was deleted</p>`;
-                    document.body.appendChild(deleteMessage);
-                    let commentCount = document.querySelector(".single-post-comment-stats .post-reaction-stats-text");
-                    commentCount.innerHTML = data.numOfComments > 0 ? data.numOfComments : "";
-                    setTimeout(function (){
-                        deleteMessage.classList.add('show-deleted-message');
-                    },50);
-
-                    setTimeout(function (){
-                        deleteMessage.remove();
-                    }, 4000);
-                },
-                error: function(err){
-                    console.log(err);
-                }
-            })
-        })
-        cancelDelete.addEventListener("click", function () {
-            deletePopupWrapper.style.display = "none";
-            document.body.style.overflow = "auto";
-        })
     }
     if(event.target.parentElement.parentElement.classList.contains("liked-on-comment-stats")){
         let icon = event.target;
@@ -144,6 +119,95 @@ document.addEventListener("click", function (event) {
             },
         })
     }
+    if(event.target.classList.contains("cancelPopupBtn")){
+        const actionPopupWrapper = document.querySelector("#action-popup-wrapper");
+        actionPopupWrapper.style.display = "none";
+        document.body.style.overflow = "auto";
+    }
+    if(event.target.className === "deletePostPopupBtn"){
+        let postId = event.target.getAttribute("data-id");
+        let actionPopupWrapper = document.querySelector("#action-popup-wrapper");
+        $.ajax({
+            url: "/posts/" + postId,
+            type: "DELETE",
+            success: function(){
+                actionPopupWrapper.style.display = "none";
+                document.body.style.overflow = "auto";
+                let returnBackLink = document.querySelector(".returnBackLink");
+                returnBackLink.click();
+            },
+            error: function(err){
+                console.log(err);
+            }
+        })
+    }
+    if(event.target.className === "deleteCommentPopupBtn"){
+        let commentId = event.target.getAttribute("data-id");
+        let actionPopupWrapper = document.querySelector("#action-popup-wrapper");
+        $.ajax({
+            url: `/posts/${commentId}/comment`,
+            type: "DELETE",
+            success: function(data){
+                let deleteCommentBtn = document.querySelector(`.delete-comment[data-id="${commentId}"]`);
+                deleteCommentBtn.parentElement.parentElement.parentElement.remove();
+                actionPopupWrapper.style.display = "none";
+                document.body.style.overflow = "auto";
+                let deleteMessage = document.createElement('div')
+                deleteMessage.id = "message-popup";
+                deleteMessage.innerHTML = `<p>Your comment was deleted</p>`;
+                document.body.appendChild(deleteMessage);
+                let commentCount = document.querySelector(".single-post-comment-stats .post-reaction-stats-text");
+                commentCount.innerHTML = data.numOfComments > 0 ? data.numOfComments : "";
+                setTimeout(function (){
+                    deleteMessage.classList.add('show-message-popup');
+                },50);
+
+                setTimeout(function (){
+                    deleteMessage.remove();
+                }, 3000);
+            },
+            error: function(err){
+                console.log(err);
+            }
+        })
+    }
+    if(event.target.className === "blockUserPopupBtn"){
+        const userId = event.target.getAttribute("data-id");
+        $.ajax({
+            url: `/users/${userId}/block`,
+            type: "POST",
+            success: function(){
+                let returnBackLink = document.querySelector(".returnBackLink");
+                returnBackLink.click();
+            },
+            error: function(err){
+                console.log(err);
+            }
+        })
+    }
+    if(event.target.className === "blockUserCommentPopupBtn"){
+        const userId = event.target.getAttribute("data-id");
+        const path = window.location.pathname;
+        const pathUsername = path.split("/")[0];
+        const username = event.target.getAttribute("data-username");
+        $.ajax({
+            url: `users/${userId}/block`,
+            type: "POST",
+            success: function(){
+                if(pathUsername === username){
+                    let returnBackLink = document.querySelector(".returnBackLink");
+                    returnBackLink.click();
+                }
+                let blockedUserComments = document.querySelectorAll(`.other-comments .block-user[data-id="${userId}"]`);
+                blockedUserComments.forEach(blockedUserComment => {
+                    blockedUserComment.parentElement.parentElement.parentElement.remove();
+                })
+            },
+            error: function(err){
+                console.log(err);
+            }
+        })
+    }
 })
 document.querySelector("#postReplyComment").addEventListener("click", function(){
     const textArea = document.querySelector(".new-comment-wrapper .new-comment-text");
@@ -215,19 +279,18 @@ const blockUserBtns = document.querySelectorAll(".other-comments .block-user");
 blockUserBtns.forEach(blockUserBtn => {
     blockUserBtn.addEventListener("click", function () {
         const userId = this.getAttribute("data-id");
-        $.ajax({
-            url: "/users/block",
-            type: "POST",
-            data: {
-                user_id: userId
-            },
-            success: function(){
-                blockUserBtn.parentElement.parentElement.parentElement.remove();
-            },
-            error: function(err){
-                console.log(err);
-            }
-        })
+        const username = this.getAttribute("data-username");
+        const actionPopupWrapper = document.querySelector("#action-popup-wrapper");
+        const confirmBlock = document.querySelector("#doActionBtn");
+        confirmBlock.className = "blockUserPopupBtn";
+        confirmBlock.textContent = "Block";
+        confirmBlock.setAttribute("data-id", userId);
+        let popupHeading = document.querySelector("#action-popup-wrapper h3");
+        popupHeading.textContent = `Block @${username}?`;
+        let popupText = document.querySelector("#action-popup-wrapper p");
+        popupText.textContent = `They will be able to see your public posts, but will no longer be able to engage with them. @${username} will also not be able to follow or message you, and you will not see notifications from them. `;
+        actionPopupWrapper.style.display = "block";
+        document.body.style.overflow = "hidden";
     })
 });
 
@@ -242,30 +305,17 @@ if(document.querySelector(".delete-post")){
     let deletePost = document.querySelector(".delete-post");
     deletePost.addEventListener("click", function (){
         const postId = this.getAttribute("data-id");
-        const deletePopupWrapper = document.querySelector("#delete-wrapper");
-        const confirmDelete = document.querySelector("#confirmDelete");
-        const cancelDelete = document.querySelector("#cancelDelete");
-        deletePopupWrapper.style.display = "block";
+        const actionPopupWrapper = document.querySelector("#action-popup-wrapper");
+        const confirmDelete = document.querySelector("#doActionBtn");
+        confirmDelete.className = "deletePostPopupBtn";
+        confirmDelete.textContent = "Delete";
+        confirmDelete.setAttribute("data-id", postId);
+        let popupHeading = document.querySelector("#action-popup-wrapper h3");
+        popupHeading.textContent = "Delete post?";
+        let popupText = document.querySelector("#action-popup-wrapper p");
+        popupText.textContent = "This can’t be undone and it will be removed from your profile, the timeline of any accounts that follow you, and from search results.";
+        actionPopupWrapper.style.display = "block";
         document.body.style.overflow = "hidden";
-        confirmDelete.addEventListener("click", function () {
-            $.ajax({
-                url: "/posts/" + postId,
-                type: "DELETE",
-                success: function(){
-                    deletePopupWrapper.style.display = "none";
-                    document.body.style.overflow = "auto";
-                    let returnBackLink = document.querySelector(".returnBackLink");
-                    returnBackLink.click();
-                },
-                error: function(err){
-                    console.log(err);
-                }
-            })
-        })
-        cancelDelete.addEventListener("click", function () {
-            deletePopupWrapper.style.display = "none";
-            document.body.style.overflow = "auto";
-        })
     })
 }
 
@@ -273,20 +323,19 @@ if(document.querySelector("#single-post-info .block-user")){
     let blockUser = document.querySelector("#single-post-info .block-user");
     blockUser.addEventListener("click", function (){
         const userId = this.getAttribute("data-id");
-        $.ajax({
-            url: "/users/block",
-            type: "POST",
-            data: {
-                user_id: userId
-            },
-            success: function(){
-                let returnBackLink = document.querySelector(".returnBackLink");
-                returnBackLink.click();
-            },
-            error: function(err){
-                console.log(err);
-            }
-        })
+        const username = this.getAttribute("data-username");
+        const actionPopupWrapper = document.querySelector("#action-popup-wrapper");
+        const confirmBlock = document.querySelector("#doActionBtn");
+        confirmBlock.className = "blockUserCommentPopupBtn";
+        confirmBlock.textContent = "Block";
+        confirmBlock.setAttribute("data-id", userId);
+        confirmBlock.setAttribute("data-username", username);
+        let popupHeading = document.querySelector("#action-popup-wrapper h3");
+        popupHeading.textContent = `Block @${username}?`;
+        let popupText = document.querySelector("#action-popup-wrapper p");
+        popupText.textContent = `They will be able to see your public posts, but will no longer be able to engage with them. @${username} will also not be able to follow or message you, and you will not see notifications from them. `;
+        actionPopupWrapper.style.display = "block";
+        document.body.style.overflow = "hidden";
     })
 }
 

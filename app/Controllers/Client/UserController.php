@@ -92,12 +92,21 @@ class UserController extends Controller
             'numOfFollowers' => count($user->followers),
         ]);
     }
-    public function unfollow(int $id) : Response
+    public function unfollow(int $id,Request $request) : Response
     {
-        Database::table(UserFollower::TABLE)
-                 ->where('user_id', '=', session()->get('user')->id)
-                 ->where('follower_id', '=', $id)
-                 ->delete();
+        if($request->input("removed_follower")){
+            Database::table(UserFollower::TABLE)
+                ->where('user_id', '=', $id)
+                ->where('follower_id', '=', session()->get('user')->id)
+                ->delete();
+            return response()->setStatusCode(Response::HTTP_NO_CONTENT)->json([]);
+        }
+        else{
+            Database::table(UserFollower::TABLE)
+                ->where('user_id', '=', session()->get('user')->id)
+                ->where('follower_id', '=', $id)
+                ->delete();
+        }
         $followBack = UserFollower::where('user_id', '=',$id)
                                   ->where('follower_id', '=', session()->get('user')->id)
                                   ->count();
@@ -109,30 +118,29 @@ class UserController extends Controller
             ]
         );
     }
-    public function blockUser(Request $request) : void
+    public function block(int $id,Request $request) : void
     {
-        $blockedUserId = $request->input('user_id');
         $userId = session()->get('user')->id;
         BlockedUser::create([
             'blocked_by_user_id' => $userId,
-            'blocked_user_id' => $blockedUserId
+            'blocked_user_id' => $id
         ]);
-        $blockedUserFollowsLoggedInUser = UserFollower::where('user_id', '=', $blockedUserId)
+        $blockedUserFollowsLoggedInUser = UserFollower::where('user_id', '=', $id)
             ->where('follower_id', '=', $userId)
             ->count();
         if($blockedUserFollowsLoggedInUser){
             Database::table(UserFollower::TABLE)
-                ->where('user_id', '=', $blockedUserId)
+                ->where('user_id', '=', $id)
                 ->where('follower_id', '=', $userId)
                 ->delete();
         }
         $loggedInUserFollowsBlockedUser = UserFollower::where('user_id', '=', $userId)
-            ->where('follower_id', '=', $blockedUserId)
+            ->where('follower_id', '=', $id)
             ->count();
         if($loggedInUserFollowsBlockedUser){
             Database::table(UserFollower::TABLE)
                 ->where('user_id', '=', $userId)
-                ->where('follower_id', '=', $blockedUserId)
+                ->where('follower_id', '=', $id)
                 ->delete();
         }
     }

@@ -48,10 +48,16 @@ document.addEventListener("click", function (event) {
     }
     if (event.target.classList.contains("delete-post")) {
         const postId = event.target.getAttribute("data-id");
-        const deletePopupWrapper = document.querySelector("#delete-wrapper");
-        const confirmDelete = document.querySelector("#confirmDelete");
-        const cancelDelete = document.querySelector("#cancelDelete");
-        deletePopupWrapper.style.display = "block";
+        const actionPopupWrapper = document.querySelector("#action-popup-wrapper");
+        const confirmDelete = document.querySelector("#doActionBtn");
+        confirmDelete.className = "deletePostPopupBtn";
+        confirmDelete.textContent = "Delete";
+        const cancelDelete = document.querySelector("#cancelAction");
+        let popupHeading = document.querySelector("#action-popup-wrapper h3");
+        popupHeading.textContent = "Delete post?";
+        let popupText = document.querySelector("#action-popup-wrapper p");
+        popupText.textContent = "This can’t be undone and it will be removed from your profile, the timeline of any accounts that follow you, and from search results.";
+        actionPopupWrapper.style.display = "block";
         document.body.style.overflow = "hidden";
         confirmDelete.addEventListener("click", function () {
             $.ajax({
@@ -70,7 +76,7 @@ document.addEventListener("click", function (event) {
                     else{
                         numOfPosts.textContent = numOfPostsNum + " posts";
                     }
-                    deletePopupWrapper.style.display = "none";
+                    actionPopupWrapper.style.display = "none";
                     document.body.style.overflow = "auto";
                     let newPostMessage = document.createElement('div')
                     newPostMessage.id = "deleted-message";
@@ -89,7 +95,7 @@ document.addEventListener("click", function (event) {
             })
         })
         cancelDelete.addEventListener("click", function () {
-            deletePopupWrapper.style.display = "none";
+            actionPopupWrapper.style.display = "none";
             document.body.style.overflow = "auto";
         })
     }
@@ -312,12 +318,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 document.querySelector("#replyBtn").classList.add("disabled-new-comment");
                 document.querySelector("#replyBtn").disabled = true;
                 let newCommentMessage = document.createElement('div')
-                newCommentMessage.id = "new-comment-message";
+                newCommentMessage.id = "message-popup";
                 newCommentMessage.innerHTML = `<p>Your comment was sent.</p><a href="${data.post_link}">View</a>`;
                 localStorage.setItem('commentID', data.comment_id);
                 document.body.appendChild(newCommentMessage);
                 setTimeout(function (){
-                    newCommentMessage.classList.add('show-new-comment-message');
+                    newCommentMessage.classList.add('show-message-popup');
                 },200);
                 setTimeout(function (){
                     newCommentMessage.remove();
@@ -336,11 +342,8 @@ if(document.querySelector(".block-user")){
         blockUserBtn.addEventListener("click", function (){
             const userId = this.getAttribute("data-id");
             $.ajax({
-                url: "/users/block",
+                url: `users/${userId}/block`,
                 type: "POST",
-                data: {
-                    user_id: userId
-                },
                 success: function(){
                     let returnBackLink = document.querySelector(".returnBackLink");
                     returnBackLink.click();

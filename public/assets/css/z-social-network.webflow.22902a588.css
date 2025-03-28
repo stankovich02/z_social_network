@@ -3145,7 +3145,7 @@ textarea.w-input, textarea.w-select {
 
 .setup-profile {
   background-color: #000;
-  border: 1px solid #fff;
+  border: 1px solid rgb(83, 100, 113);
   border-radius: 20px;
   font-weight: 700;
   line-height: 16px;
@@ -4276,7 +4276,7 @@ textarea.w-input, textarea.w-select {
 .block-icon{
     width: 1rem;
     height: 1rem;
-    margin-right: 5px;
+    margin-right: 15px;
 }
 .post-more-options-wrapper,.comment-more-options-wrapper{
   position: absolute;
@@ -4292,12 +4292,11 @@ textarea.w-input, textarea.w-select {
   align-items: end;
   position: relative;
 }
-.choose-post-option,.choose-comment-option, .choose-follower-option{
+.choose-post-option,.choose-comment-option{
   box-shadow: rgba(255, 255, 255, 0.2) 0 0 15px, rgba(255, 255, 255, 0.15) 0 0 3px 1px;
   background-color: black;
   border-radius: 16px;
-  padding: 10px;
-  width: 200px;
+  width: 250px;
   font-weight: bold;
   position: absolute;
   top: 35px;
@@ -4308,21 +4307,22 @@ textarea.w-input, textarea.w-select {
   box-shadow: rgba(255, 255, 255, 0.2) 0 0 15px, rgba(255, 255, 255, 0.15) 0 0 3px 1px;
   background-color: black;
   border-radius: 16px;
-  padding: 10px;
-  width: 200px;
+  width: 250px;
   font-weight: bold;
   position: absolute;
   top: 0;
   z-index: 5;
   display: none;
 }
-.choose-post-option:hover,.choose-comment-option:hover, .choose-follower-option:hover{
+.single-post-option:hover,.choose-comment-option:hover, .single-follower-option:hover{
   background-color: #111212;
 }
 .single-post-option,.single-comment-option, .single-follower-option{
   cursor: pointer;
   display: flex;
   align-items: center;
+  padding: 10px 15px;
+  width: 100%;
 }
 .delete-post,.delete-comment{
     color: red;
@@ -4346,7 +4346,7 @@ textarea.w-input, textarea.w-select {
   border-radius: 20px;
   margin-top: 10px;
 }
-#new-post-message, #new-comment-message, #deleted-message{
+#message-popup{
   position: fixed;
   display: flex;
   background-color: #009dff;
@@ -4358,20 +4358,21 @@ textarea.w-input, textarea.w-select {
   opacity: 0;
   transition: all 1s;
 }
-#new-post-message.show-new-post-message, #new-comment-message.show-new-comment-message, #deleted-message.show-deleted-message{
+#message-popup.show-message-popup{
   opacity: 1;
 }
-#new-post-message p, #new-comment-message p, #deleted-message p{
+#message-popup p{
   margin-right: 10px;
   margin-bottom: 0;
 }
-#deleted-message p{
+#message-popup p{
   margin-right: 0;
 }
-#new-post-message a, #new-comment-message a{
+#message-popup a{
   color: white;
   text-decoration: none;
   font-weight: bold;
+  margin-left: 5px;
 }
 #single-post-info{
   flex-direction: column;
@@ -4457,10 +4458,7 @@ textarea.w-input, textarea.w-select {
 #new-comment-popup-wrapper .new-comment-popup{
   margin-top: 5%;
 }
-#delete-wrapper{
-  display: none;
-}
-#delete-popup{
+#action-popup{
   z-index: 60;
   background-color: #000;
   border-radius: 20px;
@@ -4472,33 +4470,35 @@ textarea.w-input, textarea.w-select {
   display: block;
   flex-direction: column;
 }
-#delete-popup h3{
+#action-popup h3{
   margin-top: 0;
+  font-size: 22px;
 }
-#delete-popup p{
+#action-popup p{
   color: #fff6;
   font-size: 15px;
 }
-#delete-popup .deletePopupBtn{
+.deletePostPopupBtn,.removeFollowerPopupBtn, .blockUserPopupBtn, .cancelPopupBtn,.deleteCommentPopupBtn, .blockUserCommentPopupBtn{
   width: 100%;
   margin-bottom: 10px;
   font-weight: 700;
   padding: 10px 0;
   border-radius: 30px;
-  transition: all 0.5s;
-}
-#delete-popup #confirmDelete{
-  background-color: rgb(244, 33, 46);
+  transition: all 0.3s;
   margin-top: 20px;
 }
-#delete-popup #confirmDelete:hover{
+.deletePostPopupBtn,.removeFollowerPopupBtn, .blockUserPopupBtn, .deleteCommentPopupBtn,.blockUserCommentPopupBtn{
+  background-color: rgb(244, 33, 46);
+}
+.deletePostPopupBtn:hover,.removeFollowerPopupBtn:hover, .blockUserPopupBtn:hover,.deleteCommentPopupBtn:hover, .blockUserCommentPopupBtn:hover{
     background-color: rgb(220, 30, 41);
 }
-#delete-popup #cancelDelete{
+.cancelPopupBtn{
   background-color: black;
-  border: 1px solid white;
+  border: 1px solid rgb(83, 100, 113);
+  margin-top: 0;
 }
-#delete-popup #cancelDelete:hover{
+.cancelPopupBtn:hover{
   background-color: rgba(239,243,244,0.1);
 }
 .setup-profile:hover{
@@ -4600,15 +4600,18 @@ textarea.w-input, textarea.w-select {
 #filterWrapper .filterLink{
   width: 50%;
   text-align: center;
-  font-size: 15px;
   transition: all 0.3s;
   cursor: pointer;
-  padding: 20px 0 15px 0;
-}
-#filterWrapper .filterLink a{
-  color: #fff6;
   text-decoration: none;
+}
+#filterWrapper .filterLink p{
+  width: 25%;
+  margin-left: auto;
+  margin-right: auto;
+  color: #fff6;
+  margin-bottom: 0;
   padding: 20px 0 15px 0;
+  font-size: 15px;
 }
 #filterWrapper .filterLink .activeFollowFilter{
   border-bottom: 3px solid #009dff;
@@ -4624,7 +4627,7 @@ textarea.w-input, textarea.w-select {
   transition: all 0.3s;
   cursor: pointer;
 }
-.single-following-user:hover,.single-follower-user{
+.single-following-user:hover,.single-follower-user:hover{
   background-color: rgba(255,255,255,0.03);
 }
 .user-following-information,.user-follower-information{
@@ -4653,4 +4656,17 @@ textarea.w-input, textarea.w-select {
 }
 .user-following-bio, .user-follower-bio{
   margin-top: 5px;
+}
+.single-follower-option:first-child, .single-post-option:first-child{
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+.single-follower-option:last-child, .single-post-option:last-child{
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+}
+.single-follower-option i, .single-post-option i{
+  width: 1rem;
+  height: 1rem;
+  margin-right: 15px;
 }

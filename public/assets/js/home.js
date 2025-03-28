@@ -6,11 +6,15 @@ document.addEventListener("click", function (event) {
     }
     if (event.target.classList.contains("delete-post")) {
         const postId = event.target.getAttribute("data-id");
-        const deletePopupWrapper = document.querySelector("#delete-wrapper");
-        const confirmDelete = document.querySelector("#confirmDelete");
-        const cancelDelete = document.querySelector("#cancelDelete");
-        confirmDelete.dataset.id = postId;
-        deletePopupWrapper.style.display = "block";
+        const actionPopupWrapper = document.querySelector("#action-popup-wrapper");
+        const confirmDelete = document.querySelector("#doActionBtn");
+        confirmDelete.className = "deletePostPopupBtn";
+        const cancelDelete = document.querySelector("#cancelAction");
+        let popupHeading = document.querySelector("#action-popup-wrapper h3");
+        popupHeading.textContent = "Delete post?";
+        let popupText = document.querySelector("#action-popup-wrapper p");
+        popupText.textContent = "This can’t be undone and it will be removed from your profile, the timeline of any accounts that follow you, and from search results.";
+        actionPopupWrapper.style.display = "block";
         document.body.style.overflow = "hidden";
         confirmDelete.addEventListener("click", function () {
             $.ajax({
@@ -18,7 +22,7 @@ document.addEventListener("click", function (event) {
                 type: "DELETE",
                 success: function(){
                     event.target.parentElement.parentElement.parentElement.remove();
-                    deletePopupWrapper.style.display = "none";
+                    actionPopupWrapper.style.display = "none";
                     document.body.style.overflow = "auto";
                     let newPostMessage = document.createElement('div')
                     newPostMessage.id = "deleted-message";
@@ -37,7 +41,7 @@ document.addEventListener("click", function (event) {
             })
         })
         cancelDelete.addEventListener("click", function () {
-            deletePopupWrapper.style.display = "none";
+            actionPopupWrapper.style.display = "none";
             document.body.style.overflow = "auto";
         })
     }
@@ -180,6 +184,88 @@ document.addEventListener("click", function (event) {
             }
         })
     }
+    if(event.target.className === "blockUserPopupBtn"){
+        let userId = event.target.getAttribute("data-id");
+        let blockUserBtns = document.querySelectorAll(`.block-user[data-id="${userId}"]`);
+        let actionPopupWrapper = document.querySelector("#action-popup-wrapper");
+        $.ajax({
+            url: `/users/${userId}/block`,
+            type: "POST",
+            success: function(){
+                blockUserBtns.forEach(blockUserBtn => {
+                    blockUserBtn.parentElement.parentElement.parentElement.parentElement.remove();
+                })
+                actionPopupWrapper.style.display = "none";
+                document.body.style.overflow = "auto";
+            },
+            error: function(err){
+                console.log(err);
+            }
+        })
+    }
+    if(event.target.classList.contains("cancelPopupBtn")){
+        const actionPopupWrapper = document.querySelector("#action-popup-wrapper");
+        actionPopupWrapper.style.display = "none";
+        document.body.style.overflow = "auto";
+    }
+    if(event.target.classList.contains("follow-user")){
+        const userId = event.target.getAttribute("data-id");
+        const username = event.target.getAttribute("data-username");
+        $.ajax({
+            url: `/users/${userId}/follow`,
+            type: "POST",
+            success: function(){
+                let followMessage = document.createElement('div')
+                followMessage.id = "message-popup";
+                followMessage.innerHTML = `<p>You followed <strong>@${username}</strong></p>`;
+                document.body.appendChild(followMessage);
+                let followUserBtns = document.querySelectorAll(`.follow-user[data-id="${userId}"]`);
+                followUserBtns.forEach(followUserBtn => {
+                    followUserBtn.classList.remove ("follow-user");
+                    followUserBtn.classList.add("unfollow-user");
+                    followUserBtn.innerHTML = `<i class="fa-solid fa-user-xmark"></i> Unfollow @${username}`;
+                })
+                setTimeout(function (){
+                    followMessage.classList.add('show-message-popup');
+                },50);
+                setTimeout(function (){
+                    followMessage.remove();
+                }, 3000);
+            },
+            error: function(err){
+                console.log(err);
+            }
+        })
+    }
+    if(event.target.classList.contains("unfollow-user")){
+        const userId = event.target.getAttribute("data-id");
+        const username = event.target.getAttribute("data-username");
+        $.ajax({
+            url: `/users/${userId}/unfollow`,
+            type: "POST",
+            success: function(){
+                let followMessage = document.createElement('div')
+                followMessage.id = "message-popup";
+                followMessage.innerHTML = `<p>You unfollowed <strong>@${username}</strong></p>`;
+                document.body.appendChild(followMessage);
+                let unfollowUserBtns = document.querySelectorAll(`.unfollow-user[data-id="${userId}"]`);
+                unfollowUserBtns.forEach(unfollowUserBtn => {
+                    unfollowUserBtn.classList.remove ("unfollow-user");
+                    unfollowUserBtn.classList.add("follow-user");
+                    unfollowUserBtn.innerHTML = `<i class="fa-solid fa-user-plus"></i> Follow @${username}`;
+                })
+                setTimeout(function (){
+                    followMessage.classList.add('show-message-popup');
+                },50);
+                setTimeout(function (){
+                    followMessage.remove();
+                }, 3000);
+            },
+            error: function(err){
+                console.log(err);
+            }
+        })
+    }
 
 });
 /*document.addEventListener("DOMContentLoaded", function () {
@@ -214,25 +300,27 @@ document.addEventListener("click", function (event) {
         observer.observe(post);
     });
 });*/
-const blockUserBtns = document.querySelectorAll(".block-user");
-blockUserBtns.forEach(blockUserBtn => {
-    blockUserBtn.addEventListener("click", function () {
-        const userId = this.getAttribute("data-id");
-        $.ajax({
-            url: "/users/block",
-            type: "POST",
-            data: {
-                user_id: userId
-            },
-            success: function(){
-
-            },
-            error: function(err){
-                console.log(err);
-            }
-        })
+if(document.querySelector(".block-user")){
+    let blockUserBtns = document.querySelectorAll(".block-user");
+    blockUserBtns.forEach(blockUserBtn => {
+        blockUserBtn.addEventListener("click", function (){
+            const userId = this.getAttribute("data-id");
+            const username = this.getAttribute("data-username");
+            const actionPopupWrapper = document.querySelector("#action-popup-wrapper");
+            const confirmBlock = document.querySelector("#doActionBtn");
+            confirmBlock.className = "blockUserPopupBtn";
+            confirmBlock.textContent = "Block";
+            confirmBlock.setAttribute("data-id", userId);
+            confirmBlock.setAttribute("data-username", username);
+            let popupHeading = document.querySelector("#action-popup-wrapper h3");
+            popupHeading.textContent = `Block @${username}?`;
+            let popupText = document.querySelector("#action-popup-wrapper p");
+            popupText.textContent = `They will be able to see your public posts, but will no longer be able to engage with them. @${username} will also not be able to follow or message you, and you will not see notifications from them. `;
+            actionPopupWrapper.style.display = "block";
+            document.body.style.overflow = "hidden";
+        });
     })
-});
+}
 function feedNewPostLogic(){
     function writeInputAndIcon(){
         let form = document.querySelector("#feedNewPost form");
@@ -499,12 +587,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 document.querySelector("#replyBtn").classList.add("disabled-new-comment");
                 document.querySelector("#replyBtn").disabled = true;
                 let newCommentMessage = document.createElement('div')
-                newCommentMessage.id = "new-comment-message";
+                newCommentMessage.id = "message-popup";
                 newCommentMessage.innerHTML = `<p>Your comment was sent.</p><a href="${data.post_link}">View</a>`;
                 localStorage.setItem('commentID', data.comment_id);
                 document.body.appendChild(newCommentMessage);
                 setTimeout(function (){
-                    newCommentMessage.classList.add('show-new-comment-message');
+                    newCommentMessage.classList.add('show-message-popup');
                 },200);
                 setTimeout(function (){
                     newCommentMessage.remove();

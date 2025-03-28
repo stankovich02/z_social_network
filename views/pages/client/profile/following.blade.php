@@ -26,12 +26,12 @@
             </div>
         </div>
         <div id="filterWrapper">
-            <div class="filterLink">
-                <a href="{{route('profile.followers', ['username' => $user->username])}}">Followers</a>
-            </div>
-            <div class="filterLink">
-                <a href="{{route('profile.following', ['username' => $user->username])}}" class="activeFollowFilter">Following</a>
-            </div>
+            <a href="{{route('profile.followers', ['username' => $user->username])}}" class="filterLink">
+                <p>Followers</p>
+            </a>
+            <a href="{{route('profile.following', ['username' => $user->username])}}" class="filterLink">
+                <p class="activeFollowFilter">Following</p>
+            </a>
         </div>
         <div id="following">
            @foreach($user->following as $userProfile)

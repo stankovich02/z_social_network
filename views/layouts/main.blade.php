@@ -115,12 +115,12 @@
             <div class="reply-to-comment-btn-wrapper"><button class="reply-comment disabled-new-comment w-button" id="replyBtn" disabled>Reply</button></div>
         </div>
     </div>
-    <div class="popup-wrapper" id="delete-wrapper">
-        <div id="delete-popup">
-            <h3>Delete post?</h3>
-            <p>This can’t be undone and it will be removed from your profile, the timeline of any accounts that follow you, and from search results.</p>
-            <button id="confirmDelete" class="deletePopupBtn">Delete</button>
-            <button id="cancelDelete" class="deletePopupBtn">Cancel</button>
+    <div class="popup-wrapper" id="action-popup-wrapper">
+        <div id="action-popup">
+            <h3></h3>
+            <p></p>
+            <button id="doActionBtn" class=""></button>
+            <button id="cancelAction" class="cancelPopupBtn">Cancel</button>
         </div>
     </div>
 

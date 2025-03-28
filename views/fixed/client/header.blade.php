@@ -31,7 +31,7 @@
                     </a>
             @endforeach
         </div>
-        <a href="#" class="post-btn w-button">Post</a>
+        <button class="post-btn w-button">Post</button>
         <div id="logout-wrapper">
             <a href="{{route('logout')}}" id="logout-text">Logout, <span id="logged-user-fullname">{{session()->get('user')->full_name}}</span></a>
         </div>
