@@ -4,6 +4,12 @@ document.addEventListener("click", function (event) {
             chooseOption.style.display = "none";
         })
     }
+    if(!event.target.classList.contains("more-profile-ic")){
+        let chooseProfileOption = document.querySelector(".choose-profile-option");
+        if(chooseProfileOption){
+            chooseProfileOption.style.display = "none";
+        }
+    }
     let disallowedPostClicks = ["user-image","posted-by-fullname","post-ic","more-opt-ic", "choose-post-option", "delete-post"];
     let allowedPostClicks = ["post-info", "single-post", "post-info-and-body", "post-body", "post-body-text", "post-reactions"];
     if(allowedPostClicks.includes(event.target.className) && !disallowedPostClicks.includes(event.target.className)){
@@ -88,6 +94,59 @@ document.addEventListener("click", function (event) {
         let actionPopupWrapper = document.querySelector("#action-popup-wrapper");
         actionPopupWrapper.style.display = "none";
         document.body.style.overflow = "auto";
+    }
+    if(event.target.className === "blockUserPopupBtn"){
+        let userId = event.target.getAttribute("data-id");
+        $.ajax({
+            url: `/users/${userId}/block`,
+            type: "POST",
+            success: function(){
+                let returnBackLink = document.querySelector(".returnBackLink");
+                if(returnBackLink){
+                    returnBackLink.click();
+                }
+            },
+            error: function(err){
+                console.log(err);
+            }
+        })
+    }
+    if(event.target.className === "unfollowUserPopupBtn"){
+        let userId = event.target.getAttribute("data-id");
+        let username = event.target.getAttribute("data-username");
+        $.ajax({
+            url: `/users/${userId}/unfollow`,
+            type: "POST",
+            success: function(data){
+                let followingBtn = document.querySelector(".followingBtn");
+                let actionPopupWrapper = document.querySelector("#action-popup-wrapper");
+                followingBtn.remove();
+                actionPopupWrapper.style.display = "none";
+                document.body.style.overflow = "auto";
+                let followersStats = document.querySelector("#profile .followers-stats")
+                followersStats.innerHTML = `${data.numOfFollowers} `;
+                if(data.numOfFollowers !== 1){
+                    followersStats.innerHTML += `<span class="text-span-3">Followers</span>`;
+                }
+                else{
+                    followersStats.innerHTML += `<span class="text-span-3">Follower</span>`;
+                }
+                if(data.followBack){
+                    document.querySelector("#other-profile-features").innerHTML +=`<button class="followBackBtn">Follow back</button>`;
+                    let followBackBtn = document.querySelector(".followBackBtn");
+                    followBackBtn.dataset.id = userId;
+                    followBackBtn.dataset.username = username;
+                }else{
+                    document.querySelector("#other-profile-features").innerHTML +=`<button class="followBtn">Follow</button>`;
+                    let followBtn = document.querySelector(".followBtn");
+                    followBtn.dataset.id = userId;
+                    followBtn.dataset.username = username;
+                }
+            },
+            error: function(err){
+                console.log(err);
+            }
+        })
     }
     if (event.target.classList.contains("delete-post")) {
         const postId = event.target.getAttribute("data-id");
@@ -205,38 +264,24 @@ document.addEventListener("click", function (event) {
     }
 
     if(event.target.className === "unfollowBtn"){
-        let userId = event.target.getAttribute("data-id");
-        $.ajax({
-            url: `/users/${userId}/unfollow`,
-            type: "POST",
-            success: function(data){
-                let unfollowBtn = document.querySelector(".unfollowBtn");
-                unfollowBtn.remove();
-                let followersStats = document.querySelector("#profile .followers-stats")
-                followersStats.innerHTML = `${data.numOfFollowers} `;
-                if(data.numOfFollowers !== 1){
-                    followersStats.innerHTML += `<span class="text-span-3">Followers</span>`;
-                }
-                else{
-                    followersStats.innerHTML += `<span class="text-span-3">Follower</span>`;
-                }
-                if(data.followBack){
-                    document.querySelector("#other-profile-features").innerHTML +=`<button class="followBackBtn">Follow back</button>`;
-                    let followBackBtn = document.querySelector(".followBackBtn");
-                    followBackBtn.dataset.id = userId;
-                }else{
-                    document.querySelector("#other-profile-features").innerHTML +=`<button class="followBtn">Follow</button>`;
-                    let followBtn = document.querySelector(".followBtn");
-                    followBtn.dataset.id = userId;
-                }
-            },
-            error: function(err){
-                console.log(err);
-            }
-        })
+        const userId = event.target.getAttribute("data-id");
+        const username = event.target.getAttribute("data-username");
+        const actionPopupWrapper = document.querySelector("#action-popup-wrapper");
+        const confirmUnfollow = document.querySelector("#doActionBtn");
+        confirmUnfollow.className = "unfollowUserPopupBtn";
+        confirmUnfollow.textContent = "Unfollow";
+        confirmUnfollow.setAttribute("data-id", userId);
+        confirmUnfollow.setAttribute("data-username", username);
+        let popupHeading = document.querySelector("#action-popup-wrapper h3");
+        popupHeading.textContent = `Unfollow @${username}?`;
+        let popupText = document.querySelector("#action-popup-wrapper p");
+        popupText.textContent = `Their posts will no longer show up in your For You timeline. You can still view their profile, unless their posts are protected.`;
+        actionPopupWrapper.style.display = "block";
+        document.body.style.overflow = "hidden";
     }
     if(event.target.className === "followBtn"){
         let userId = event.target.getAttribute("data-id");
+        let username = event.target.getAttribute("data-username");
         $.ajax({
             url: `/users/${userId}/follow`,
             type: "POST",
@@ -253,6 +298,7 @@ document.addEventListener("click", function (event) {
                 }
                 let followingBtn = document.querySelector(".followingBtn");
                 followingBtn.dataset.id = userId;
+                followingBtn.dataset.username = username;
                 followingBtn.addEventListener("mouseover", function (){
                     followingBtn.textContent = "Unfollow";
                     followingBtn.className = "unfollowBtn";
@@ -269,6 +315,7 @@ document.addEventListener("click", function (event) {
     }
     if(event.target.className === "followBackBtn"){
         let userId = event.target.getAttribute("data-id");
+        let username = event.target.getAttribute("data-username");
         $.ajax({
             url: `/users/${userId}/follow`,
             type: "POST",
@@ -285,6 +332,7 @@ document.addEventListener("click", function (event) {
                 }
                 let followingBtn = document.querySelector(".followingBtn");
                 followingBtn.dataset.id = userId;
+                followingBtn.dataset.username = username;
                 followingBtn.addEventListener("mouseover", function (){
                     followingBtn.textContent = "Unfollow";
                     followingBtn.className = "unfollowBtn";
@@ -345,19 +393,21 @@ if(document.querySelector(".block-user")){
     blockUserBtns.forEach(blockUserBtn => {
         blockUserBtn.addEventListener("click", function (){
             const userId = this.getAttribute("data-id");
-            $.ajax({
-                url: `users/${userId}/block`,
-                type: "POST",
-                success: function(){
-                    let returnBackLink = document.querySelector(".returnBackLink");
-                    returnBackLink.click();
-                },
-                error: function(err){
-                    console.log(err);
-                }
-            })
-        })
-    });
+            const username = this.getAttribute("data-username");
+            const actionPopupWrapper = document.querySelector("#action-popup-wrapper");
+            const confirmBlock = document.querySelector("#doActionBtn");
+            confirmBlock.className = "blockUserPopupBtn";
+            confirmBlock.textContent = "Block";
+            confirmBlock.setAttribute("data-id", userId);
+            confirmBlock.setAttribute("data-username", username);
+            let popupHeading = document.querySelector("#action-popup-wrapper h3");
+            popupHeading.textContent = `Block @${username}?`;
+            let popupText = document.querySelector("#action-popup-wrapper p");
+            popupText.textContent = `They will be able to see your public posts, but will no longer be able to engage with them. @${username} will also not be able to follow or message you, and you will not see notifications from them. `;
+            actionPopupWrapper.style.display = "block";
+            document.body.style.overflow = "hidden";
+        });
+    })
 }
 const setupProfileBtn = document.querySelector("#setupProfile");
 const editProfileBtn = document.querySelector("#editProfile");
@@ -857,6 +907,35 @@ if(followingBtn){
     followingBtn.addEventListener("mouseout", function (){
         followingBtn.textContent = "Following";
         followingBtn.className = "followingBtn";
+    })
+}
+let moreProfileIcon = document.querySelector(".more-profile-ic")
+if(moreProfileIcon){
+    moreProfileIcon.addEventListener("click", function (){
+        let chooseProfileOption = moreProfileIcon.parentElement.querySelector(".choose-profile-option");
+        chooseProfileOption.style.display = (chooseProfileOption.style.display === "block") ? "none" : "block";
+    })
+}
+let copyProfile = document.querySelector(".copy-profile");
+if(copyProfile){
+    copyProfile.addEventListener("click", function (){
+        const link = window.location.href;
+
+        navigator.clipboard.writeText(link).then(function() {
+            let msg = document.createElement("div");
+            msg.id = "message-popup";
+            msg.innerHTML = `<p>Copied to clipboard</p>`;
+            document.body.appendChild(msg);
+            setTimeout(function (){
+                msg.classList.add('show-message-popup');
+            },50);
+            setTimeout(function (){
+                msg.remove();
+            }, 3000);
+
+        }).catch(function(err) {
+            console.error("Failed to copy: ", err);
+        });
     })
 }
 

@@ -3089,7 +3089,7 @@ textarea.w-input, textarea.w-select {
   grid-column-gap: 50px;
   grid-row-gap: 50px;
   align-items: center;
-  padding: 10px 20px;
+  padding: 8px 20px;
   display: flex;
 }
 
@@ -3116,7 +3116,7 @@ textarea.w-input, textarea.w-select {
 }
 .num-of-posts {
   color: #fff6;
-  margin-top: 5px;
+  margin-top: 2px;
 }
 
 .profile-banner {
@@ -4303,7 +4303,7 @@ textarea.w-input, textarea.w-select {
   z-index: 5;
   display: none;
 }
-.choose-follower-option{
+.choose-follower-option, .choose-profile-option{
   box-shadow: rgba(255, 255, 255, 0.2) 0 0 15px, rgba(255, 255, 255, 0.15) 0 0 3px 1px;
   background-color: black;
   border-radius: 16px;
@@ -4314,10 +4314,13 @@ textarea.w-input, textarea.w-select {
   z-index: 5;
   display: none;
 }
-.single-post-option:hover,.choose-comment-option:hover, .single-follower-option:hover{
+.choose-profile-option{
+  right: 20%;
+}
+.single-post-option:hover,.single-comment-option:hover, .single-follower-option:hover,.single-profile-option:hover{
   background-color: #111212;
 }
-.single-post-option,.single-comment-option, .single-follower-option{
+.single-post-option,.single-comment-option, .single-follower-option, .single-profile-option{
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -4478,7 +4481,7 @@ textarea.w-input, textarea.w-select {
   color: #fff6;
   font-size: 15px;
 }
-.deletePostPopupBtn,.removeFollowerPopupBtn, .blockUserPopupBtn, .cancelPopupBtn,.deleteCommentPopupBtn, .blockUserCommentPopupBtn{
+.deletePostPopupBtn,.removeFollowerPopupBtn, .blockUserPopupBtn, .cancelPopupBtn,.deleteCommentPopupBtn, .blockUserCommentPopupBtn, .unfollowUserPopupBtn{
   width: 100%;
   margin-bottom: 10px;
   font-weight: 700;
@@ -4489,6 +4492,13 @@ textarea.w-input, textarea.w-select {
 }
 .deletePostPopupBtn,.removeFollowerPopupBtn, .blockUserPopupBtn, .deleteCommentPopupBtn,.blockUserCommentPopupBtn{
   background-color: rgb(244, 33, 46);
+}
+.unfollowUserPopupBtn{
+  color: black;
+  background-color: rgba(239,243,244);
+}
+.unfollowUserPopupBtn:hover{
+  background-color: rgba(215,219,220);
 }
 .deletePostPopupBtn:hover,.removeFollowerPopupBtn:hover, .blockUserPopupBtn:hover,.deleteCommentPopupBtn:hover, .blockUserCommentPopupBtn:hover{
     background-color: rgb(220, 30, 41);
@@ -4532,9 +4542,11 @@ textarea.w-input, textarea.w-select {
 }
 #other-profile-features{
   position: absolute;
+  display: flex;
+  align-items: center;
   top: 5px;
 }
-#other-profile-features i{
+#other-profile-features .new-message,#other-profile-features .more-profile-ic{
   padding: 10px;
   font-size: 16px;
   border-width: 1px;
@@ -4543,9 +4555,9 @@ textarea.w-input, textarea.w-select {
   border-radius: 50%;
   transition: all 0.5s;
   cursor: pointer;
-  margin-right: 5px;
+  margin-right: 10px;
 }
-#other-profile-features i:hover{
+#other-profile-features .new-message:hover,#other-profile-features .more-profile-ic:hover{
   background-color: rgba(239,243,244,0.1);
 }
 #other-profile-features button, #following button, #followers button{
@@ -4657,16 +4669,19 @@ textarea.w-input, textarea.w-select {
 .user-following-bio, .user-follower-bio{
   margin-top: 5px;
 }
-.single-follower-option:first-child, .single-post-option:first-child{
+.single-follower-option:first-child, .single-post-option:first-child, .single-comment-option:first-child, .single-profile-option:first-child{
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;
 }
-.single-follower-option:last-child, .single-post-option:last-child{
+.single-follower-option:last-child, .single-post-option:last-child, .single-comment-option:last-child, .single-profile-option:last-child{
   border-bottom-left-radius: 16px;
   border-bottom-right-radius: 16px;
 }
-.single-follower-option i, .single-post-option i{
+.single-follower-option i, .single-post-option i, .copy-profile i, .choose-comment-option .follow-user i, .choose-comment-option .unfollow-user i{
   width: 1rem;
   height: 1rem;
   margin-right: 15px;
+}
+.more-other-profile-options{
+  position: relative;
 }

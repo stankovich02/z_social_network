@@ -208,6 +208,64 @@ document.addEventListener("click", function (event) {
             }
         })
     }
+    if(event.target.classList.contains("follow-user")){
+        const userId = event.target.getAttribute("data-id");
+        const username = event.target.getAttribute("data-username");
+        $.ajax({
+            url: `/users/${userId}/follow`,
+            type: "POST",
+            success: function(){
+                let followMessage = document.createElement('div')
+                followMessage.id = "message-popup";
+                followMessage.innerHTML = `<p>You followed <strong>@${username}</strong></p>`;
+                document.body.appendChild(followMessage);
+                let followUserBtns = document.querySelectorAll(`.follow-user[data-id="${userId}"]`);
+                followUserBtns.forEach(followUserBtn => {
+                    followUserBtn.classList.remove ("follow-user");
+                    followUserBtn.classList.add("unfollow-user");
+                    followUserBtn.innerHTML = `<i class="fa-solid fa-user-xmark"></i> Unfollow @${username}`;
+                })
+                setTimeout(function (){
+                    followMessage.classList.add('show-message-popup');
+                },50);
+                setTimeout(function (){
+                    followMessage.remove();
+                }, 3000);
+            },
+            error: function(err){
+                console.log(err);
+            }
+        })
+    }
+    if(event.target.classList.contains("unfollow-user")){
+        const userId = event.target.getAttribute("data-id");
+        const username = event.target.getAttribute("data-username");
+        $.ajax({
+            url: `/users/${userId}/unfollow`,
+            type: "POST",
+            success: function(){
+                let followMessage = document.createElement('div')
+                followMessage.id = "message-popup";
+                followMessage.innerHTML = `<p>You unfollowed <strong>@${username}</strong></p>`;
+                document.body.appendChild(followMessage);
+                let unfollowUserBtns = document.querySelectorAll(`.unfollow-user[data-id="${userId}"]`);
+                unfollowUserBtns.forEach(unfollowUserBtn => {
+                    unfollowUserBtn.classList.remove ("unfollow-user");
+                    unfollowUserBtn.classList.add("follow-user");
+                    unfollowUserBtn.innerHTML = `<i class="fa-solid fa-user-plus"></i> Follow @${username}`;
+                })
+                setTimeout(function (){
+                    followMessage.classList.add('show-message-popup');
+                },50);
+                setTimeout(function (){
+                    followMessage.remove();
+                }, 3000);
+            },
+            error: function(err){
+                console.log(err);
+            }
+        })
+    }
 })
 document.querySelector("#postReplyComment").addEventListener("click", function(){
     const textArea = document.querySelector(".new-comment-wrapper .new-comment-text");

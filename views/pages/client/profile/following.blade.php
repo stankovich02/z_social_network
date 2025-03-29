@@ -42,7 +42,7 @@
                             <div class="user-following-fullname">{{$userProfile->follower->full_name}}</div>
                             <div class="user-following-username">&#64;{{$userProfile->follower->username}}</div>
                         </div>
-                        <button class="followingBtn" data-id="{{$userProfile->follower->id}}">Following</button>
+                        <button class="followingBtn" data-id="{{$userProfile->follower->id}}" data-username="{{$userProfile->follower->username}}">Following</button>
                         @if($userProfile->follower->biography)
                             <div class="user-following-bio">{{$userProfile->follower->biography}}</div>
                         @endif

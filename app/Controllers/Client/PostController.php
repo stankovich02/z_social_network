@@ -10,6 +10,7 @@ use App\Models\Notification;
 use App\Models\Post;
 use App\Models\PostNotification;
 use App\Models\RepostedPost;
+use App\Models\UserFollower;
 use App\Traits\CalculateDate;
 use DateTime;
 use NovaLite\Database\Database;
@@ -102,6 +103,12 @@ class PostController extends Controller
         if(in_array($post->user->id, $blockedUsers) || in_array($post->user->id, $usersWhoBlockLoggedInUser)){
             return redirect()->to('home');
         }
+        $loggedInUserFollowing =  array_column(
+            Database::table(UserFollower::TABLE)
+                ->where('user_id', '=', session()->get('user')->id)
+                ->get(),
+            'follower_id'
+        );
         $post->number_of_likes = $post->likesCount($post->id);
         $post->user_liked = LikedPost::where('user_id', '=', session()->get('user')->id)
             ->where('post_id', '=', $post->id)
@@ -111,6 +118,7 @@ class PostController extends Controller
             ->where('post_id', '=', $post->id)
             ->count();
         $post->number_of_comments = $post->commentsCount($post->id);
+        $post->user->loggedInUserFollowing = in_array($post->user->id, $loggedInUserFollowing);
         $date = new DateTime($post->created_at);
         $postedOn = $date->format("g:i A - M j, Y");
         $splitDate = explode('-', $postedOn);

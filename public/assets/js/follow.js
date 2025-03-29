@@ -12,25 +12,21 @@ document.addEventListener("mouseout", function (event){
 })
 document.addEventListener("click", function (event){
     if(event.target.className === "unfollowBtn"){
-        let userId = event.target.getAttribute("data-id");
-        $.ajax({
-            url: `/users/${userId}/unfollow`,
-            type: "POST",
-            success: function(data){
-                if(data.followBack){
-                    event.target.className = "followBackBtn";
-                    event.target.textContent = "Follow back";
-                    event.target.dataset.id = userId;
-                }else{
-                    event.target.className = "followBtn";
-                    event.target.textContent = "Follow";
-                    event.target.dataset.id = userId;
-                }
-            },
-            error: function(err){
-                console.log(err);
-            }
-        })
+        const userId = event.target.getAttribute("data-id");
+        const username = event.target.getAttribute("data-username");
+        const actionPopupWrapper = document.querySelector("#action-popup-wrapper");
+        const confirmUnfollow = document.querySelector("#doActionBtn");
+        confirmUnfollow.className = "unfollowUserPopupBtn";
+        confirmUnfollow.textContent = "Unfollow";
+        confirmUnfollow.setAttribute("data-id", userId);
+        confirmUnfollow.setAttribute("data-username", username);
+        let popupHeading = document.querySelector("#action-popup-wrapper h3");
+        popupHeading.textContent = `Unfollow @${username}?`;
+        let popupText = document.querySelector("#action-popup-wrapper p");
+        popupText.textContent = `Their posts will no longer show up in your For You timeline. You can still view their profile, unless their posts are protected.`;
+        actionPopupWrapper.style.display = "block";
+        document.body.style.overflow = "hidden";
+
     }
     if(event.target.className === "followBtn"){
         let userId = event.target.getAttribute("data-id");
@@ -113,7 +109,31 @@ document.addEventListener("click", function (event){
             }
         })
     }
-
+    if(event.target.className === "unfollowUserPopupBtn"){
+        let userId = event.target.getAttribute("data-id");
+        $.ajax({
+            url: `/users/${userId}/unfollow`,
+            type: "POST",
+            success: function(data){
+                let followingBtn = document.querySelector(`.followingBtn[data-id="${userId}"]`);
+                let actionPopupWrapper = document.querySelector("#action-popup-wrapper");
+                if(data.followBack){
+                    followingBtn.className = "followBackBtn";
+                    followingBtn.textContent = "Follow back";
+                    followingBtn.dataset.id = userId;
+                }else{
+                    followingBtn.className = "followBtn";
+                    followingBtn.textContent = "Follow";
+                    followingBtn.dataset.id = userId;
+                }
+                actionPopupWrapper.style.display = "none";
+                document.body.style.overflow = "auto";
+            },
+            error: function(err){
+                console.log(err);
+            }
+        })
+    }
     if(event.target.classList.contains("cancelPopupBtn")){
         const actionPopupWrapper = document.querySelector("#action-popup-wrapper");
         actionPopupWrapper.style.display = "none";

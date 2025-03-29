@@ -25,11 +25,11 @@ document.addEventListener("click", function (event) {
                     actionPopupWrapper.style.display = "none";
                     document.body.style.overflow = "auto";
                     let newPostMessage = document.createElement('div')
-                    newPostMessage.id = "deleted-message";
+                    newPostMessage.id = "message-popup";
                     newPostMessage.innerHTML = `<p>Your post was deleted</p>`;
                     document.body.appendChild(newPostMessage);
                     setTimeout(function (){
-                        newPostMessage.classList.add('show-deleted-message');
+                        newPostMessage.classList.add('show-message-popup');
                     },50);
                     setTimeout(function (){
                         newPostMessage.remove();
