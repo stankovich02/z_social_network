@@ -51,6 +51,7 @@ Router::middleware([\App\Middlewares\IsLoggedIn::class])->group(function () {
 
     Router::controller(UserController::class)->group(function (){
         Router::post('/users/{id}/block', 'block')->name('users.block');
+        Router::post('/users/{id}/unblock', 'unblock')->name('users.unblock');
         Router::post('/users/{id}/follow', 'follow')->name('users.follow');
         Router::post('/users/{id}/unfollow', 'unfollow')->name('users.unfollow');
         Router::patch('/users/{id}/update', 'update')->name('users.update');

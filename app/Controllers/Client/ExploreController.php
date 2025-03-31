@@ -6,6 +6,7 @@ use App\Models\User;
 use NovaLite\Database\Database;
 use NovaLite\Http\Controller;
 use NovaLite\Http\Request;
+use NovaLite\Http\Response;
 use NovaLite\Views\View;
 
 class ExploreController extends Controller
@@ -14,27 +15,14 @@ class ExploreController extends Controller
     {
         return view('pages.client.explore');
     }
-    public function search(Request $request)
+    public function search(Request $request) : Response
     {
         $users = User::where('username', 'like', "%{$request->input('search')}%")
                      ->orWhere('full_name', 'like', "%{$request->input('search')}%")
                      ->where('id','!=', session()->get('user')->id)->get();
-        $blockedUsers = array_column(
-            Database::table('blocked_users')
-                ->where('blocked_by_user_id', '=', session()->get('user')->id)
-                ->get(),
-            'blocked_user_id'
-        );
-        $usersWhoBlockLoggedInUser = array_column(
-            Database::table('blocked_users')
-                ->where('blocked_user_id', '=', session()->get('user')->id)
-                ->get(),
-            'blocked_by_user_id'
-        );
         $response = [];
         if($users){
             foreach ($users as $user) {
-               if(!in_array($user->id, $blockedUsers) && !in_array($user->id, $usersWhoBlockLoggedInUser)) {
                    $response[] = [
                        'id' => $user->id,
                        'username' => $user->username,
@@ -42,7 +30,6 @@ class ExploreController extends Controller
                        'photo' => asset('assets/img/users/' . $user->photo),
                        'profile_url' => route('profile', ['username' => $user->username])
                    ];
-               }
             }
             return response()->json($response);
         }

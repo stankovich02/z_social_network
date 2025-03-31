@@ -40,6 +40,9 @@ document.addEventListener("click", function (event) {
             popup.style.display = "none";
             document.body.style.overflow = "auto";
         })
+        if(document.querySelector("#newCommentTextArea")){
+            document.querySelector("#newCommentTextArea").value = "";
+        }
 
     }
 });

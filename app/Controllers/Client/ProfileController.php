@@ -30,9 +30,6 @@ class ProfileController extends Controller
         $userBlockedLoggedInUser = BlockedUser::where('blocked_user_id', '=', session()->get('user')->id)
             ->where('blocked_by_user_id', '=', $user->id)
             ->count();
-        if(in_array($user->id, $blockedUsers) || $userBlockedLoggedInUser) {
-            return redirect()->to('home');
-        }
         $joinedDate = date('F Y', strtotime(session()->get('user')->created_at));
 
         foreach ($user->posts as $post) {
@@ -89,7 +86,9 @@ class ProfileController extends Controller
         return view('pages.client.profile', [
             'numOfPosts' => $numOfPosts,
             'joinedDate' => $joinedDate,
-            'user' => $user
+            'user' => $user,
+            'userBlockedLoggedInUser' => $userBlockedLoggedInUser,
+            'loggedInUserBlockedUser' => in_array($user->id, $blockedUsers),
         ]);
     }
 

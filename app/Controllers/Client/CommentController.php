@@ -75,6 +75,9 @@ class CommentController extends Controller
         foreach ($notificationForDelete as $notification){
             Notification::delete($notification->notification_id);
         }
+        Database::table(PostCommentNotification::TABLE)
+                ->where('comment_id', '=', $id)
+                ->delete();
         Comment::delete($id);
         $post = Post::with('comments')->where('id', '=', $postId)->first();
         return response()->json([
@@ -82,7 +85,7 @@ class CommentController extends Controller
         ]);
     }
 
-    public function like(string $postId,string $commentId)
+    public function like(int $postId,int $commentId)
     {
         $alreadyLiked = LikedComment::where('user_id', '=', session()->get('user')->id)
             ->where('comment_id', '=', $commentId)

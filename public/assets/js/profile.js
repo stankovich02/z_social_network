@@ -101,10 +101,7 @@ document.addEventListener("click", function (event) {
             url: `/users/${userId}/block`,
             type: "POST",
             success: function(){
-                let returnBackLink = document.querySelector(".returnBackLink");
-                if(returnBackLink){
-                    returnBackLink.click();
-                }
+                location.reload();
             },
             error: function(err){
                 console.log(err);
@@ -147,6 +144,34 @@ document.addEventListener("click", function (event) {
                 console.log(err);
             }
         })
+    }
+    if(event.target.className === "unblockUserPopupBtn"){
+        let userId = event.target.getAttribute("data-id");
+        $.ajax({
+            url: `/users/${userId}/unblock`,
+            type: "POST",
+            success: function(){
+                location.reload();
+            },
+            error: function(err){
+                console.log(err);
+            }
+        })
+    }
+    if(event.target.className === "unblockBtn"){
+        const userId = event.target.getAttribute("data-id");
+        const username = event.target.getAttribute("data-username");
+        const actionPopupWrapper = document.querySelector("#action-popup-wrapper");
+        const confirmBlock = document.querySelector("#doActionBtn");
+        confirmBlock.className = "unblockUserPopupBtn";
+        confirmBlock.textContent = "Unblock";
+        confirmBlock.setAttribute("data-id", userId);
+        let popupHeading = document.querySelector("#action-popup-wrapper h3");
+        popupHeading.textContent = `Unblock @${username}?`;
+        let popupText = document.querySelector("#action-popup-wrapper p");
+        popupText.textContent = `They will able to follow you and engage with your public posts.`;
+        actionPopupWrapper.style.display = "block";
+        document.body.style.overflow = "hidden";
     }
     if (event.target.classList.contains("delete-post")) {
         const postId = event.target.getAttribute("data-id");
@@ -241,7 +266,6 @@ document.addEventListener("click", function (event) {
                 }
                 else{
                     let commentContentDiv = document.createElement('div');
-                    commentContentDiv.className = "comment-body";
                     commentContentDiv.id = "commentOnPostContent";
                     if(data.post.content){
                         commentContentDiv.innerHTML += `<p>${data.post.content}</p>`;
@@ -409,8 +433,8 @@ if(document.querySelector(".block-user")){
         });
     })
 }
-const setupProfileBtn = document.querySelector("#setupProfile");
-const editProfileBtn = document.querySelector("#editProfile");
+
+
 function nextBioBtnFunc(describeBio,saveProfile,popupLogo,returnBackBtn,closeIcon){
     let nextBioBtn = document.querySelector(".describe-bio .next-profile-btn");
     nextBioBtn.addEventListener("click", function (){
@@ -431,7 +455,9 @@ function nextBioBtnFunc(describeBio,saveProfile,popupLogo,returnBackBtn,closeIco
                     document.querySelector(".describe-bio .errorMsg").remove();
                 }
                 let profileBio = document.querySelector(".profile-bio");
+                let editProfileBio = document.querySelector(".edit-popup .current-biography-input");
                 profileBio.textContent += bioTextarea.value;
+                editProfileBio.value = bioTextarea.value;
                 bioTextarea.value = "";
 
             },
@@ -447,89 +473,117 @@ function nextBioBtnFunc(describeBio,saveProfile,popupLogo,returnBackBtn,closeIco
 
     });
 }
-if(setupProfileBtn){
-    setupProfileBtn.addEventListener("click", function (){
-        const setupProfileWrapper = document.querySelector("#setupProfileWrapper");
-        setupProfileWrapper.style.display = "block";
-        let returnBackBtn = document.querySelector("#returnBackSetupProfile");
-        let closeIcon = document.querySelector("#setupProfileWrapper .close-icon");
-        let skipPictureBtn = document.querySelector(".pick-profile-picture .skip-profile-btn");
-        let skipHeaderBtn = document.querySelector(".pick-header .skip-profile-btn");
-        let skipBioBtn = document.querySelector(".describe-bio .skip-profile-btn");
-        let pickProfilePicture = document.querySelector(".pick-profile-picture");
-        let pickHeader = document.querySelector(".pick-header");
-        let describeBio = document.querySelector(".describe-bio");
-        let saveProfile = document.querySelector("#saveProfileDiv");
-        let saveProfileBtn = document.querySelector("#saveProfileDiv .save-profile-btn");
-        let popupLogo = document.querySelector("#setupProfileWrapper .top-setup-profile .popup-logo");
-        let nextProfileBtn = document.querySelector(".pick-profile-picture .next-profile-btn");
-        let nextHeaderBtn = document.querySelector(".pick-header .next-profile-btn");
+function setupProfileBtnFunc(){
+    const setupProfileBtn = document.querySelector("#setupProfile");
+    if(setupProfileBtn){
+        setupProfileBtn.addEventListener("click", function (){
+            const setupProfileWrapper = document.querySelector("#setupProfileWrapper");
+            setupProfileWrapper.style.display = "block";
+            let returnBackBtn = document.querySelector("#returnBackSetupProfile");
+            let closeIcon = document.querySelector("#setupProfileWrapper .close-icon");
+            let skipPictureBtn = document.querySelector(".pick-profile-picture .skip-profile-btn");
+            let skipHeaderBtn = document.querySelector(".pick-header .skip-profile-btn");
+            let skipBioBtn = document.querySelector(".describe-bio .skip-profile-btn");
+            let pickProfilePicture = document.querySelector(".pick-profile-picture");
+            let pickHeader = document.querySelector(".pick-header");
+            let describeBio = document.querySelector(".describe-bio");
+            let saveProfile = document.querySelector("#saveProfileDiv");
+            let saveProfileBtn = document.querySelector("#saveProfileDiv .save-profile-btn");
+            let popupLogo = document.querySelector("#setupProfileWrapper .top-setup-profile .popup-logo");
+            let nextProfileBtn = document.querySelector(".pick-profile-picture .next-profile-btn");
+            let nextHeaderBtn = document.querySelector(".pick-header .next-profile-btn");
 
-        skipPictureBtn.addEventListener("click", function (){
-            pickProfilePicture.style.display = "none";
-            pickHeader.style.display = "block";
-            returnBackBtn.style.display = "block";
-        });
-        returnBackBtn.addEventListener("click", function (){
-            if(pickHeader.style.display === "block"){
-                pickHeader.style.display = "none";
-                pickProfilePicture.style.display = "flex";
-                returnBackBtn.style.display = "none";
-            }
-            if(describeBio.style.display === "block"){
-                describeBio.style.display = "none";
+            skipPictureBtn.addEventListener("click", function (){
+                pickProfilePicture.style.display = "none";
                 pickHeader.style.display = "block";
-            }
+                returnBackBtn.style.display = "block";
+            });
+            returnBackBtn.addEventListener("click", function (){
+                if(pickHeader.style.display === "block"){
+                    pickHeader.style.display = "none";
+                    pickProfilePicture.style.display = "flex";
+                    returnBackBtn.style.display = "none";
+                }
+                if(describeBio.style.display === "block"){
+                    describeBio.style.display = "none";
+                    pickHeader.style.display = "block";
+                }
+            })
+            skipHeaderBtn.addEventListener("click", function (){
+                pickHeader.style.display = "none";
+                describeBio.style.display = "block";
+            });
+            skipBioBtn.addEventListener("click", function (){
+                describeBio.style.display = "none";
+                saveProfile.style.display = "flex";
+                popupLogo.style.display = "none";
+                returnBackBtn.style.display = "none";
+                closeIcon.style.display = "block";
+                if(document.querySelector(".describe-bio .errorMsg")){
+                    document.querySelector(".describe-bio .errorMsg").remove();
+                }
+            });
+            closeIcon.addEventListener("click", function (){
+                pickProfilePicture.style.display = "flex";
+                saveProfile.style.display = "none";
+                setupProfileWrapper.style.display = "none";
+                closeIcon.style.display = "none";
+                let profilePicture = document.querySelector("#profile .profile-info img");
+                let coverPicture = document.querySelector("#profile .profile-banner");
+                let biography = document.querySelector(".profile-bio");
+                if(!profilePicture.src.includes("default.jpg") || !coverPicture.style.backgroundImage.includes("default-cover.jpg") || biography.innerHTML){
+                    let setupProfileBtn = document.querySelector("#setupProfile");
+                    setupProfileBtn.remove();
+                    let imageAndSetupDiv = document.querySelector(".image-and-setup");
+                    imageAndSetupDiv.innerHTML += `<button class="setup-profile w-button" id="editProfile">Edit profile</button>`;
+                    editProfileBtnFunc();
+                }
+            });
+            saveProfileBtn.addEventListener("click", function (){
+                pickProfilePicture.style.display = "flex";
+                saveProfile.style.display = "none";
+                setupProfileWrapper.style.display = "none";
+                closeIcon.style.display = "none";
+                let profilePicture = document.querySelector("#profile .profile-info img");
+                let coverPicture = document.querySelector("#profile .profile-banner");
+                let biography = document.querySelector(".profile-bio");
+                if(!profilePicture.src.includes("default.jpg") || !coverPicture.style.backgroundImage.includes("default-cover.jpg") || biography.innerHTML){
+                    let setupProfileBtn = document.querySelector("#setupProfile");
+                    setupProfileBtn.remove();
+                    let imageAndSetupDiv = document.querySelector(".image-and-setup");
+                    imageAndSetupDiv.innerHTML += `<button class="setup-profile w-button" id="editProfile">Edit profile</button>`;
+                    editProfileBtnFunc();
+                }
+            });
+            nextProfileBtn.addEventListener("click", function (){
+                pickProfilePicture.style.display = "none";
+                pickHeader.style.display = "block";
+                returnBackBtn.style.display = "block";
+            });
+            nextHeaderBtn.addEventListener("click", function (){
+                pickHeader.style.display = "none";
+                describeBio.style.display = "block";
+            });
+            nextBioBtnFunc(describeBio,saveProfile,popupLogo,returnBackBtn,closeIcon);
         })
-        skipHeaderBtn.addEventListener("click", function (){
-            pickHeader.style.display = "none";
-            describeBio.style.display = "block";
-        });
-        skipBioBtn.addEventListener("click", function (){
-            describeBio.style.display = "none";
-            saveProfile.style.display = "flex";
-            popupLogo.style.display = "none";
-            returnBackBtn.style.display = "none";
-            closeIcon.style.display = "block";
-            if(document.querySelector(".describe-bio .errorMsg")){
-                document.querySelector(".describe-bio .errorMsg").remove();
-            }
-        });
-        closeIcon.addEventListener("click", function (){
-            pickProfilePicture.style.display = "flex";
-            saveProfile.style.display = "none";
-            setupProfileWrapper.style.display = "none";
-            closeIcon.style.display = "none";
-        });
-        saveProfileBtn.addEventListener("click", function (){
-            pickProfilePicture.style.display = "flex";
-            saveProfile.style.display = "none";
-            setupProfileWrapper.style.display = "none";
-            closeIcon.style.display = "none";
-        });
-        nextProfileBtn.addEventListener("click", function (){
-            pickProfilePicture.style.display = "none";
-            pickHeader.style.display = "block";
-            returnBackBtn.style.display = "block";
-        });
-        nextHeaderBtn.addEventListener("click", function (){
-            pickHeader.style.display = "none";
-            describeBio.style.display = "block";
-        });
-        nextBioBtnFunc(describeBio,saveProfile,popupLogo,returnBackBtn,closeIcon);
-    })
+    }
 }
-if(editProfileBtn){
-    editProfileBtn.addEventListener("click", function (){
-        let editProfileWrapper = document.querySelector("#editProfileWrapper");
-        editProfileWrapper.style.display = "block";
-        let closeIcon = document.querySelector("#editProfileWrapper .close-icon");
-        closeIcon.addEventListener("click", function (){
-            editProfileWrapper.style.display = "none";
-        })
+function editProfileBtnFunc(){
+    const editProfileBtn = document.querySelector("#editProfile");
+    if(editProfileBtn){
+        editProfileBtn.addEventListener("click", function (){
+            let editProfileWrapper = document.querySelector("#editProfileWrapper");
+            editProfileWrapper.style.display = "block";
+            let closeIcon = document.querySelector("#editProfileWrapper .close-icon");
+            closeIcon.addEventListener("click", function (){
+                editProfileWrapper.style.display = "none";
+            })
 
-    });
+        });
+    }
 }
+setupProfileBtnFunc();
+editProfileBtnFunc();
 function typingBio(){
     let bioTextarea= document.querySelector(".describe-bio #biography");
     bioTextarea.addEventListener("input", () => {
@@ -627,8 +681,14 @@ profilePictureInput.addEventListener("change", function (){
             let skipProfilePictureBtn = document.querySelector(".pick-profile-picture .skip-profile-btn");
             let nextHeaderBtn = document.querySelector(".pick-profile-picture .next-profile-btn");
             let profilePicture = document.querySelector("#profile .profile-info img")
+            let editProfilePicture = document.querySelector(".edit-popup .edit-profile-pic img");
+            let currentProfilePicturePickHeader = document.querySelector("#setupProfileWrapper .pick-header .current-profile-pic");
+            let menuProfilePhoto = document.querySelector(".left-bar-menu .logged-in-user img");
             img.src = data.newPhoto;
             profilePicture.src = data.newPhoto;
+            editProfilePicture.src = data.newPhoto;
+            currentProfilePicturePickHeader.src = data.newPhoto;
+            menuProfilePhoto.src = data.newPhoto;
             let profilePictureInput = document.querySelector("#pickProfilePicture");
             profilePictureInput.value = "";
             let removePhotoWrapper = document.querySelector(".pick-profile-picture .remove-new-photo-wrapper")
@@ -643,6 +703,9 @@ profilePictureInput.addEventListener("change", function (){
                     success: function(){
                         img.src = data.oldPhoto;
                         profilePicture.src = data.oldPhoto;
+                        editProfilePicture.src = data.oldPhoto;
+                        currentProfilePicturePickHeader.src = data.oldPhoto;
+                        menuProfilePhoto.src = data.oldPhoto;
                         removePhotoWrapper.style.display = "none";
                         skipProfilePictureBtn.style.display = "block";
                         nextHeaderBtn.style.display = "none";
@@ -761,8 +824,10 @@ headerPictureInput.addEventListener("change", function (){
             let skipCoverPictureBtn = document.querySelector(".pick-header .skip-profile-btn");
             let nextBioBtn = document.querySelector(".pick-header .next-profile-btn");
             let profileCover = document.querySelector("#profile .profile-banner")
+            let editHeaderPicture = document.querySelector(".edit-popup .pick-header-img-wrapper .pick-header-img");
             img.style.backgroundImage = `url(${data.newPhoto})`;
             profileCover.style.backgroundImage = `url(${data.newPhoto})`;
+            editHeaderPicture.style.backgroundImage = `url(${data.newPhoto})`;
             let coverPictureInput = document.querySelector("#pickHeaderPicture");
             coverPictureInput.value = "";
             let removePhotoWrapper = document.querySelector(".pick-header .remove-new-photo-wrapper")
@@ -777,6 +842,7 @@ headerPictureInput.addEventListener("change", function (){
                     success: function(){
                         img.style.backgroundImage = `url(${data.oldPhoto})`;
                         profileCover.style.backgroundImage = `url(${data.oldPhoto})`;
+                        editHeaderPicture.style.backgroundImage = `url(${data.oldPhoto})`;
                         removePhotoWrapper.style.display = "none";
                         skipCoverPictureBtn.style.display = "block";
                         nextBioBtn.style.display = "none";
@@ -794,8 +860,8 @@ headerPictureInput.addEventListener("change", function (){
     })
 })
 
-let saveEditeProfileBtn = document.querySelector(".edit-popup .save-edited-profile");
-saveEditeProfileBtn.addEventListener("click", function (){
+let saveEditedProfileBtn = document.querySelector(".edit-popup .save-edited-profile");
+saveEditedProfileBtn.addEventListener("click", function (){
     let userId = this.getAttribute("data-id");
     let coverImage = document.querySelector(".edit-popup .pick-header-img-wrapper .pick-header-img");
     coverImage = coverImage.style.backgroundImage.slice(5, -2);
@@ -833,6 +899,13 @@ saveEditeProfileBtn.addEventListener("click", function (){
             biography.textContent = data.biography;
             loggedInImg.src = data.profileImage;
             loggedInFullName.textContent = data.fullName;
+            if(data.coverImage.includes("default-cover.jpg") && data.profileImage.includes("default.jpg") && !data.biography){
+                let editProfileBtn = document.querySelector("#editProfile");
+                editProfileBtn.remove();
+                let imageAndSetupDiv = document.querySelector(".image-and-setup");
+                imageAndSetupDiv.innerHTML += `<button class="setup-profile w-button" id="setupProfile">Set up profile</button>`;
+                setupProfileBtnFunc();
+            }
             allPostsFullNames.forEach(fullName => {
                 if(!fullName.parentElement.parentElement.parentElement.classList.contains("reposted-post")){
                     fullName.textContent = data.fullName;
@@ -938,4 +1011,38 @@ if(copyProfile){
         });
     })
 }
+let blockedBtn = document.querySelector(".blockedBtn");
+blockedBtn.addEventListener("mouseover", function (){
+    let userId = blockedBtn.getAttribute("data-id");
+    let username = blockedBtn.getAttribute("data-username");
+    blockedBtn.className = "unblockBtn";
+    blockedBtn.textContent = "Unblock";
+    blockedBtn.setAttribute("data-id", userId);
+    blockedBtn.setAttribute("data-username", username);
+})
+blockedBtn.addEventListener("mouseout", function (){
+    let userId = blockedBtn.getAttribute("data-id");
+    let username = blockedBtn.getAttribute("data-username");
+    blockedBtn.className = "blockedBtn";
+    blockedBtn.textContent = "Blocked";
+    blockedBtn.setAttribute("data-id", userId);
+    blockedBtn.setAttribute("data-username", username);
+})
+
+let unblockUserBtn = document.querySelector(".unblock-user");
+unblockUserBtn.addEventListener("click", function (){
+    const userId = this.getAttribute("data-id");
+    const username = this.getAttribute("data-username");
+    const actionPopupWrapper = document.querySelector("#action-popup-wrapper");
+    const confirmBlock = document.querySelector("#doActionBtn");
+    confirmBlock.className = "unblockUserPopupBtn";
+    confirmBlock.textContent = "Unblock";
+    confirmBlock.setAttribute("data-id", userId);
+    let popupHeading = document.querySelector("#action-popup-wrapper h3");
+    popupHeading.textContent = `Unblock @${username}?`;
+    let popupText = document.querySelector("#action-popup-wrapper p");
+    popupText.textContent = `They will able to follow you and engage with your public posts.`;
+    actionPopupWrapper.style.display = "block";
+    document.body.style.overflow = "hidden";
+})
 

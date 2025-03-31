@@ -49,20 +49,28 @@
                     <div class="more-other-profile-options">
                         <i class="fa-solid fa-ellipsis more-profile-ic"></i>
                         <div class="choose-profile-option">
+                            @if($loggedInUserBlockedUser)
+                                <div class="single-profile-option unblock-user" data-id="{{$user->id}}" data-username="{{$user->username}}"><div class="block-icon w-embed"><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" height="100%" width="100%" class="iconify iconify--ic" role="img" aria-hidden="true" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2M4 12c0-4.42 3.58-8 8-8c1.85 0 3.55.63 4.9 1.69L5.69 16.9A7.9 7.9 0 0 1 4 12m8 8c-1.85 0-3.55-.63-4.9-1.69L18.31 7.1A7.9 7.9 0 0 1 20 12c0 4.42-3.58 8-8 8" fill="currentColor"></path></svg></div>Unblock &#64;{{$user->username}}</div>
+                            @else
                             <div class="single-profile-option block-user" data-id="{{$user->id}}" data-username="{{$user->username}}"><div class="block-icon w-embed"><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" height="100%" width="100%" class="iconify iconify--ic" role="img" aria-hidden="true" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2M4 12c0-4.42 3.58-8 8-8c1.85 0 3.55.63 4.9 1.69L5.69 16.9A7.9 7.9 0 0 1 4 12m8 8c-1.85 0-3.55-.63-4.9-1.69L18.31 7.1A7.9 7.9 0 0 1 20 12c0 4.42-3.58 8-8 8" fill="currentColor"></path></svg></div>Block &#64;{{$user->username}}</div>
+                            @endif
                             <div class="single-profile-option copy-profile">
                                 <i class="fa-solid fa-link"></i> Copy link to profile
                             </div>
                         </div>
                     </div>
-
-                    <i class="fa-regular fa-envelope new-message"></i>
-                    @if($user->userFollowsLoggedInUser && !$user->loggedInUserFollowsUser)
-                        <button class="followBackBtn" data-id="{{$user->id}}" data-username="{{$user->username}}">Follow back</button>
-                    @elseif($user->loggedInUserFollowsUser)
-                        <button class="followingBtn" data-id="{{$user->id}}" data-username="{{$user->username}}">Following</button>
+                    @if($loggedInUserBlockedUser)
+                        <button class="blockedBtn" data-id="{{$user->id}}" data-username="{{$user->username}}">Blocked</button>
+                    @elseif($userBlockedLoggedInUser)
                     @else
-                        <button class="followBtn" data-id="{{$user->id}}" data-username="{{$user->username}}">Follow</button>
+                        <i class="fa-regular fa-envelope new-message"></i>
+                        @if($user->userFollowsLoggedInUser && !$user->loggedInUserFollowsUser)
+                            <button class="followBackBtn" data-id="{{$user->id}}" data-username="{{$user->username}}">Follow back</button>
+                        @elseif($user->loggedInUserFollowsUser)
+                            <button class="followingBtn" data-id="{{$user->id}}" data-username="{{$user->username}}">Following</button>
+                        @else
+                            <button class="followBtn" data-id="{{$user->id}}" data-username="{{$user->username}}">Follow</button>
+                        @endif
                     @endif
 
                 </div>
@@ -105,7 +113,18 @@
 </div>
 </div>
 </div>
-<div id="posts">
+    @if($loggedInUserBlockedUser)
+        <div id="userBlockedNotification">
+            <h2>&#64;{{$user->username}} is blocked</h2>
+            <p>You cannot see their posts and comments, or follow them, and you cannot send them messages, but you can still see their profile.</p>
+        </div>
+    @elseif($userBlockedLoggedInUser)
+        <div id="userBlockedNotification">
+            <h2>&#64;{{$user->username}} has blocked you</h2>
+            <p>You cannot view public posts or comments from &#64;{{$user->username}}, and you also cannot follow or message &#64;{{$user->username}}.</p>
+        </div>
+    @else
+    <div id="posts">
     @foreach($user->mergedPosts as $index => $post)
         @if($post->type === \App\Models\Post::REPOSTED_POST)
         <div class="single-post reposted-post" data-id="{{$post->post->id}}">
@@ -115,7 +134,7 @@
             </div>
             <div><strong>{{$post->user->username === session()->get('user')->username ? "You" : $post->user->full_name}}</strong> reposted</div>
         </div>
-        <img src="{{asset('assets/img/users/' . $post->user->photo)}}" loading="eager" alt="" class="user-image" />
+        <img src="{{asset('assets/img/users/' . $post->post->user->photo)}}" loading="eager" alt="" class="user-image" />
         <div class="post-info-and-body">
             <div class="post-info">
                 <div class="posted-by-fullname">{{$post->post->user->full_name}}</div>
@@ -233,6 +252,7 @@
         @endif
     @endforeach
 </div>
+    @endif
 </section>
 <div id="setupProfileWrapper" class="popup-wrapper">
 <div class="setup-profile-popup">

@@ -191,13 +191,16 @@ document.addEventListener("click", function (event) {
         const pathUsername = path.split("/")[0];
         const username = event.target.getAttribute("data-username");
         $.ajax({
-            url: `users/${userId}/block`,
+            url: `/users/${userId}/block`,
             type: "POST",
             success: function(){
                 if(pathUsername === username){
                     let returnBackLink = document.querySelector(".returnBackLink");
                     returnBackLink.click();
                 }
+                let actionPopupWrapper = document.querySelector("#action-popup-wrapper");
+                actionPopupWrapper.style.display = "none";
+                document.body.style.overflow = "auto";
                 let blockedUserComments = document.querySelectorAll(`.other-comments .block-user[data-id="${userId}"]`);
                 blockedUserComments.forEach(blockedUserComment => {
                     blockedUserComment.parentElement.parentElement.parentElement.remove();
@@ -340,7 +343,7 @@ blockUserBtns.forEach(blockUserBtn => {
         const username = this.getAttribute("data-username");
         const actionPopupWrapper = document.querySelector("#action-popup-wrapper");
         const confirmBlock = document.querySelector("#doActionBtn");
-        confirmBlock.className = "blockUserPopupBtn";
+        confirmBlock.className = "blockUserCommentPopupBtn";
         confirmBlock.textContent = "Block";
         confirmBlock.setAttribute("data-id", userId);
         let popupHeading = document.querySelector("#action-popup-wrapper h3");
@@ -384,7 +387,7 @@ if(document.querySelector("#single-post-info .block-user")){
         const username = this.getAttribute("data-username");
         const actionPopupWrapper = document.querySelector("#action-popup-wrapper");
         const confirmBlock = document.querySelector("#doActionBtn");
-        confirmBlock.className = "blockUserCommentPopupBtn";
+        confirmBlock.className = "blockUserPopupBtn";
         confirmBlock.textContent = "Block";
         confirmBlock.setAttribute("data-id", userId);
         confirmBlock.setAttribute("data-username", username);

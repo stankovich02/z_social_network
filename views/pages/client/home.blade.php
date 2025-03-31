@@ -105,6 +105,7 @@
                     </div>
                 @endif
             @endforeach
+            <div id="load-more"></div>
         </div>
     </section>
 

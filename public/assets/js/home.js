@@ -163,7 +163,6 @@ document.addEventListener("click", function (event) {
                 }
                 else{
                     let commentContentDiv = document.createElement('div');
-                    commentContentDiv.className = "comment-body";
                     commentContentDiv.id = "commentOnPostContent";
                     if(data.post.content){
                         commentContentDiv.innerHTML += `<p>${data.post.content}</p>`;
@@ -604,4 +603,113 @@ document.addEventListener("DOMContentLoaded", function () {
         })
     });
 })
+let offset = 7;
+let isFetching = false;
+$(window).on("scroll", function () {
+    let scrollHeight = $(document).height();
+    let scrollTop = $(window).scrollTop();
+    let windowHeight = $(window).height();
+
+    if (scrollTop + windowHeight >= scrollHeight - 100) {
+        loadMorePosts();
+    }
+});
+
+function loadMorePosts() {
+    if (isFetching) return;
+
+    isFetching = true;
+    $.ajax({
+        url: `/posts?offset=${offset}`,
+        type: "GET",
+        success: function (data){
+            if (posts.length === 0) {
+                $(window).off("scroll");
+                return;
+            }
+
+            const container = document.getElementById("posts");
+            data.posts.forEach(post => {
+                const postElement = document.createElement("div");
+                postElement.classList.add("single-post");
+                postElement.setAttribute("data-id", post.id);
+                postElement.innerHTML = `
+                      <div class="post-more-options-wrapper">
+                            <div class="more-options w-embed post-more-options">
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--ph more-opt-ic" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 256">
+                                    <path fill="currentColor" d="M144 128a16 16 0 1 1-16-16a16 16 0 0 1 16 16m-84-16a16 16 0 1 0 16 16a16 16 0 0 0-16-16m136 0a16 16 0 1 0 16 16a16 16 0 0 0-16-16"></path>
+                                </svg>
+                            </div>
+                            <div class="choose-post-option">
+                                    <div class="single-post-option block-user" data-id="${post.user.id}" data-username="${post.user.username}"><div class="block-icon w-embed"><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" height="100%" width="100%" class="iconify iconify--ic" role="img" aria-hidden="true" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2M4 12c0-4.42 3.58-8 8-8c1.85 0 3.55.63 4.9 1.69L5.69 16.9A7.9 7.9 0 0 1 4 12m8 8c-1.85 0-3.55-.63-4.9-1.69L18.31 7.1A7.9 7.9 0 0 1 20 12c0 4.42-3.58 8-8 8" fill="currentColor"></path></svg></div>Block &#64;${post.user.username}</div>`;
+                let blockUser = document.querySelector(`.block-user[data-id="${post.user.id}"]`);
+                if(post.user.loggedInUserFollowing){
+                    blockUser.parentElement.innerHTML += `<div class="single-post-option unfollow-user" data-id="${post.user.id}" data-username="${post.user.username}"><i class="fa-solid fa-user-xmark"></i> Unfollow &#64;${post.user.username}</div>`;
+                }
+                else {
+                    blockUser.parentElement.innerHTML += `<div class="single-post-option follow-user" data-id="${post.user.id}" data-username="${post.user.username}"><i class="fa-solid fa-user-plus"></i> Follow &#64;${post.user.username}</div>`;
+                }
+                postElement.innerHTML += `
+                            </div>
+                        </div>
+                        <a href="${post.user.profile_link}"><img src="${post.user.photo}" loading="eager" alt="" class="user-image" /></a>`;
+                let postInfoAndBody = document.createElement("div");
+                postInfoAndBody.classList.add("post-info-and-body");
+                postInfoAndBody.innerHTML = `<div class="post-info">
+                                <a href="${post.user.profile_link}" class="posted-by-fullname">${post.user.full_name}</a>
+                                <a href="${post.user.profile_link}" class="posted-by-username">&#64;${post.user.username}</a>
+                                <div class="dot">·</div>
+                                <div class="posted-on-date-text">${post.created_at}</div>
+                            </div>`;
+                let postBody = document.createElement("div");
+                postBody.classList.add("post-body");
+                if(post.content){
+                    postBody.innerHTML += `<p class="post-body-text">${post.content}</p>`;
+                }
+                if(post.image){
+                    postBody.innerHTML += `<img
+                                    src="${post.image}"
+                                    loading="lazy"
+                                    sizes="100vw"
+                                    alt=""
+                                    class="post-image"
+                            />`;
+                }
+                postInfoAndBody.appendChild(postBody);
+                postInfoAndBody.innerHTML += `
+                            <div class="post-reactions">
+                                <div class="post-comment-stats">
+                                    <div class="post-stats-icon" data-id="${post.id}">
+                                        <i class="fa-regular fa-comment post-ic"></i>
+                                    </div>
+                                    <div class="post-reaction-stats-text">${post.number_of_comments > 0 ? post.number_of_comments : ""}</div>
+                                </div>
+                                <div class="post-reposted-stats">
+                                    <div class="post-stats-icon" data-id="${post.id}">
+                                        <i class="${post.user_reposted ? "repostedPost" : ""} fa-solid fa-retweet post-ic"></i>
+                                    </div>
+                                    <div class="post-reaction-stats-text ${post.user_reposted ? "repostedPost" : ""}">${post.number_of_reposts > 0 ? post.number_of_reposts : ""}</div>
+                                </div>
+                                <div class="post-likes-stats">
+                                    <div class="post-stats-icon" data-id="${post.id}">
+                                        <i class="${post.user_liked ? "fa-solid likedPost" : "fa-regular"} fa-heart post-ic"></i>
+                                    </div>
+                                    <div class="post-reaction-stats-text ${post.user_liked ? "likedPost" : ""}">${post.number_of_likes > 0 ? post.number_of_likes : ""}</div>
+                                </div>
+                                <div class="post-views-stats">
+                                    <div class="post-stats-icon">
+                                        <i class="fa-solid fa-chart-simple post-ic"></i>
+                                    </div>
+                                    <div class="post-reaction-stats-text">${post.views > 0 ? post.views : ''}</div>
+                                </div>
+                            </div>
+                `;
+                postElement.innerHTML += postInfoAndBody.outerHTML;
+                container.appendChild(postElement);
+            });
+            offset += 7;
+            isFetching = false;
+        }
+    });
+}
 

@@ -118,7 +118,7 @@ class UserController extends Controller
             ]
         );
     }
-    public function block(int $id,Request $request) : void
+    public function block(int $id) : void
     {
         $userId = session()->get('user')->id;
         BlockedUser::create([
@@ -143,6 +143,14 @@ class UserController extends Controller
                 ->where('follower_id', '=', $id)
                 ->delete();
         }
+    }
+
+    public function unblock(int $id) : void
+    {
+        Database::table(BlockedUser::TABLE)
+            ->where('blocked_by_user_id', '=', session()->get('user')->id)
+            ->where('blocked_user_id', '=', $id)
+            ->delete();
     }
     public function uploadProfileImage(Request $request) : Response
     {

@@ -8,6 +8,7 @@ use App\Models\LikedComment;
 use App\Models\LikedPost;
 use App\Models\Notification;
 use App\Models\Post;
+use App\Models\PostCommentNotification;
 use App\Models\PostNotification;
 use App\Models\RepostedPost;
 use App\Models\UserFollower;
@@ -23,9 +24,64 @@ use NovaLite\Views\View;
 class PostController extends Controller
 {
     use CalculateDate;
-	public function index()
+	public function index(Request $request) : Response
 	{
-		//
+        $posts = Post::with('user','image')
+                     ->orderBy('id', 'desc')
+                     ->take(7)
+                     ->skip($request->query('offset'))
+                     ->get();
+        $loggedInUserFollowing =  array_column(
+            Database::table(UserFollower::TABLE)
+                ->where('user_id', '=', session()->get('user')->id)
+                ->get(),
+            'follower_id'
+        );
+        $blockedUsers = array_column(
+            Database::table('blocked_users')
+                ->where('blocked_by_user_id', '=', session()->get('user')->id)
+                ->get(),
+            'blocked_user_id'
+        );
+        $usersWhoBlockLoggedInUser = array_column(
+            Database::table('blocked_users')
+                ->where('blocked_user_id', '=', session()->get('user')->id)
+                ->get(),
+            'blocked_by_user_id'
+        );
+        $jsonPosts = [];
+        foreach ($posts as $post) {
+            if(!in_array($post->user->id, $blockedUsers) && !in_array($post->user->id, $usersWhoBlockLoggedInUser) &&
+                $post->user->id !== session()->get('user')->id){
+                $jsonPosts[] = [
+                    'id' => $post->id,
+                    'content' => $post->content,
+                    'created_at' => $this->calculatePostedDate($post->created_at),
+                    'image' => $post->image ? asset('assets/img/posts/' . $post->image->image) : null,
+                    'post_link' => route('post', ['username' => $post->user->username, 'id' => $post->id]),
+                    'number_of_likes' => $post->likesCount($post->id),
+                    'number_of_reposts' => $post->repostsCount($post->id),
+                    'number_of_comments' => $post->commentsCount($post->id),
+                    'user_liked' => LikedPost::where('user_id', '=', session()->get('user')->id)
+                        ->where('post_id', '=', $post->id)
+                        ->count(),
+                    'user_reposted' => RepostedPost::where('user_id', '=', session()->get('user')->id)
+                        ->where('post_id', '=', $post->id)
+                        ->count(),
+                    'user' => [
+                        'id' => $post->user->id,
+                        'photo' => asset('assets/img/users/' . $post->user->photo),
+                        'username' => $post->user->username,
+                        'full_name' => $post->user->full_name,
+                        'loggedInUserFollowing' => in_array($post->user->id, $loggedInUserFollowing),
+                        'profile_link' => route('profile', ['username' => $post->user->username]),
+                    ]
+                ];
+            }
+        }
+        return \response()->json([
+            'posts' => $jsonPosts
+        ]);
 	}
 
 	public function create()
@@ -156,12 +212,22 @@ class PostController extends Controller
 
 	public function destroy(int $id) : void
 	{
-        $post = Post::with('image')->where('id', '=', $id)->first();
+        $post = Post::with('image', 'comments')->where('id', '=', $id)->first();
         if($post->image){
             unlink(public_path('assets/img/posts/' . $post->image->image));
         }
-        $notificationsForDelete = PostNotification::where('post_id', '=', $id)->get();
-        foreach ($notificationsForDelete as $notification){
+        $commentIds = [];
+        foreach ($post->comments as $comment) {
+            $commentIds[] = $comment->id;
+        }
+        $postNotificationsForDelete = PostNotification::where('post_id', '=', $id)->get();
+        $commentsNotificationsForDelete = Database::table(PostCommentNotification::TABLE)
+                                                  ->whereIn('comment_id', $commentIds)
+                                                  ->get();
+        foreach ($postNotificationsForDelete as $notification){
+            Notification::delete($notification->notification_id);
+        }
+        foreach ($commentsNotificationsForDelete as $notification){
             Notification::delete($notification->notification_id);
         }
 		Post::delete($id);

@@ -32,7 +32,7 @@
                 </svg>
             </div>
             <div class="new-post new-post-popup-create">
-                <img src="{{asset('assets/img/67b61da06092cd17329df26d/67b9c46d9abe545630bb3f09_default.jpg')}}" loading="eager" alt="" class="user-image" />
+                <img src="{{asset('assets/img/users/' . session()->get('user')->photo)}}" loading="eager" alt="" class="user-image" />
                 <div class="post-creating">
                     <div class="form-block w-form" id="popupFormBlock">
                         <form

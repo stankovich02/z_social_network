@@ -4481,7 +4481,7 @@ textarea.w-input, textarea.w-select {
   color: #fff6;
   font-size: 15px;
 }
-.deletePostPopupBtn,.removeFollowerPopupBtn, .blockUserPopupBtn, .cancelPopupBtn,.deleteCommentPopupBtn, .blockUserCommentPopupBtn, .unfollowUserPopupBtn{
+.deletePostPopupBtn,.removeFollowerPopupBtn, .blockUserPopupBtn, .cancelPopupBtn,.deleteCommentPopupBtn, .blockUserCommentPopupBtn, .unfollowUserPopupBtn, .unblockUserPopupBtn{
   width: 100%;
   margin-bottom: 10px;
   font-weight: 700;
@@ -4493,7 +4493,7 @@ textarea.w-input, textarea.w-select {
 .deletePostPopupBtn,.removeFollowerPopupBtn, .blockUserPopupBtn, .deleteCommentPopupBtn,.blockUserCommentPopupBtn{
   background-color: rgb(244, 33, 46);
 }
-.unfollowUserPopupBtn{
+.unfollowUserPopupBtn, .unblockUserPopupBtn{
   color: black;
   background-color: rgba(239,243,244);
 }
@@ -4579,7 +4579,7 @@ textarea.w-input, textarea.w-select {
   color: white;
   border-color: rgb(83,100,113);
 }
-.followingBtn,.unfollowBtn, .followBackBtn{
+.followingBtn,.unfollowBtn, .followBackBtn, .blockedBtn, .unblockBtn{
   width: 120px;
   font-weight: 700;
   border-width: 1px;
@@ -4589,6 +4589,11 @@ textarea.w-input, textarea.w-select {
   background-color: rgba(244,33,46,0.1);
   color: red;
   border-color: rgb(103,7,15);
+}
+.blockedBtn, .unblockBtn{
+  color: white;
+  background-color: rgb(244,33,46);
+  border-color: rgb(244,33,46);
 }
 #username-and-follows-info{
   display: flex;
@@ -4638,6 +4643,7 @@ textarea.w-input, textarea.w-select {
   padding: 15px;
   transition: all 0.3s;
   cursor: pointer;
+  text-decoration: none;
 }
 .single-following-user:hover,.single-follower-user:hover{
   background-color: rgba(255,255,255,0.03);
@@ -4649,6 +4655,9 @@ textarea.w-input, textarea.w-select {
   width: 100%;
   align-items: center;
   margin-left: 10px;
+}
+.single-following-user .user-following-fullname, .single-follower-user .user-follower-fullname,.single-follower-user .choose-follower-option{
+  color: white;
 }
 .user-following-fullname-and-username,.user-follower-fullname-and-username{
   width: 70%;
@@ -4668,6 +4677,7 @@ textarea.w-input, textarea.w-select {
 }
 .user-following-bio, .user-follower-bio{
   margin-top: 5px;
+  width: 100%;
 }
 .single-follower-option:first-child, .single-post-option:first-child, .single-comment-option:first-child, .single-profile-option:first-child{
   border-top-left-radius: 16px;
@@ -4684,4 +4694,22 @@ textarea.w-input, textarea.w-select {
 }
 .more-other-profile-options{
   position: relative;
+}
+#noFollowers,#noFollowing, #userBlockedNotification{
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 30px;
+}
+#noFollowers p,#noFollowing p,#userBlockedNotification p{
+  color: rgba(113,118,123);
+}
+.new-comment-popup .comment-body{
+  max-width: 90%;
+}
+.new-comment-popup #commentOnPostContent{
+  padding: 5px 0;
+}
+.new-comment-popup #commentOnPostContent p{
+  margin-bottom: 0;
 }

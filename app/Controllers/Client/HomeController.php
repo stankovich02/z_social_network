@@ -19,7 +19,7 @@ class HomeController extends Controller
     use CalculateDate;
     public function index() : View
     {
-        $posts = Post::with('user','image')->orderBy('id', 'desc')->get();
+        $posts = Post::with('user','image')->orderBy('id', 'desc')->take(7)->get();
         $loggedInUserFollowing =  array_column(
             Database::table(UserFollower::TABLE)
                 ->where('user_id', '=', session()->get('user')->id)

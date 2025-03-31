@@ -34,21 +34,36 @@
             </a>
         </div>
         <div id="following">
-           @foreach($user->following as $userProfile)
-                <div class="single-following-user">
-                    <img src="{{asset('assets/img/users/' . $userProfile->follower->photo)}}" loading="lazy" alt="" class="user-image" />
-                    <div class="user-following-information">
-                        <div class="user-following-fullname-and-username">
-                            <div class="user-following-fullname">{{$userProfile->follower->full_name}}</div>
-                            <div class="user-following-username">&#64;{{$userProfile->follower->username}}</div>
+            @if($user->following)
+                @foreach($user->following as $userProfile)
+                    <a href={{route('profile', ['username' => $userProfile->follower->username])}} class="single-following-user">
+                        <img src="{{asset('assets/img/users/' . $userProfile->follower->photo)}}" loading="lazy" alt="" class="user-image" />
+                        <div class="user-following-information">
+                            <div class="user-following-fullname-and-username">
+                                <div class="user-following-fullname">{{$userProfile->follower->full_name}}</div>
+                                <div class="user-following-username">&#64;{{$userProfile->follower->username}}</div>
+                            </div>
+                            <button class="followingBtn" data-id="{{$userProfile->follower->id}}" data-username="{{$userProfile->follower->username}}">Following</button>
+                            @if($userProfile->follower->biography)
+                                <div class="user-following-bio">{{$userProfile->follower->biography}}</div>
+                            @endif
                         </div>
-                        <button class="followingBtn" data-id="{{$userProfile->follower->id}}" data-username="{{$userProfile->follower->username}}">Following</button>
-                        @if($userProfile->follower->biography)
-                            <div class="user-following-bio">{{$userProfile->follower->biography}}</div>
-                        @endif
+                    </a>
+                @endforeach
+            @else
+                @if($user->username === session()->get('user')->username)
+                    <div id="noFollowing">
+                        <h2>Be in the know</h2>
+                        <p>Following accounts is an easy way to curate your timeline and know what’s happening with the topics and people you’re interested in.</p>
                     </div>
-                </div>
-           @endforeach
+                @else
+                    <div id="noFollowing">
+                        <h2>&#64;{{$user->username}} isn't following anyone</h2>
+                        <p>Once they follow accounts, they’ll show up here.</p>
+                    </div>
+                @endif
+            @endif
+
         </div>
     </div>
     <script src="{{asset('assets/js/follow.js')}}"></script>
