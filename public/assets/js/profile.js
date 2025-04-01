@@ -1012,37 +1012,41 @@ if(copyProfile){
     })
 }
 let blockedBtn = document.querySelector(".blockedBtn");
-blockedBtn.addEventListener("mouseover", function (){
-    let userId = blockedBtn.getAttribute("data-id");
-    let username = blockedBtn.getAttribute("data-username");
-    blockedBtn.className = "unblockBtn";
-    blockedBtn.textContent = "Unblock";
-    blockedBtn.setAttribute("data-id", userId);
-    blockedBtn.setAttribute("data-username", username);
-})
-blockedBtn.addEventListener("mouseout", function (){
-    let userId = blockedBtn.getAttribute("data-id");
-    let username = blockedBtn.getAttribute("data-username");
-    blockedBtn.className = "blockedBtn";
-    blockedBtn.textContent = "Blocked";
-    blockedBtn.setAttribute("data-id", userId);
-    blockedBtn.setAttribute("data-username", username);
-})
+if(blockedBtn){
+    blockedBtn.addEventListener("mouseover", function (){
+        let userId = blockedBtn.getAttribute("data-id");
+        let username = blockedBtn.getAttribute("data-username");
+        blockedBtn.className = "unblockBtn";
+        blockedBtn.textContent = "Unblock";
+        blockedBtn.setAttribute("data-id", userId);
+        blockedBtn.setAttribute("data-username", username);
+    })
+    blockedBtn.addEventListener("mouseout", function (){
+        let userId = blockedBtn.getAttribute("data-id");
+        let username = blockedBtn.getAttribute("data-username");
+        blockedBtn.className = "blockedBtn";
+        blockedBtn.textContent = "Blocked";
+        blockedBtn.setAttribute("data-id", userId);
+        blockedBtn.setAttribute("data-username", username);
+    })
+}
 
 let unblockUserBtn = document.querySelector(".unblock-user");
-unblockUserBtn.addEventListener("click", function (){
-    const userId = this.getAttribute("data-id");
-    const username = this.getAttribute("data-username");
-    const actionPopupWrapper = document.querySelector("#action-popup-wrapper");
-    const confirmBlock = document.querySelector("#doActionBtn");
-    confirmBlock.className = "unblockUserPopupBtn";
-    confirmBlock.textContent = "Unblock";
-    confirmBlock.setAttribute("data-id", userId);
-    let popupHeading = document.querySelector("#action-popup-wrapper h3");
-    popupHeading.textContent = `Unblock @${username}?`;
-    let popupText = document.querySelector("#action-popup-wrapper p");
-    popupText.textContent = `They will able to follow you and engage with your public posts.`;
-    actionPopupWrapper.style.display = "block";
-    document.body.style.overflow = "hidden";
-})
+if(unblockUserBtn){
+    unblockUserBtn.addEventListener("click", function (){
+        const userId = this.getAttribute("data-id");
+        const username = this.getAttribute("data-username");
+        const actionPopupWrapper = document.querySelector("#action-popup-wrapper");
+        const confirmBlock = document.querySelector("#doActionBtn");
+        confirmBlock.className = "unblockUserPopupBtn";
+        confirmBlock.textContent = "Unblock";
+        confirmBlock.setAttribute("data-id", userId);
+        let popupHeading = document.querySelector("#action-popup-wrapper h3");
+        popupHeading.textContent = `Unblock @${username}?`;
+        let popupText = document.querySelector("#action-popup-wrapper p");
+        popupText.textContent = `They will able to follow you and engage with your public posts.`;
+        actionPopupWrapper.style.display = "block";
+        document.body.style.overflow = "hidden";
+    })
+}
 

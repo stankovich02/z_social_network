@@ -7,10 +7,16 @@
                         <div class="icon-embed-medium link-icon w-embed">
                             <?php
                             $newNotifications = App\Models\Notification::where('is_read','=',0)->where('target_user_id', '=', session()->get('user')->id)->count();
+                            $newMessages = App\Models\Message::where('is_read','=',0)->where('sent_to', '=', session()->get('user')->id)->count();
                             ?>
                             @if($newNotifications > 0 && $nav->name === 'Notifications')
-                                <div class="numOfNewMessOrNotifications">
+                                <div class="numOfNewNotifications">
                                     <p>{{$newNotifications}}</p>
+                                </div>
+                            @endif
+                            @if($newMessages > 0 && $nav->name === 'Messages')
+                                <div class="numOfNewMessages">
+                                    <p>{{$newMessages}}</p>
                                 </div>
                             @endif
                             <svg
@@ -35,7 +41,7 @@
         <div id="logout-wrapper">
             <a href="{{route('logout')}}" id="logout-text">Logout, <span id="logged-user-fullname">{{session()->get('user')->full_name}}</span></a>
         </div>
-        <div class="logged-in-user">
+        <div class="logged-in-user" data-id="{{session()->get('user')->id}}">
             <img src="{{asset('assets/img/users/' . session()->get('user')->photo)}}" loading="lazy" alt="" class="user-image" />
             <div class="logged-in-user-info">
                 <div class="user-fullname">{{session()->get('user')->full_name}}</div>

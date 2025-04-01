@@ -2824,8 +2824,13 @@ textarea.w-input, textarea.w-select {
   align-items: flex-start;
   padding: 15px;
   display: flex;
+  cursor: pointer;
+  transition: all 0.3s;
+  border-right: 2px solid black;
 }
-
+.single-message.old-message:hover{
+  background-color: rgba(22,24,28);
+}
 .single-message.new-message {
   color: #fff;
   background-color: #1796ff26;
@@ -2933,8 +2938,12 @@ textarea.w-input, textarea.w-select {
   padding-top: 30px;
   padding-bottom: 50px;
   display: flex;
+  cursor: pointer;
+  transition: all 0.3s;
 }
-
+.chat-user-info-wrapper:hover{
+  background-color: rgb(22, 24, 28);
+}
 .chat-user-image {
   border-radius: 50%;
   width: 60px;
@@ -2974,7 +2983,7 @@ textarea.w-input, textarea.w-select {
 .chat-messages-wrapper {
   border-bottom: 1px solid #88888880;
   width: 100%;
-  max-height: calc(100vh - 380px);
+  height: calc(100vh - 380px);
   padding-top: 15px;
   padding-left: 15px;
   padding-right: 15px;
@@ -2992,8 +3001,8 @@ textarea.w-input, textarea.w-select {
 .sent-message {
   background-color: #009dff;
   border-radius: 24px 24px 0;
-  width: 70%;
-  padding: 15px;
+  padding: 10px;
+  max-width: 70%;
 }
 
 .message-text {
@@ -3018,8 +3027,8 @@ textarea.w-input, textarea.w-select {
 .received-message {
   background-color: #2f3336;
   border-radius: 24px 24px 24px 0;
-  width: 70%;
-  padding: 15px;
+  padding: 10px;
+  max-width: 70%;
 }
 
 .received-message-info {
@@ -3074,6 +3083,7 @@ textarea.w-input, textarea.w-select {
 
 .send-message-icon.can-send-icon {
   color: #009dff;
+  cursor: pointer;
 }
 
 .new-message-icon {
@@ -4425,7 +4435,7 @@ textarea.w-input, textarea.w-select {
 .single-notification-link .text-block{
   color: white;
 }
-.numOfNewMessOrNotifications{
+.numOfNewNotifications, .numOfNewMessages{
   position: absolute;
   top: 0;
   right: 0;
@@ -4438,7 +4448,7 @@ textarea.w-input, textarea.w-select {
   justify-content: center;
   align-items: center;
 }
-.numOfNewMessOrNotifications p{
+.numOfNewNotifications p, .numOfNewMessages p{
   margin-bottom: 0;
  }
 .reply-to-new-comment-form textarea{
@@ -4712,4 +4722,29 @@ textarea.w-input, textarea.w-select {
 }
 .new-comment-popup #commentOnPostContent p{
   margin-bottom: 0;
+}
+.newMessageIcon{
+  font-size: 5px;
+  color: #009dff;
+}
+.chat #selectMessageNotification{
+  height: 100vh;
+  width: 60%;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  justify-content: center;
+}
+.chat #selectMessageNotification p{
+  color: rgb(113, 118, 123);
+}
+.chat #selectMessageNotification button{
+background-color: rgb(29, 155, 240);
+  font-weight: bold;
+  padding: 15px 35px;
+  font-size: 16px;
+  border-radius: 30px;
+  margin-top: 20px;
 }

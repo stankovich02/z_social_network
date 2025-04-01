@@ -58,155 +58,47 @@
             </div>
         </div>
         <div class="all-messages">
-            <div class="single-message">
-                <img src="{{asset('assets/img/67b61da06092cd17329df26d/67b9c46d9abe545630bb3f09_default.jpg')}}" loading="lazy" alt="" class="user-image" />
-                <div class="message-sender-info">
-                    <div class="messaged-by-user-info">
-                        <div class="messaged-by-fullname">Marko Stankovic</div>
-                        <div class="messaged-by-username">@markostanke2002</div>
-                        <div class="dot">·</div>
-                        <div class="last-sent-time-text">15h</div>
+            @foreach($chats as $chat)
+                @if($chat->is_read === 0)
+                    <div class="single-message new-message" data-id="{{$chat->user->id}}">
+                        <img src="{{asset('assets/img/users/' . $chat->user->photo)}}" loading="lazy" alt="" class="user-image" />
+                        <div class="message-sender-info">
+                            <div class="messaged-by-user-info">
+                                <div class="messaged-by-fullname">{{$chat->user->full_name}}</div>
+                                <div class="messaged-by-username">&#64;{{$chat->user->username}}</div>
+                                <div class="dot">·</div>
+                                <div class="last-sent-time-text">{{$chat->created_at}}</div>
+                            </div>
+                            <div class="message-from-user new-message">{{$chat->message}}</div>
+                        </div>
+                        <img src="{{asset('assets/img/67b61da06092cd17329df26d/67bd987eda529b92af7c73e7_IcBaselineMoreHoriz.png')}}" loading="lazy" alt="" class="more-options-message" />
+                        <i class="fa-solid fa-circle newMessageIcon"></i>
                     </div>
-                    <div class="message-from-user">Cao brate</div>
-                </div>
-                <img src="{{asset('assets/img/67b61da06092cd17329df26d/67bd987eda529b92af7c73e7_IcBaselineMoreHoriz.png')}}" loading="lazy" alt="" class="more-options-message" />
-            </div>
-            <div class="single-message new-message">
-                <img src="{{asset('assets/img/67b61da06092cd17329df26d/67b9c46d9abe545630bb3f09_default.jpg')}}" loading="lazy" alt="" class="user-image" />
-                <div class="message-sender-info">
-                    <div class="messaged-by-user-info">
-                        <div class="messaged-by-fullname">Marko Stankovic</div>
-                        <div class="messaged-by-username">@markostanke2002</div>
-                        <div class="dot">·</div>
-                        <div class="last-sent-time-text">15h</div>
+                @else
+                    <div class="single-message old-message">
+                        <img src="{{asset('assets/img/users/' . $chat->user->photo)}}" loading="lazy" alt="" class="user-image" />
+                        <div class="message-sender-info">
+                            <div class="messaged-by-user-info">
+                                <div class="messaged-by-fullname">{{$chat->user->full_name}}</div>
+                                <div class="messaged-by-username">&#64;{{$chat->user->username}}</div>
+                                <div class="dot">·</div>
+                                <div class="last-sent-time-text">{{$chat->created_at}}</div>
+                            </div>
+                            <div class="message-from-user new-message">{{$chat->message}}</div>
+                        </div>
+                        <img src="{{asset('assets/img/67b61da06092cd17329df26d/67bd987eda529b92af7c73e7_IcBaselineMoreHoriz.png')}}" loading="lazy" alt="" class="more-options-message" />
                     </div>
-                    <div class="message-from-user new-message">Cao brate</div>
-                </div>
-                <img src="{{asset('assets/img/67b61da06092cd17329df26d/67bd987eda529b92af7c73e7_IcBaselineMoreHoriz.png')}}" loading="lazy" alt="" class="more-options-message" />
-                <div class="icon-embed-small-2 w-embed">
-                    <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            xmlns:xlink="http://www.w3.org/1999/xlink"
-                            aria-hidden="true"
-                            role="img"
-                            class="iconify iconify--carbon"
-                            width="100%"
-                            height="100%"
-                            preserveAspectRatio="xMidYMid meet"
-                            viewBox="0 0 32 32"
-                    >
-                        <circle cx="16" cy="16" r="8" fill="currentColor"></circle>
-                    </svg>
-                </div>
-            </div>
-            <div class="single-message active-chat">
-                <img src="{{asset('assets/img/67b61da06092cd17329df26d/67b9c46d9abe545630bb3f09_default.jpg')}}" loading="lazy" alt="" class="user-image" />
-                <div class="message-sender-info">
-                    <div class="messaged-by-user-info">
-                        <div class="messaged-by-fullname">Marko Stankovic</div>
-                        <div class="messaged-by-username">@markostanke2002</div>
-                        <div class="dot">·</div>
-                        <div class="last-sent-time-text">15h</div>
-                    </div>
-                    <div class="message-from-user">Cao brate</div>
-                </div>
-                <img src="{{asset('assets/img/67b61da06092cd17329df26d/67bd987eda529b92af7c73e7_IcBaselineMoreHoriz.png')}}" loading="lazy" alt="" class="more-options-message" />
-            </div>
+                @endif
+            @endforeach
         </div>
     </div>
     <div class="chat">
-        <div class="chat-user-fullname">Marko Stankovic</div>
-        <div class="chat-user-info-wrapper">
-            <img src="{{asset('assets/img/67b61da06092cd17329df26d/67b9c46d9abe545630bb3f09_default.jpg')}}" loading="lazy" alt="" class="chat-user-image" />
-            <div class="chat-user-info">
-                <div class="chat-user-info-fullname">Marko Stankovic</div>
-                <div class="chat-user-info-username">@markostanke2002</div>
-                <div class="chat-user-bio">Ovo je moja biografija</div>
-                <div class="chat-user-date-joined-and-followers">
-                    <div class="user-joined-date">Joined February 2025</div>
-                    <div class="dot">·</div>
-                    <div class="chat-user-num-of-followers">1 Follower</div>
-                </div>
-            </div>
-        </div>
-        <div class="chat-messages-wrapper">
-            <div class="sent-message-wrapper">
-                <div class="sent-message">
-                    <p class="message-text">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae
-                        erat. Aenean faucibus nibh et justo cursus id rutrum lorem imperdiet. Nunc ut sem vitae risus tristique posuere.
-                    </p>
-                </div>
-                <div class="sent-message-info">May 28, 2024, 11:05 AM</div>
-            </div>
-            <div class="received-message-wrapper">
-                <div class="received-message">
-                    <p class="message-text">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae
-                        erat. Aenean faucibus nibh et justo cursus id rutrum lorem imperdiet. Nunc ut sem vitae risus tristique posuere.
-                    </p>
-                </div>
-                <div class="received-message-info">May 28, 2024, 11:25 AM</div>
-            </div>
-            <div class="sent-message-wrapper">
-                <div class="sent-message">
-                    <p class="message-text">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae
-                        erat. Aenean faucibus nibh et justo cursus id rutrum lorem imperdiet. Nunc ut sem vitae risus tristique posuere.
-                    </p>
-                </div>
-                <div class="sent-message-info">May 28, 2024, 11:05 AM</div>
-            </div>
-            <div class="received-message-wrapper">
-                <div class="received-message">
-                    <p class="message-text">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae
-                        erat. Aenean faucibus nibh et justo cursus id rutrum lorem imperdiet. Nunc ut sem vitae risus tristique posuere.
-                    </p>
-                </div>
-                <div class="received-message-info">May 28, 2024, 11:25 AM</div>
-            </div>
-            <div class="received-message-wrapper">
-                <div class="received-message">
-                    <p class="message-text">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae
-                        erat. Aenean faucibus nibh et justo cursus id rutrum lorem imperdiet. Nunc ut sem vitae risus tristique posuere.
-                    </p>
-                </div>
-                <div class="received-message-info">May 28, 2024, 11:25 AM</div>
-            </div>
-        </div>
-        <div class="send-message-div">
-            <div class="send-message-form w-form">
-                <form
-                        id="email-form-2"
-                        name="email-form-2"
-                        data-name="Email Form 2"
-                        method="get"
-                        class="form-3"
-                        data-wf-page-id="67b61da06092cd17329df273"
-                        data-wf-element-id="9e904a35-d3ac-6b33-8a50-ddbc237c6bcc"
-                        data-turnstile-sitekey="0x4AAAAAAAQTptj2So4dx43e"
-                >
-                    <input class="type-message-input w-input" maxlength="256" name="new-message-text" data-name="new-message-text" placeholder="Start a new message" type="text" id="new-message-text" />
-                </form>
-            </div>
-            <div class="send-message-icon can-send-icon w-embed">
-                <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        xmlns:xlink="http://www.w3.org/1999/xlink"
-                        aria-hidden="true"
-                        role="img"
-                        class="iconify iconify--ic"
-                        width="100%"
-                        height="100%"
-                        preserveAspectRatio="xMidYMid meet"
-                        viewBox="0 0 24 24"
-                >
-                    <path fill="currentColor" d="M2.01 21L23 12L2.01 3L2 10l15 2l-15 2z"></path>
-                </svg>
-            </div>
-        </div>
+       <div id="selectMessageNotification">
+           <h2 id="selectMessageHeading">Select a message</h2>
+           <p id="selectMessText">Choose from your existing conversations, start a new one, or just keep swimming.</p>
+           <button id="newMessageBtn">New message</button>
+       </div>
     </div>
 </section>
+    <script src="{{asset('assets/js/messages.js')}}"></script>
 @endsection
