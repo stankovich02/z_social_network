@@ -2492,7 +2492,7 @@ textarea.w-input, textarea.w-select {
   flex-flow: row;
   justify-content: center;
   align-items: center;
-  width: 80%;
+  width: 100%;
   margin-top: 10px;
   margin-left: auto;
   margin-right: auto;
@@ -2932,7 +2932,9 @@ textarea.w-input, textarea.w-select {
   flex-flow: column;
   justify-content: center;
   align-items: center;
-  width: 100%;
+  width: calc(100% - 30px);
+  margin-left: auto;
+  margin-right: auto;
   height: 250px;
   margin-top: 20px;
   padding-top: 30px;
@@ -2940,6 +2942,7 @@ textarea.w-input, textarea.w-select {
   display: flex;
   cursor: pointer;
   transition: all 0.3s;
+  text-decoration: none;
 }
 .chat-user-info-wrapper:hover{
   background-color: rgb(22, 24, 28);
@@ -2957,6 +2960,7 @@ textarea.w-input, textarea.w-select {
 
 .chat-user-info-fullname {
   font-weight: 700;
+  color: white;
 }
 
 .chat-user-info-username {
@@ -2978,6 +2982,7 @@ textarea.w-input, textarea.w-select {
 
 .chat-user-bio {
   margin-top: 20px;
+  color: white;
 }
 
 .chat-messages-wrapper {

@@ -1049,4 +1049,15 @@ if(unblockUserBtn){
         document.body.style.overflow = "hidden";
     })
 }
+let newMessageBtn = document.querySelector(".other-profile-features .new-message");
+if(newMessageBtn){
+    newMessageBtn.addEventListener("click", function (){
+        $.ajax({
+            url: `/messages?userId=${this.getAttribute("data-id")}`,
+            type: "GET",
+            success: function(){
+            },
+        });
+    })
+}
 

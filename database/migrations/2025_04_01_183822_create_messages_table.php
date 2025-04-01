@@ -9,6 +9,7 @@ class create_messages_table
 	{
 		Schema::create(\App\Models\Message::TABLE, function (Migration $table) {
 			$table->id();
+            $table->foreignId('conversation_id')->references('conversations')->onDelete('cascade');
             $table->foreignId('sent_from')->references('users')->onDelete('cascade');
             $table->foreignId('sent_to')->references('users')->onDelete('cascade');
             $table->string('message');

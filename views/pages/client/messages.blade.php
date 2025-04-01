@@ -59,8 +59,8 @@
         </div>
         <div class="all-messages">
             @foreach($chats as $chat)
-                @if($chat->is_read === 0)
-                    <div class="single-message new-message" data-id="{{$chat->user->id}}">
+                @if($chat->is_read === 0 && $chat->sent_to === session()->get('user')->id)
+                    <div class="single-message new-message" data-id="{{session()->get('user')->id}}" data-other-id="{{$chat->user->id}}">
                         <img src="{{asset('assets/img/users/' . $chat->user->photo)}}" loading="lazy" alt="" class="user-image" />
                         <div class="message-sender-info">
                             <div class="messaged-by-user-info">
@@ -75,7 +75,7 @@
                         <i class="fa-solid fa-circle newMessageIcon"></i>
                     </div>
                 @else
-                    <div class="single-message old-message">
+                    <div class="single-message old-message" data-id="{{session()->get('user')->id}}" data-other-id="{{$chat->user->id}}">
                         <img src="{{asset('assets/img/users/' . $chat->user->photo)}}" loading="lazy" alt="" class="user-image" />
                         <div class="message-sender-info">
                             <div class="messaged-by-user-info">

@@ -32,24 +32,32 @@ class MyChat implements MessageComponentInterface, \Ratchet\MessageComponentInte
         $sentFrom = $data['sent_from'];
         $sentTo = $data['sent_to'];
         $message = $data['message'];
+        $createdAt = $data['created_at'];
 
         echo "User $sentFrom sent: $message\n";
-
-        $this->saveMessageToDatabase($sentFrom, $sentTo, $message);
+        $this->saveMessageToDatabase($sentFrom, $sentTo, $message,$createdAt);
 
         if (isset($this->clients[$sentTo])) {
             $this->clients[$sentTo]->send(json_encode([
                 'sent_from' => $sentFrom,
                 'sent_to' => $sentTo,
-                'message' => $message
+                'message' => $message,
+                'created_at' => $createdAt,
             ]));
         }
+        $this->clients[$sentFrom]->send(json_encode([
+            'sent_from' => $sentFrom,
+            'sent_to' => $sentTo,
+            'message' => $message,
+            'created_at' => $createdAt,
+        ]));
     }
 
-    private function saveMessageToDatabase($sentFrom,$sentTo, $message) {
+    private function saveMessageToDatabase($sentFrom,$sentTo, $message, $createdAt)
+    {
         $pdo = new \PDO("mysql:host=localhost;dbname=z_social_network", "root", "");
         $stmt = $pdo->prepare("INSERT INTO messages (sent_from,sent_to, message, created_at) VALUES (?, ?, ?, ?)");
-        $stmt->execute([$sentFrom, $sentTo, $message,date('Y-m-d H:i:s')]);
+        $stmt->execute([$sentFrom, $sentTo, $message,$createdAt]);
     }
 
     function onClose(ConnectionInterface $conn)

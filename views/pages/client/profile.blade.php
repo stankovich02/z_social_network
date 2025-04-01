@@ -63,7 +63,7 @@
                         <button class="blockedBtn" data-id="{{$user->id}}" data-username="{{$user->username}}">Blocked</button>
                     @elseif($userBlockedLoggedInUser)
                     @else
-                        <i class="fa-regular fa-envelope new-message"></i>
+                        <i class="fa-regular fa-envelope new-message" data-id="{{$user->id}}"></i>
                         @if($user->userFollowsLoggedInUser && !$user->loggedInUserFollowsUser)
                             <button class="followBackBtn" data-id="{{$user->id}}" data-username="{{$user->username}}">Follow back</button>
                         @elseif($user->loggedInUserFollowsUser)

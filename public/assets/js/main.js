@@ -285,7 +285,6 @@ document.querySelector("#popupFormBlock #post-body-2").addEventListener("input",
     postBtn.disabled = this.value.trim() === "";
     this.value.trim() === "" ? postBtn.classList.add("disabled-new-post-btn") : postBtn.classList.remove("disabled-new-post-btn");
 });
-//if the socket is connected, dont connect again
 let socket;
 if (typeof socket !== 'undefined' && socket.readyState === WebSocket.OPEN) {
     console.log("WebSocket is already connected.");
@@ -293,11 +292,27 @@ if (typeof socket !== 'undefined' && socket.readyState === WebSocket.OPEN) {
 else{
     socket = new WebSocket("ws://localhost:8081");
 }
-
+function timeAgo(createdAt) {
+    console.log("menjam vreme");
+    const timestamp = new Date(createdAt).getTime();
+    const now = Date.now();
+    const diff = Math.floor((now - timestamp) / 1000);
+    if (diff < 60) {
+        return "now";
+    } else if (diff < 3600) {
+        const minutes = Math.floor(diff / 60);
+        return `${minutes} min${minutes > 1 ? "s" : ""}`;
+    } else if (diff < 86400) {
+        const hours = Math.floor(diff / 3600);
+        return `${hours}h`;
+    } else {
+        const date = new Date(timestamp);
+        return date.toLocaleString("en-US", { month: "short", day: "numeric" });
+    }
+}
 
 
 socket.onopen = function () {
-    console.log("Connected to WebSocket server.");
     let loggedInUser = document.querySelector(".logged-in-user");
     let userId = loggedInUser.getAttribute("data-id");
     socket.send(JSON.stringify({ user_id: userId }));
@@ -311,49 +326,48 @@ socket.onmessage = function (event) {
         socket.send(JSON.stringify({ user_id: userId }));
         return;
     }
-
+    let numOfNewMessages = document.querySelector(".numOfNewMessages p");
+    if(numOfNewMessages){
+        let numOfNewMessagesText = numOfNewMessages.textContent;
+        let numOfNewMessagesNum = parseInt(numOfNewMessagesText);
+        numOfNewMessagesNum++;
+        numOfNewMessages.textContent = numOfNewMessagesNum.toString();
+    }
+    else{
+        let linkTexts = document.querySelectorAll(".link-text");
+        linkTexts.forEach(linkText => {
+            if(linkText.innerHTML === "Messages"){
+                let linkIcon = linkText.parentElement.querySelector(".link-icon");
+                linkIcon.innerHTML += `
+                     <div class="numOfNewNotifications">
+                        <p>1</p>
+                    </div>`;
+            }
+        })
+    }
     let messageWrapper = document.querySelector(".chat-messages-wrapper");
-
-    if(data.sent_from === userId){
+    console.log(data);
+    let sentMessageDate = timeAgo(data.created_at);
+    if(parseInt(data.sent_from) === parseInt(userId)){
         if(messageWrapper){
             messageWrapper.innerHTML += `
         <div class="sent-message-wrapper">
             <div class="sent-message">
                 <p class="message-text">${data.message}</p>
             </div>
-            <div class="sent-message-info">May 28, 2024, 11:05 AM</div>
+            <div class="sent-message-info">${sentMessageDate}</div>
         </div>
         `;
         }
     }
     else{
-        let numOfNewMessages = document.querySelector(".numOfNewMessages p");
-        if(numOfNewMessages){
-            let numOfNewMessagesText = numOfNewMessages.textContent;
-            let numOfNewMessagesNum = parseInt(numOfNewMessagesText);
-            numOfNewMessagesNum++;
-            numOfNewMessages.textContent = numOfNewMessagesNum.toString();
-        }
-        else{
-            let linkTexts = document.querySelectorAll(".link-text");
-            linkTexts.forEach(linkText => {
-                if(linkText.innerHTML === "Messages"){
-                    let linkIcon = linkText.parentElement.querySelector(".link-icon");
-                    linkIcon.innerHTML += `
-                     <div class="numOfNewNotifications">
-                        <p>1</p>
-                    </div>
-                    `;
-                }
-            })
-        }
         if(messageWrapper) {
             messageWrapper.innerHTML += `
             <div class="received-message-wrapper">
                 <div class="received-message">
                    <p class="message-text">${data.message}</p>
                 </div>
-                <div class="received-message-info">May 28, 2024, 11:25 AM</div>
+                <div class="received-message-info">${sentMessageDate}</div>
             </div>
         `;
         }
@@ -368,17 +382,13 @@ function sendMessage() {
     let messageData = JSON.stringify({
         sent_from: sentFrom,
         sent_to: sentTo,
-        message: messageInput.value
+        message: messageInput.value,
+        created_at: new Date().toISOString()
     });
-
     socket.send(messageData);
     messageInput.value = "";
 }
 
-let canSendIcon = document.querySelector(".can-send-icon");
-if(canSendIcon){
-    canSendIcon.addEventListener("click", sendMessage);
-}
 
 
 
