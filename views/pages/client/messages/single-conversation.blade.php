@@ -153,21 +153,16 @@
                 @endforeach
             </div>
             <div class="send-message-div">
-                <div class="send-message-form w-form">
+                <div class="send-message-form">
                     <form
                             id="email-form-2"
-                            name="email-form-2"
-                            data-name="Email Form 2"
                             method="get"
                             class="form-3"
-                            data-wf-page-id="67b61da06092cd17329df273"
-                            data-wf-element-id="9e904a35-d3ac-6b33-8a50-ddbc237c6bcc"
-                            data-turnstile-sitekey="0x4AAAAAAAQTptj2So4dx43e"
                     >
-                        <input class="type-message-input w-input" maxlength="256" name="new-message-text" data-name="new-message-text" placeholder="Start a new message" type="text" id="new-message-text" />
+                        <input class="type-message-input w-input" placeholder="Start a new message" type="text" id="new-message-text" />
                     </form>
                 </div>
-                <div class="send-message-icon can-send-icon w-embed" data-id="{{session()->get('user')->id}}" data-receiver-id="1">
+                <div class="send-message-icon can-send-icon w-embed" data-id="{{session()->get('user')->id}}" data-receiver-id="{{$activeChatUser->id}}" data-conversation-id="{{$chatId}}" data-other-user-column-name="{{$activeChatUser->column_name}}">
                     <svg
                             xmlns="http://www.w3.org/2000/svg"
                             xmlns:xlink="http://www.w3.org/1999/xlink"

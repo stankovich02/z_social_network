@@ -4,7 +4,7 @@ namespace App\Traits;
 
 trait CalculateDate
 {
-    public function calculatePostedDate($createdAt)
+    public function calculatePostedDate($createdAt) : string
     {
         $timestamp = strtotime($createdAt);
         $now = time();

@@ -28,7 +28,7 @@ class PostController extends Controller
 	{
         $posts = Post::with('user','image')
                      ->orderBy('id', 'desc')
-                     ->take(7)
+                     ->take(10)
                      ->skip($request->query('offset'))
                      ->get();
         $loggedInUserFollowing =  array_column(

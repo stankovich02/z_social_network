@@ -2,9 +2,7 @@
 
 namespace App\Chat;
 
-use App\Models\Message;
 use Ratchet\ConnectionInterface;
-use Ratchet\RFC6455\Messaging\MessageInterface;
 use Ratchet\WebSocket\MessageComponentInterface;
 
 class MyChat implements MessageComponentInterface, \Ratchet\MessageComponentInterface
@@ -32,10 +30,12 @@ class MyChat implements MessageComponentInterface, \Ratchet\MessageComponentInte
         $sentFrom = $data['sent_from'];
         $sentTo = $data['sent_to'];
         $message = $data['message'];
+        $conversationId = $data['conversation_id'];
+        $otherUserColumn = $data['other_user_column'];
         $createdAt = $data['created_at'];
 
         echo "User $sentFrom sent: $message\n";
-        $this->saveMessageToDatabase($sentFrom, $sentTo, $message,$createdAt);
+        $this->saveMessageToDatabase($sentFrom, $sentTo, $message,$createdAt, $conversationId, $otherUserColumn);
 
         if (isset($this->clients[$sentTo])) {
             $this->clients[$sentTo]->send(json_encode([
@@ -53,11 +53,18 @@ class MyChat implements MessageComponentInterface, \Ratchet\MessageComponentInte
         ]));
     }
 
-    private function saveMessageToDatabase($sentFrom,$sentTo, $message, $createdAt)
+    private function saveMessageToDatabase($sentFrom,$sentTo, $message, $createdAt, $conversationId, $otherUserColumn)
     {
         $pdo = new \PDO("mysql:host=localhost;dbname=z_social_network", "root", "");
-        $stmt = $pdo->prepare("INSERT INTO messages (sent_from,sent_to, message, created_at) VALUES (?, ?, ?, ?)");
-        $stmt->execute([$sentFrom, $sentTo, $message,$createdAt]);
+        $stmt = $pdo->prepare("INSERT INTO messages (conversation_id, sent_from,sent_to, message, created_at) VALUES (?, ?, ?, ?, ?)");
+        $stmt->execute([$conversationId, $sentFrom, $sentTo, $message, $createdAt]);
+        $stmt = $pdo->prepare("UPDATE conversations SET last_message_time = ?, last_message = ? WHERE user_id = ? AND other_user_id = ?");
+        if($otherUserColumn == 'user_id'){
+            $stmt->execute([$createdAt, $message, $sentTo, $sentFrom]);
+        }
+        else{
+            $stmt->execute([$createdAt, $message, $sentFrom, $sentTo]);
+        }
     }
 
     function onClose(ConnectionInterface $conn)

@@ -603,7 +603,7 @@ document.addEventListener("DOMContentLoaded", function () {
         })
     });
 })
-let offset = 7;
+let offset = 10;
 let isFetching = false;
 $(window).on("scroll", function () {
     let scrollHeight = $(document).height();
@@ -707,7 +707,7 @@ function loadMorePosts() {
                 postElement.innerHTML += postInfoAndBody.outerHTML;
                 container.appendChild(postElement);
             });
-            offset += 7;
+            offset += 10;
             isFetching = false;
         }
     });

@@ -326,27 +326,29 @@ socket.onmessage = function (event) {
         socket.send(JSON.stringify({ user_id: userId }));
         return;
     }
-    let numOfNewMessages = document.querySelector(".numOfNewMessages p");
-    if(numOfNewMessages){
-        let numOfNewMessagesText = numOfNewMessages.textContent;
-        let numOfNewMessagesNum = parseInt(numOfNewMessagesText);
-        numOfNewMessagesNum++;
-        numOfNewMessages.textContent = numOfNewMessagesNum.toString();
-    }
-    else{
-        let linkTexts = document.querySelectorAll(".link-text");
-        linkTexts.forEach(linkText => {
-            if(linkText.innerHTML === "Messages"){
-                let linkIcon = linkText.parentElement.querySelector(".link-icon");
-                linkIcon.innerHTML += `
+    if(parseInt(data.sent_from) !== parseInt(userId) && !window.location.href.includes("messages")){
+        let numOfNewMessages = document.querySelector(".numOfNewMessages p");
+        if(numOfNewMessages){
+            let numOfNewMessagesText = numOfNewMessages.textContent;
+            let numOfNewMessagesNum = parseInt(numOfNewMessagesText);
+            numOfNewMessagesNum++;
+            numOfNewMessages.textContent = numOfNewMessagesNum.toString();
+        }
+        else{
+            let linkTexts = document.querySelectorAll(".link-text");
+            linkTexts.forEach(linkText => {
+                if(linkText.innerHTML === "Messages"){
+                    let linkIcon = linkText.parentElement.querySelector(".link-icon");
+                    linkIcon.innerHTML += `
                      <div class="numOfNewNotifications">
                         <p>1</p>
                     </div>`;
-            }
-        })
+                }
+            })
+        }
     }
+
     let messageWrapper = document.querySelector(".chat-messages-wrapper");
-    console.log(data);
     let sentMessageDate = timeAgo(data.created_at);
     if(parseInt(data.sent_from) === parseInt(userId)){
         if(messageWrapper){
@@ -372,6 +374,9 @@ socket.onmessage = function (event) {
         `;
         }
     }
+    setTimeout(scrollToBottom, 100);
+    document.querySelector(".active-chat .message-from-user").innerHTML = `${data.message}`;
+    document.querySelector(".active-chat .last-sent-time-text").innerHTML = `${sentMessageDate}`;
 };
 
 function sendMessage() {
@@ -379,14 +384,28 @@ function sendMessage() {
     let sendMessageButton = document.querySelector(".send-message-icon");
     let sentFrom = sendMessageButton.getAttribute("data-id");
     let sentTo = sendMessageButton.getAttribute("data-receiver-id");
+    let conversationId = sendMessageButton.getAttribute("data-conversation-id");
+    let otherUserColumn = sendMessageButton.getAttribute("data-other-user-column-name");
+    const now = new Date();
+    const offset = now.getTimezoneOffset() * 60000;
+    const localISOTime = new Date(now - offset).toISOString().slice(0, 19);
+    const formattedDate = localISOTime.replace("T", " ");
     let messageData = JSON.stringify({
         sent_from: sentFrom,
         sent_to: sentTo,
         message: messageInput.value,
-        created_at: new Date().toISOString()
+        conversation_id: conversationId,
+        other_user_column: otherUserColumn,
+        created_at: formattedDate
     });
     socket.send(messageData);
     messageInput.value = "";
+}
+function scrollToBottom() {
+    let chatContainer = document.querySelector(".chat-messages-wrapper");
+    if (chatContainer) {
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
 }
 
 

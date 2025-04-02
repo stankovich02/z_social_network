@@ -21,7 +21,7 @@ class HomeController extends Controller
     {
         $posts = Post::with('user','image')
                      ->where('user_id', '!=', session()->get('user')->id)
-                     ->orderBy('id', 'desc')->take(7)
+                     ->orderBy('id', 'desc')->take(10)
                      ->get();
         $loggedInUserFollowing =  array_column(
             Database::table(UserFollower::TABLE)

@@ -62,10 +62,14 @@ class MessageController extends Controller
         $activeChatUser->number_of_followers = count($activeChatUser->followers) != 1 ? count
             ($activeChatUser->followers) . " Followers" : count($activeChatUser->followers) . " Follower";
         $activeChatUser->joined_date = date('F Y', strtotime($activeChatUser->created_at));
+        $activeChatUser->column_name = $conversation->user_id == $loggedInUserId ? 'other_user_id' : 'user_id';
         $messages = Message::with('conversation')
                            ->where('conversation_id', '=', $id)
-                           ->orderBy('created_at', 'DESC')
+                           ->orderBy('created_at', 'ASC')
                            ->get();
+        foreach ($messages as $message) {
+            $message->created_at = $this->calculatePostedDate($message->created_at);
+        }
         return view('pages.client.messages.single-conversation',[
             'chatId' => $id,
             'chats' => $lastChats,
