@@ -7,7 +7,8 @@ use NovaLite\Database\Relations\BelongsTo;
 
 class Conversation extends Model
 {
-    protected string $table = 'conversations';
+    const TABLE = 'conversations';
+    protected string $table = self::TABLE;
     protected array $fillable = [
         'user_id',
         'other_user_id',

@@ -17,6 +17,8 @@ Router::middleware([\App\Middlewares\IsLoggedIn::class])->group(function () {
     Router::get('/home', [\App\Controllers\Client\HomeController::class, 'index'])->name('home');
     Router::get('/explore', [\App\Controllers\Client\ExploreController::class, 'index'])->name('explore');
     Router::get('/messages', [\App\Controllers\Client\MessageController::class, 'index'])->name('messages');
+    Router::get('/messages/{id}', [\App\Controllers\Client\MessageController::class, 'conversation'])->name('messages.conversation');
+    Router::get('/navigate-to-conversation', [\App\Controllers\Client\MessageController::class, 'navigateToConversation'])->name('messages.navigate');
 
     Router::get('/notifications', [\App\Controllers\Client\NotificationController::class, 'index'])->name('notifications');
     Router::post('/notifications/{id}/read', [\App\Controllers\Client\NotificationController::class, 'read'])->name('notifications.read');

@@ -27,4 +27,8 @@ class Message extends Model
     {
         return $this->belongsTo(User::class, 'sent_to');
     }
+    public function conversation() : BelongsTo
+    {
+        return $this->belongsTo(Conversation::class, 'conversation_id');
+    }
 }

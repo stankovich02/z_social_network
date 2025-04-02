@@ -1049,13 +1049,14 @@ if(unblockUserBtn){
         document.body.style.overflow = "hidden";
     })
 }
-let newMessageBtn = document.querySelector(".other-profile-features .new-message");
+let newMessageBtn = document.querySelector("#other-profile-features .new-message");
 if(newMessageBtn){
     newMessageBtn.addEventListener("click", function (){
         $.ajax({
-            url: `/messages?userId=${this.getAttribute("data-id")}`,
+            url: `/navigate-to-conversation?userId=${this.getAttribute("data-id")}`,
             type: "GET",
-            success: function(){
+            success: function(data){
+                window.location.href = data.route;
             },
         });
     })
