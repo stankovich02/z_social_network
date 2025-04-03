@@ -3023,8 +3023,12 @@ textarea.w-input, textarea.w-select {
 .sent-message-info {
   color: #fff6;
   margin-top: 5px;
+  display: flex;
+  column-gap: 3px;
 }
-
+.sent-message-info p,.received-message-info p{
+  margin-bottom: 0;
+}
 .received-message-wrapper {
   flex-flow: column;
   justify-content: flex-start;
@@ -3043,6 +3047,8 @@ textarea.w-input, textarea.w-select {
 .received-message-info {
   color: #fff6;
   margin-top: 5px;
+  display: flex;
+  column-gap: 3px;
 }
 
 .send-message-div {
@@ -3085,8 +3091,8 @@ textarea.w-input, textarea.w-select {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.2rem;
+  height: 1.2rem;
   display: flex;
 }
 

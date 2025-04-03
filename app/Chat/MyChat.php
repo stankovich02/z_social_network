@@ -84,6 +84,7 @@ class MyChat implements MessageComponentInterface, \Ratchet\MessageComponentInte
             $this->clients[$sentFrom]->send(json_encode([
                 'message_id' => $messageId,
                 'viewed' => true,
+                'updated_at' => $updatedAt,
             ]));
         }
     }

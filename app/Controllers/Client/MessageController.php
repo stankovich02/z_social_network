@@ -30,6 +30,12 @@ class MessageController extends Controller
                 $chat->user = User::where('id', '=', $chat->user_id)->first();
             }
             if($chat->last_message_time){
+                $lastMessage = Message::where('conversation_id', '=', $chat->id)
+                    ->where('message', '=', $chat->last_message)
+                    ->where('created_at', '=', $chat->last_message_time)
+                    ->first();
+                $chat->is_read = $lastMessage->is_read;
+                $chat->sent_to = $lastMessage->sent_to;
                $chat->last_message_time = $this->calculatePostedDate($chat->last_message_time);
             }
         }
@@ -68,7 +74,7 @@ class MessageController extends Controller
                            ->orderBy('created_at', 'ASC')
                            ->get();
         foreach ($messages as $message) {
-            $message->created_at = $this->calculatePostedDate($message->created_at);
+            $message->created_at = $this->calculateMessageDate($message->created_at);
         }
         return view('pages.client.messages.single-conversation',[
             'chatId' => $id,

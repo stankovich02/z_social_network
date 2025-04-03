@@ -289,18 +289,22 @@ let socket = new WebSocket("ws://localhost:8081");
 function timeAgo(createdAt) {
     const timestamp = new Date(createdAt).getTime();
     const now = Date.now();
-    const diff = Math.floor((now - timestamp) / 1000);
-    if (diff < 60) {
-        return "now";
-    } else if (diff < 3600) {
-        const minutes = Math.floor(diff / 60);
-        return `${minutes} min${minutes > 1 ? "s" : ""}`;
-    } else if (diff < 86400) {
-        const hours = Math.floor(diff / 3600);
-        return `${hours}h`;
+    const diff = now - timestamp;
+
+    const oneDay = 86400 * 1000;
+    const twoDays = 2 * oneDay;
+
+    const date = new Date(timestamp);
+
+    const options = { hour: '2-digit', minute: '2-digit', hour12: false };
+
+    if (diff < oneDay) {
+        return date.toLocaleTimeString(undefined, options);
+    } else if (diff < twoDays) {
+        return `Yesterday, ${date.toLocaleTimeString(undefined, options)}`;
     } else {
-        const date = new Date(timestamp);
-        return date.toLocaleString("en-US", { month: "short", day: "numeric" });
+        return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) +
+            `, ${date.toLocaleTimeString(undefined, options)}`;
     }
 }
 
@@ -350,10 +354,13 @@ socket.onmessage = function (event) {
     if (data.viewed) {
         let messageId = data.message_id;
         let sentMessageWrapper = document.querySelector(`.sent-message-wrapper[data-id="${messageId}"]`);
-
+        let seenDate = timeAgo(data.updated_at);
         if (sentMessageWrapper) {
             let sentMessageInfo = sentMessageWrapper.querySelector(".sent-message-info");
-            sentMessageInfo.innerHTML = `now - Seen`;
+            sentMessageInfo.innerHTML = `
+               <p class="sentInfoDate">${seenDate}</p>
+               <div class="dot">·</div>
+               <p class="sentInfoText">Seen</p>`;
         }
     }
     else{
@@ -388,7 +395,11 @@ socket.onmessage = function (event) {
                 <div class="sent-message">
                     <p class="message-text">${data.message}</p>
                 </div>
-                <div class="sent-message-info">${sentMessageDate} - Sent</div>
+                <div class="sent-message-info">
+                    <p class="sentInfoDate">${sentMessageDate}</p>
+                    <div class="dot">·</div>
+                    <p class="sentInfoText">Sent</p>
+                </div>
             </div>`;
             }
         }

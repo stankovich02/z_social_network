@@ -140,14 +140,18 @@
                             <div class="sent-message">
                                 <p class="message-text">{{$message->message}}</p>
                             </div>
-                            <div class="sent-message-info">{{$message->created_at}}</div>
+                            <div class="sent-message-info">
+                                <p>{{$message->created_at}}</p>
+                            </div>
                         </div>
                     @else
                         <div class="received-message-wrapper {{$message->is_read ? "viewed" : ""}}" data-id="{{$message->id}}" >
                             <div class="received-message">
                                 <p class="message-text">{{$message->message}}</p>
                             </div>
-                            <div class="received-message-info">{{$message->created_at}}</div>
+                            <div class="received-message-info">
+                                <p>{{$message->created_at}}</p>
+                            </div>
                         </div>
                     @endif
                 @endforeach

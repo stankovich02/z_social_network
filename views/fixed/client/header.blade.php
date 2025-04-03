@@ -7,10 +7,16 @@
                         <div class="icon-embed-medium link-icon w-embed">
                             <?php
                             $newNotifications = App\Models\Notification::where('is_read','=',0)->where('target_user_id', '=', session()->get('user')->id)->count();
+                            $newMessages = App\Models\Message::where('is_read','=',0)->where('sent_to', '=', session()->get('user')->id)->count();
                             ?>
                             @if($newNotifications > 0 && $nav->name === 'Notifications')
                                 <div class="numOfNewNotifications">
                                     <p>{{$newNotifications}}</p>
+                                </div>
+                            @endif
+                            @if($newMessages > 0 && $nav->name === 'Messages')
+                                <div class="numOfNewMessages">
+                                    <p>{{$newMessages}}</p>
                                 </div>
                             @endif
                             <svg
