@@ -92,7 +92,7 @@
                                     @endif
                                 </div>
                                 @if($chat->last_message)
-                                    <div class="message-from-user new-message">{{$chat->last_message}}</div>
+                                    <div class="message-from-user">{{$chat->last_message}}</div>
                                 @endif
                             </div>
                             <img src="{{asset('assets/img/67b61da06092cd17329df26d/67bd987eda529b92af7c73e7_IcBaselineMoreHoriz.png')}}" loading="lazy" alt="" class="more-options-message" />

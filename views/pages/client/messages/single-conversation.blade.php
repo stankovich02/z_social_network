@@ -136,14 +136,14 @@
             <div class="chat-messages-wrapper">
                 @foreach($messages as $message)
                     @if($message->sent_from === session()->get('user')->id)
-                        <div class="sent-message-wrapper">
+                        <div class="sent-message-wrapper {{$message->is_read ? "viewed" : ""}}" data-id="{{$message->id}}" >
                             <div class="sent-message">
                                 <p class="message-text">{{$message->message}}</p>
                             </div>
                             <div class="sent-message-info">{{$message->created_at}}</div>
                         </div>
                     @else
-                        <div class="received-message-wrapper">
+                        <div class="received-message-wrapper {{$message->is_read ? "viewed" : ""}}" data-id="{{$message->id}}" >
                             <div class="received-message">
                                 <p class="message-text">{{$message->message}}</p>
                             </div>
@@ -162,7 +162,7 @@
                         <input class="type-message-input w-input" placeholder="Start a new message" type="text" id="new-message-text" />
                     </form>
                 </div>
-                <div class="send-message-icon can-send-icon w-embed" data-id="{{session()->get('user')->id}}" data-receiver-id="{{$activeChatUser->id}}" data-conversation-id="{{$chatId}}" data-other-user-column-name="{{$activeChatUser->column_name}}">
+                <div class="send-message-icon w-embed" disabled data-id="{{session()->get('user')->id}}" data-receiver-id="{{$activeChatUser->id}}" data-conversation-id="{{$chatId}}" data-other-user-column-name="{{$activeChatUser->column_name}}">
                     <svg
                             xmlns="http://www.w3.org/2000/svg"
                             xmlns:xlink="http://www.w3.org/1999/xlink"

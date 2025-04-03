@@ -285,15 +285,8 @@ document.querySelector("#popupFormBlock #post-body-2").addEventListener("input",
     postBtn.disabled = this.value.trim() === "";
     this.value.trim() === "" ? postBtn.classList.add("disabled-new-post-btn") : postBtn.classList.remove("disabled-new-post-btn");
 });
-let socket;
-if (typeof socket !== 'undefined' && socket.readyState === WebSocket.OPEN) {
-    console.log("WebSocket is already connected.");
-}
-else{
-    socket = new WebSocket("ws://localhost:8081");
-}
+let socket = new WebSocket("ws://localhost:8081");
 function timeAgo(createdAt) {
-    console.log("menjam vreme");
     const timestamp = new Date(createdAt).getTime();
     const now = Date.now();
     const diff = Math.floor((now - timestamp) / 1000);
@@ -311,11 +304,39 @@ function timeAgo(createdAt) {
     }
 }
 
-
 socket.onopen = function () {
-    let loggedInUser = document.querySelector(".logged-in-user");
+/*    let loggedInUser = document.querySelector(".logged-in-user");
     let userId = loggedInUser.getAttribute("data-id");
-    socket.send(JSON.stringify({ user_id: userId }));
+    socket.send(JSON.stringify({ user_id: userId }));*/
+    if(document.querySelector(".chat-messages-wrapper")){
+        let observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    let message = entry.target;
+                    let id = message.getAttribute("data-id");
+                    if (!message.classList.contains("viewed")) {
+                        let sendMessageButton = document.querySelector(".send-message-icon");
+                        let sentFrom = sendMessageButton.getAttribute("data-receiver-id");
+                        const now = new Date();
+                        const offset = now.getTimezoneOffset() * 60000;
+                        const localISOTime = new Date(now - offset).toISOString().slice(0, 19);
+                        const formattedDate = localISOTime.replace("T", " ");
+                        let messageData = JSON.stringify({
+                            sent_from: sentFrom,
+                            viewed: true,
+                            message_id: id,
+                            updated_at: formattedDate
+                        });
+                        socket.send(messageData);
+                    }
+                }
+            });
+        }, { threshold: 1.0 });
+        document.querySelectorAll(".received-message-wrapper").forEach(message => {
+            observer.observe(message);
+        });
+
+    }
 };
 
 socket.onmessage = function (event) {
@@ -326,57 +347,82 @@ socket.onmessage = function (event) {
         socket.send(JSON.stringify({ user_id: userId }));
         return;
     }
-    if(parseInt(data.sent_from) !== parseInt(userId) && !window.location.href.includes("messages")){
-        let numOfNewMessages = document.querySelector(".numOfNewMessages p");
-        if(numOfNewMessages){
-            let numOfNewMessagesText = numOfNewMessages.textContent;
-            let numOfNewMessagesNum = parseInt(numOfNewMessagesText);
-            numOfNewMessagesNum++;
-            numOfNewMessages.textContent = numOfNewMessagesNum.toString();
-        }
-        else{
-            let linkTexts = document.querySelectorAll(".link-text");
-            linkTexts.forEach(linkText => {
-                if(linkText.innerHTML === "Messages"){
-                    let linkIcon = linkText.parentElement.querySelector(".link-icon");
-                    linkIcon.innerHTML += `
-                     <div class="numOfNewNotifications">
-                        <p>1</p>
-                    </div>`;
-                }
-            })
-        }
-    }
+    if (data.viewed) {
+        let messageId = data.message_id;
+        let sentMessageWrapper = document.querySelector(`.sent-message-wrapper[data-id="${messageId}"]`);
 
-    let messageWrapper = document.querySelector(".chat-messages-wrapper");
-    let sentMessageDate = timeAgo(data.created_at);
-    if(parseInt(data.sent_from) === parseInt(userId)){
-        if(messageWrapper){
-            messageWrapper.innerHTML += `
-        <div class="sent-message-wrapper">
-            <div class="sent-message">
-                <p class="message-text">${data.message}</p>
-            </div>
-            <div class="sent-message-info">${sentMessageDate}</div>
-        </div>
-        `;
+        if (sentMessageWrapper) {
+            let sentMessageInfo = sentMessageWrapper.querySelector(".sent-message-info");
+            sentMessageInfo.innerHTML = `now - Seen`;
         }
     }
     else{
-        if(messageWrapper) {
-            messageWrapper.innerHTML += `
-            <div class="received-message-wrapper">
+        if(parseInt(data.sent_from) !== parseInt(userId) && !window.location.href.includes("messages")){
+            let numOfNewMessages = document.querySelector(".numOfNewMessages p");
+            if(numOfNewMessages){
+                let numOfNewMessagesText = numOfNewMessages.textContent;
+                let numOfNewMessagesNum = parseInt(numOfNewMessagesText);
+                numOfNewMessagesNum++;
+                numOfNewMessages.textContent = numOfNewMessagesNum.toString();
+            }
+            else{
+                let linkTexts = document.querySelectorAll(".link-text");
+                linkTexts.forEach(linkText => {
+                    if(linkText.innerHTML === "Messages"){
+                        let linkIcon = linkText.parentElement.querySelector(".link-icon");
+                        linkIcon.innerHTML += `
+                     <div class="numOfNewNotifications">
+                        <p>1</p>
+                    </div>`;
+                    }
+                })
+            }
+        }
+
+        let messageWrapper = document.querySelector(".chat-messages-wrapper");
+        let sentMessageDate = timeAgo(data.created_at);
+        if(parseInt(data.sent_from) === parseInt(userId)){
+            if(messageWrapper){
+                messageWrapper.innerHTML += `
+            <div class="sent-message-wrapper" data-id="${data.message_id}">
+                <div class="sent-message">
+                    <p class="message-text">${data.message}</p>
+                </div>
+                <div class="sent-message-info">${sentMessageDate} - Sent</div>
+            </div>`;
+            }
+        }
+        else{
+            if(messageWrapper) {
+                messageWrapper.innerHTML += `
+            <div class="received-message-wrapper" data-id="${data.message_id}">
                 <div class="received-message">
                    <p class="message-text">${data.message}</p>
                 </div>
                 <div class="received-message-info">${sentMessageDate}</div>
-            </div>
-        `;
+            </div>`;
+                let message = document.querySelector(`.received-message-wrapper[data-id="${data.message_id}"]`);
+                let sendMessageButton = document.querySelector(".send-message-icon");
+                let sentFrom = sendMessageButton.getAttribute("data-receiver-id");
+                const now = new Date();
+                const offset = now.getTimezoneOffset() * 60000;
+                const localISOTime = new Date(now - offset).toISOString().slice(0, 19);
+                const formattedDate = localISOTime.replace("T", " ");
+                let messageData = JSON.stringify({
+                    sent_from: sentFrom,
+                    viewed: true,
+                    message_id: data.message_id,
+                    updated_at: formattedDate
+                });
+                socket.send(messageData);
+            }
         }
+
+        setTimeout(scrollToBottom, 100);
+        document.querySelector(".active-chat .message-from-user").innerHTML = `${data.message}`;
+        document.querySelector(".active-chat .last-sent-time-text").innerHTML = `${sentMessageDate}`;
     }
-    setTimeout(scrollToBottom, 100);
-    document.querySelector(".active-chat .message-from-user").innerHTML = `${data.message}`;
-    document.querySelector(".active-chat .last-sent-time-text").innerHTML = `${sentMessageDate}`;
+
 };
 
 function sendMessage() {
@@ -401,6 +447,7 @@ function sendMessage() {
     socket.send(messageData);
     messageInput.value = "";
 }
+
 function scrollToBottom() {
     let chatContainer = document.querySelector(".chat-messages-wrapper");
     if (chatContainer) {
