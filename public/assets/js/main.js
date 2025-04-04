@@ -111,7 +111,6 @@ function newPostLogic(){
                 removePhotoDiv.innerHTML = `
          <svg
                                 xmlns="http://www.w3.org/2000/svg"
-                                xmlns:xlink="http://www.w3.org/1999/xlink"
                                 aria-hidden="true"
                                 role="img"
                                 class="iconify iconify--ic"
@@ -182,12 +181,12 @@ function sendPost(){
                     <div class="single-post" data-id="${post.id}">
                     <div class="post-more-options-wrapper">
                         <div class="more-options w-embed post-more-options">
-                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--ph more-opt-ic" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 256">
+                            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" class="iconify iconify--ph more-opt-ic" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 256">
                                 <path fill="currentColor" d="M144 128a16 16 0 1 1-16-16a16 16 0 0 1 16 16m-84-16a16 16 0 1 0 16 16a16 16 0 0 0-16-16m136 0a16 16 0 1 0 16 16a16 16 0 0 0-16-16"></path>
                             </svg>
                         </div>
                         <div class="choose-post-option">
-                                <div class="single-post-option delete-post" data-id="${post.id}"><div class="trash-icon w-embed"><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" height="100%" width="100%" class="iconify iconify--bx" role="img" aria-hidden="true" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M6 7H5v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7H6zm10.618-3L15 2H9L7.382 4H3v2h18V4z"></path></svg></div>Delete</div>
+                                <div class="single-post-option delete-post" data-id="${post.id}"><div class="trash-icon w-embed"><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" height="100%" width="100%" class="iconify iconify--bx" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M6 7H5v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7H6zm10.618-3L15 2H9L7.382 4H3v2h18V4z"></path></svg></div>Delete</div>
                         </div>
                     </div>
             <img src="${post.user.photo}" loading="eager" alt="" class="user-image" />
@@ -287,26 +286,26 @@ document.querySelector("#popupFormBlock #post-body-2").addEventListener("input",
 });
 let socket = new WebSocket("ws://localhost:8081");
 function timeAgo(createdAt) {
-    const timestamp = new Date(createdAt).getTime();
-    const now = Date.now();
-    const diff = now - timestamp;
+    const now = new Date();
+    const date = new Date(createdAt);
 
-    const oneDay = 86400 * 1000;
-    const twoDays = 2 * oneDay;
+    const yesterday = new Date(now);
+    yesterday.setDate(now.getDate() - 1);
 
-    const date = new Date(timestamp);
+    const timeOptions = { hour: '2-digit', minute: '2-digit', hour12: false };
 
-    const options = { hour: '2-digit', minute: '2-digit', hour12: false };
-
-    if (diff < oneDay) {
-        return date.toLocaleTimeString(undefined, options);
-    } else if (diff < twoDays) {
-        return `Yesterday, ${date.toLocaleTimeString(undefined, options)}`;
-    } else {
+    if (now.toDateString() === date.toDateString()) {
+        return date.toLocaleTimeString(undefined, timeOptions);
+    }
+    else if (yesterday.toDateString() === date.toDateString()) {
+        return `Yesterday, ${date.toLocaleTimeString(undefined, timeOptions)}`;
+    }
+    else {
         return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) +
-            `, ${date.toLocaleTimeString(undefined, options)}`;
+            `, ${date.toLocaleTimeString(undefined, timeOptions)}`;
     }
 }
+
 
 socket.onopen = function () {
 /*    let loggedInUser = document.querySelector(".logged-in-user");
@@ -342,7 +341,27 @@ socket.onopen = function () {
 
     }
 };
+let lastSentTimeInterval;
 
+function startLiveTimer(element, timestamp) {
+    clearInterval(lastSentTimeInterval);
+
+    function updateTime() {
+        const now = Date.now();
+        const diff = Math.floor((now - timestamp) / 1000);
+
+        if (diff < 60) {
+            element.textContent = "now";
+        } else if (diff < 3600) {
+            element.textContent = `${Math.floor(diff / 60)}m`;
+        } else {
+            element.textContent = `${Math.floor(diff / 3600)}h`;
+        }
+    }
+
+    updateTime();
+    lastSentTimeInterval = setInterval(updateTime, 30000);
+}
 socket.onmessage = function (event) {
     const data = JSON.parse(event.data);
     let loggedInUser = document.querySelector(".logged-in-user");
@@ -354,13 +373,12 @@ socket.onmessage = function (event) {
     if (data.viewed) {
         let messageId = data.message_id;
         let sentMessageWrapper = document.querySelector(`.sent-message-wrapper[data-id="${messageId}"]`);
-        let seenDate = timeAgo(data.updated_at);
         if (sentMessageWrapper) {
             let sentMessageInfo = sentMessageWrapper.querySelector(".sent-message-info");
-            sentMessageInfo.innerHTML = `
-               <p class="sentInfoDate">${seenDate}</p>
-               <div class="dot">·</div>
-               <p class="sentInfoText">Seen</p>`;
+            let sentInfoText = sentMessageInfo.querySelector(".sentInfoText");
+            if(sentInfoText.textContent === "Sent"){
+                sentInfoText.textContent = "Seen";
+            }
         }
     }
     else{
@@ -390,6 +408,20 @@ socket.onmessage = function (event) {
         let sentMessageDate = timeAgo(data.created_at);
         if(parseInt(data.sent_from) === parseInt(userId)){
             if(messageWrapper){
+                let lastElement = messageWrapper.lastElementChild;
+                if(lastElement && lastElement.classList.contains("sent-message-wrapper")){
+                    let setInfoDate = lastElement.querySelector(".sentInfoDate");
+                    let dot = lastElement.querySelector(".dot");
+                    let sentInfoText = lastElement.querySelector(".sentInfoText");
+                    if(dot && sentInfoText){
+                        dot.remove();
+                        sentInfoText.remove();
+                    }
+                    if(setInfoDate.innerHTML === sentMessageDate){
+                        setInfoDate.remove();
+                        lastElement.style.marginBottom = "0px";
+                    }
+                }
                 messageWrapper.innerHTML += `
             <div class="sent-message-wrapper" data-id="${data.message_id}">
                 <div class="sent-message">
@@ -405,6 +437,15 @@ socket.onmessage = function (event) {
         }
         else{
             if(messageWrapper) {
+                let lastElement = messageWrapper.lastElementChild;
+                if(lastElement && lastElement.classList.contains("sent-message-wrapper")){
+                    let dot = lastElement.querySelector(".dot");
+                    let sentInfoText = lastElement.querySelector(".sentInfoText");
+                    if(dot && sentInfoText){
+                        dot.remove();
+                        sentInfoText.remove();
+                    }
+                }
                 messageWrapper.innerHTML += `
             <div class="received-message-wrapper" data-id="${data.message_id}">
                 <div class="received-message">
@@ -412,7 +453,6 @@ socket.onmessage = function (event) {
                 </div>
                 <div class="received-message-info">${sentMessageDate}</div>
             </div>`;
-                let message = document.querySelector(`.received-message-wrapper[data-id="${data.message_id}"]`);
                 let sendMessageButton = document.querySelector(".send-message-icon");
                 let sentFrom = sendMessageButton.getAttribute("data-receiver-id");
                 const now = new Date();
@@ -430,8 +470,18 @@ socket.onmessage = function (event) {
         }
 
         setTimeout(scrollToBottom, 100);
-        document.querySelector(".active-chat .message-from-user").innerHTML = `${data.message}`;
-        document.querySelector(".active-chat .last-sent-time-text").innerHTML = `${sentMessageDate}`;
+        let messageFromUser = document.querySelector(".active-chat .message-from-user");
+        if(messageFromUser){
+            messageFromUser.innerHTML = `${data.message}`;
+        }
+
+        const lastSentTime = document.querySelector(".active-chat .last-sent-time-text");
+        if (lastSentTime) {
+            lastSentTime.textContent = "now";
+
+
+            startLiveTimer(lastSentTime, Date.now());
+        }
     }
 
 };

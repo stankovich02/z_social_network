@@ -4783,3 +4783,35 @@ background-color: rgb(29, 155, 240);
 .chat-messages-wrapper::-webkit-scrollbar-thumb:hover {
   background: #888; /
 }
+#blockedChat{
+  background-color: transparent;
+  justify-content: center;
+  align-items: center;
+  width: 95%;
+  height: 40px;
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 5px 15px;
+  display: flex;
+  position: static;
+  inset: auto auto 1%;
+  color: #888888;
+}
+#newMessagesChatNotification{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 15px;
+  color: rgb(113,118,123);
+  margin-bottom: 20px;
+}
+#newMessagesChatNotification .lineNotification{
+  width: 35%;
+  height: 1px;
+  background-color: rgb(47,51,54);
+}
+#newMessagesChatNotification p{
+  margin-bottom: 0;
+}

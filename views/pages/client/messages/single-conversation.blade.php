@@ -134,17 +134,34 @@
                 </div>
             </a>
             <div class="chat-messages-wrapper">
-                @foreach($messages as $message)
+                <?php
+                $isWrittenNewMessage = false;
+                ?>
+                @foreach($messages as $index => $message)
                     @if($message->sent_from === session()->get('user')->id)
                         <div class="sent-message-wrapper {{$message->is_read ? "viewed" : ""}}" data-id="{{$message->id}}" >
                             <div class="sent-message">
                                 <p class="message-text">{{$message->message}}</p>
                             </div>
                             <div class="sent-message-info">
-                                <p>{{$message->created_at}}</p>
+                                <p class="sentInfoDate">{{$message->created_at}}</p>
+                                @if($index === ($numOfMessages - 1))
+                                    <div class="dot">·</div>
+                                    <p class="sentInfoText">{{$message->is_read ? "Seen" : "Sent"}}</p>
+                                @endif
                             </div>
                         </div>
                     @else
+                        @if($message->is_read === 0 && !$isWrittenNewMessage )
+                            <div id="newMessagesChatNotification">
+                                <div class="lineNotification"></div>
+                                <p>{{$newMessages}} new {{$newMessages != 1 ? "messages" : "message"}}</p>
+                                <div class="lineNotification"></div>
+                            </div>
+                            <?php
+                                $isWrittenNewMessage = true;
+                            ?>
+                        @endif
                         <div class="received-message-wrapper {{$message->is_read ? "viewed" : ""}}" data-id="{{$message->id}}" >
                             <div class="received-message">
                                 <p class="message-text">{{$message->message}}</p>
@@ -155,33 +172,41 @@
                         </div>
                     @endif
                 @endforeach
+
             </div>
-            <div class="send-message-div">
-                <div class="send-message-form">
-                    <form
-                            id="email-form-2"
-                            method="get"
-                            class="form-3"
-                    >
-                        <input class="type-message-input w-input" placeholder="Start a new message" type="text" id="new-message-text" />
-                    </form>
+            @if($chatIsBlocked)
+                <div id="blockedChat">
+                    <p>You can no longer send messages to this person.</p>
                 </div>
-                <div class="send-message-icon w-embed" disabled data-id="{{session()->get('user')->id}}" data-receiver-id="{{$activeChatUser->id}}" data-conversation-id="{{$chatId}}" data-other-user-column-name="{{$activeChatUser->column_name}}">
-                    <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            xmlns:xlink="http://www.w3.org/1999/xlink"
-                            aria-hidden="true"
-                            role="img"
-                            class="iconify iconify--ic"
-                            width="100%"
-                            height="100%"
-                            preserveAspectRatio="xMidYMid meet"
-                            viewBox="0 0 24 24"
-                    >
-                        <path fill="currentColor" d="M2.01 21L23 12L2.01 3L2 10l15 2l-15 2z"></path>
-                    </svg>
+            @else
+                <div class="send-message-div">
+                    <div class="send-message-form">
+                        <form
+                                id="email-form-2"
+                                method="get"
+                                class="form-3"
+                        >
+                            <input class="type-message-input w-input" placeholder="Start a new message" type="text" id="new-message-text" />
+                        </form>
+                    </div>
+                    <div class="send-message-icon w-embed" disabled data-id="{{session()->get('user')->id}}" data-receiver-id="{{$activeChatUser->id}}" data-conversation-id="{{$chatId}}" data-other-user-column-name="{{$activeChatUser->column_name}}">
+                        <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                xmlns:xlink="http://www.w3.org/1999/xlink"
+                                aria-hidden="true"
+                                role="img"
+                                class="iconify iconify--ic"
+                                width="100%"
+                                height="100%"
+                                preserveAspectRatio="xMidYMid meet"
+                                viewBox="0 0 24 24"
+                        >
+                            <path fill="currentColor" d="M2.01 21L23 12L2.01 3L2 10l15 2l-15 2z"></path>
+                        </svg>
+                    </div>
                 </div>
-            </div>
+            @endif
+
         </div>
     </section>
     <script src="{{asset('assets/js/messages.js')}}"></script>

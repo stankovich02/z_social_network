@@ -2,6 +2,7 @@
 
 namespace App\Controllers\Client;
 
+use App\Models\BlockedUser;
 use App\Models\Conversation;
 use App\Models\Message;
 use App\Models\User;
@@ -36,7 +37,7 @@ class MessageController extends Controller
                     ->first();
                 $chat->is_read = $lastMessage->is_read;
                 $chat->sent_to = $lastMessage->sent_to;
-               $chat->last_message_time = $this->calculatePostedDate($chat->last_message_time);
+               $chat->last_message_time = $this->calculateLastMessageDate($chat->last_message_time);
             }
         }
 
@@ -59,7 +60,7 @@ class MessageController extends Controller
                 $chat->user = User::where('id', '=', $chat->user_id)->first();
             }
             if($chat->last_message_time){
-                $chat->last_message_time = $this->calculatePostedDate($chat->last_message_time);
+                $chat->last_message_time = $this->calculateLastMessageDate($chat->last_message_time);
             }
         }
         $conversation = Conversation::where('id', '=', $id)->first();
@@ -73,13 +74,27 @@ class MessageController extends Controller
                            ->where('conversation_id', '=', $id)
                            ->orderBy('created_at', 'ASC')
                            ->get();
+        $newMessages = 0;
         foreach ($messages as $message) {
             $message->created_at = $this->calculateMessageDate($message->created_at);
+            if ($message->sent_to == $loggedInUserId && $message->is_read == 0) {
+                $newMessages++;
+            }
         }
+        $userBlockedLoggedInUser = BlockedUser::where('blocked_user_id', '=', $loggedInUserId)
+                                              ->where('blocked_by_user_id', '=', $otherUserId)
+                                              ->first();
+        $loggedInUserBlockedUser = BlockedUser::where('blocked_user_id', '=', $otherUserId)
+                                              ->where('blocked_by_user_id', '=', $loggedInUserId)
+                                              ->first();
+        $chatIsBlocked = $userBlockedLoggedInUser || $loggedInUserBlockedUser;
         return view('pages.client.messages.single-conversation',[
             'chatId' => $id,
             'chats' => $lastChats,
             'messages' => $messages,
+            'numOfMessages' => count($messages),
+            'chatIsBlocked' => $chatIsBlocked,
+            'newMessages' => $newMessages,
             'activeChatUser' => $activeChatUser
         ]);
     }
