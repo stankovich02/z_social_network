@@ -3,6 +3,7 @@
 <link href="{{asset("assets/css/z-social-network.webflow.22902a588.css")}}" rel="stylesheet" type="text/css">
 <link href="https://fonts.googleapis.com" rel="preconnect" />
 <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/emoji-mart@3.0.1/css/emoji-mart.css">
 <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" type="text/javascript"></script>
 <script type="text/javascript">
     !(function (o, c) {

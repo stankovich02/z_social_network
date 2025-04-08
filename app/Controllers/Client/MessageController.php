@@ -37,7 +37,7 @@ class MessageController extends Controller
                     ->first();
                 $chat->is_read = $lastMessage->is_read;
                 $chat->sent_to = $lastMessage->sent_to;
-               $chat->last_message_time = $this->calculateLastMessageDate($chat->last_message_time);
+                $chat->last_message_time = $this->calculateLastMessageDate($chat->last_message_time);
             }
         }
 
@@ -60,6 +60,12 @@ class MessageController extends Controller
                 $chat->user = User::where('id', '=', $chat->user_id)->first();
             }
             if($chat->last_message_time){
+                $lastMessage = Message::where('conversation_id', '=', $chat->id)
+                    ->where('message', '=', $chat->last_message)
+                    ->where('created_at', '=', $chat->last_message_time)
+                    ->first();
+                $chat->is_read = $lastMessage->is_read;
+                $chat->sent_to = $lastMessage->sent_to;
                 $chat->last_message_time = $this->calculateLastMessageDate($chat->last_message_time);
             }
         }

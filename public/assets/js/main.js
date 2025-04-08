@@ -406,8 +406,40 @@ socket.onmessage = function (event) {
 
         let messageWrapper = document.querySelector(".chat-messages-wrapper");
         let sentMessageDate = timeAgo(data.created_at);
+        let allMessages = document.querySelector(".messages-wrapper .all-messages")
         if(parseInt(data.sent_from) === parseInt(userId)){
-            if(messageWrapper){
+            if(allMessages){
+                let chat = document.querySelector(`.active-chat`);
+                if (chat){
+                    let messageFromUser = chat.querySelector(".message-from-user");
+                    if(messageFromUser && chat.classList.contains("active-chat")){
+                        messageFromUser.classList.remove("new-message");
+                    }
+                    if(messageFromUser){
+                        messageFromUser.innerHTML = `${data.message}`;
+                    }
+                    else{
+                        let messageSenderInfo = chat.querySelector(".message-sender-info");
+                        messageSenderInfo.innerHTML += `<div class="message-from-user">${data.message}</div>`;
+                    }
+
+                    const lastSentTime = chat.querySelector(".last-sent-time-text");
+                    if (lastSentTime) {
+                        lastSentTime.textContent = "now";
+                        startLiveTimer(lastSentTime, Date.now());
+                    }
+                    else{
+                        let messagedByUserInfo = chat.querySelector(".messaged-by-user-info");
+                        messagedByUserInfo.innerHTML += `<div class="dot">·</div><div class="last-sent-time-text">now</div>`;
+                        let lastSentTime = chat.querySelector(".last-sent-time-text");
+                        startLiveTimer(lastSentTime, Date.now());
+                    }
+                }
+            }
+            if(messageWrapper && messageWrapper.parentElement.getAttribute("data-user-id") === data.sent_to){
+                if(document.querySelector("#newMessagesChatNotification")){
+                    document.querySelector("#newMessagesChatNotification").remove();
+                }
                 let lastElement = messageWrapper.lastElementChild;
                 if(lastElement && lastElement.classList.contains("sent-message-wrapper")){
                     let setInfoDate = lastElement.querySelector(".sentInfoDate");
@@ -448,7 +480,6 @@ socket.onmessage = function (event) {
             }
         }
         else{
-            let allMessages = document.querySelector(".messages-wrapper .all-messages")
             if(allMessages){
                let chat = document.querySelector(`.single-message[data-other-id="${data.sent_from}"]`);
                if (chat){
@@ -456,24 +487,33 @@ socket.onmessage = function (event) {
                    if(messageFromUser){
                        messageFromUser.innerHTML = `${data.message}`;
                    }
-
+                    if(messageFromUser && chat.classList.contains("active-chat")){
+                        messageFromUser.classList.remove("new-message");
+                    }
+                    else{
+                        messageFromUser.classList.add("new-message");
+                    }
                    const lastSentTime = chat.querySelector(".last-sent-time-text");
                    if (lastSentTime) {
                        lastSentTime.textContent = "now";
                        startLiveTimer(lastSentTime, Date.now());
                    }
-                   if(!chat.classList.contains("new-message")){
+                   if(!chat.classList.contains("new-message") && !chat.classList.contains("active-chat")){
                        chat.classList.add("new-message");
                        chat.innerHTML += `<i class="fa-solid fa-circle newMessageIcon"></i>`;
                    }
                }
                else{
-                    let html = `<a href="/messages/${data.conversation_id}" class="single-message new-message" data-id="${data.sent_to}" data-other-id="${data.sent_from}">
-                            <img src="{{asset('assets/img/users/' . $chat->user->photo)}}" loading="lazy" alt="" class="user-image" />
+                   $.ajax({
+                       url: `/users/${data.sent_from}`,
+                       type: 'GET',
+                       success: function (user){
+                           let html = `<a href="/messages/${data.conversation_id}" class="single-message new-message" data-id="${data.sent_to}" data-other-id="${data.sent_from}">
+                            <img src="${user.photo}" loading="lazy" alt="" class="user-image" />
                             <div class="message-sender-info">
                                 <div class="messaged-by-user-info">
-                                    <div class="messaged-by-fullname">{{$chat->user->full_name}}</div>
-                                    <div class="messaged-by-username">&#64;{{$chat->user->username}}</div>
+                                    <div class="messaged-by-fullname">${user.full_name}</div>
+                                    <div class="messaged-by-username">@${user.username}</div>
                                     <div class="dot">·</div>
                                     <div class="last-sent-time-text">now</div>
                                 </div>
@@ -482,9 +522,21 @@ socket.onmessage = function (event) {
                             <img src="{{asset('assets/img/67b61da06092cd17329df26d/67bd987eda529b92af7c73e7_IcBaselineMoreHoriz.png')}}" loading="lazy" alt="" class="more-options-message" />
                             <i class="fa-solid fa-circle newMessageIcon"></i>
                         </a>`;
+                           allMessages.insertAdjacentHTML('afterbegin', html);
+                           const chat = document.querySelector(`.single-message[data-other-id="${data.sent_from}"]`);
+                           const lastSentTime = chat.querySelector(".last-sent-time-text");
+                           if (lastSentTime) {
+                               lastSentTime.textContent = "now";
+                               startLiveTimer(lastSentTime, Date.now());
+                           }
+                       },
+                       error: function (err){
+                           console.log(err)
+                       }
+                   })
                }
             }
-            if(messageWrapper) {
+            if(messageWrapper && messageWrapper.parentElement.getAttribute("data-user-id") === data.sent_from) {
                 let lastElement = messageWrapper.lastElementChild;
                 if(lastElement && lastElement.classList.contains("sent-message-wrapper")){
                     let dot = lastElement.querySelector(".dot");
@@ -563,6 +615,12 @@ function scrollToBottom() {
         chatContainer.scrollTop = chatContainer.scrollHeight;
     }
 }
+
+
+
+
+
+
 
 
 

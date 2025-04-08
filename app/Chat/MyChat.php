@@ -37,6 +37,7 @@ class MyChat implements MessageComponentInterface, \Ratchet\MessageComponentInte
 
             if (isset($this->clients[$sentTo])) {
                 $this->clients[$sentTo]->send(json_encode([
+                    'conversation_id' => $conversationId,
                     'message_id' => $messageId,
                     'sent_from' => $sentFrom,
                     'sent_to' => $sentTo,

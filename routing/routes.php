@@ -42,16 +42,12 @@ Router::middleware([\App\Middlewares\IsLoggedIn::class])->group(function () {
 
     Router::controller(CommentController::class)->group(function (){
         Router::post("/posts/{postId}/comment/{commentId}/like", 'like')->name('comments.like');
-    });
-
-    Router::controller(CommentController::class)->group(function () {
         Router::post('/posts/{id}/comment', 'store')->name('comment.store');
         Router::delete('/posts/{id}/comment', 'destroy')->name('comment.destroy');
     });
 
-
-
     Router::controller(UserController::class)->group(function (){
+        Router::get('/users/{id}', 'show')->name('users.show');
         Router::post('/users/{id}/block', 'block')->name('users.block');
         Router::post('/users/{id}/unblock', 'unblock')->name('users.unblock');
         Router::post('/users/{id}/follow', 'follow')->name('users.follow');

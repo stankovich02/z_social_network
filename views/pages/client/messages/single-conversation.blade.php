@@ -59,24 +59,7 @@
             </div>
             <div class="all-messages">
                 @foreach($chats as $chat)
-                    @if($chat->is_read === 0 && $chat->sent_to === session()->get('user')->id)
-                        <a href="{{route("messages.conversation", ['id' => $chat->id])}}" class="single-message new-message" data-id="{{session()->get('user')->id}}" data-other-id="{{$chat->user->id}}">
-                            <img src="{{asset('assets/img/users/' . $chat->user->photo)}}" loading="lazy" alt="" class="user-image" />
-                            <div class="message-sender-info">
-                                <div class="messaged-by-user-info">
-                                    <div class="messaged-by-fullname">{{$chat->user->full_name}}</div>
-                                    <div class="messaged-by-username">&#64;{{$chat->user->username}}</div>
-                                    @if($chat->last_message_time)
-                                        <div class="dot">·</div>
-                                        <div class="last-sent-time-text">{{$chat->last_message_time}}</div>
-                                    @endif
-                                </div>
-                                <div class="message-from-user new-message">{{$chat->message}}</div>
-                            </div>
-                            <img src="{{asset('assets/img/67b61da06092cd17329df26d/67bd987eda529b92af7c73e7_IcBaselineMoreHoriz.png')}}" loading="lazy" alt="" class="more-options-message" />
-                            <i class="fa-solid fa-circle newMessageIcon"></i>
-                        </a>
-                    @elseif($chat->id === $chatId)
+                    @if($chat->id === $chatId)
                         <a href="{{route("messages.conversation", ['id' => $chat->id])}}" class="single-message active-chat" data-id="{{session()->get('user')->id}}" data-other-id="{{$activeChatUser->id}}">
                             <img src="{{asset('assets/img/users/' . $chat->user->photo)}}" loading="lazy" alt="" class="user-image" />
                             <div class="message-sender-info">
@@ -89,10 +72,27 @@
                                     @endif
                                 </div>
                                 @if($chat->last_message)
-                                    <div class="message-from-user new-message">{{$chat->last_message}}</div>
+                                    <div class="message-from-user">{{$chat->last_message}}</div>
                                 @endif
                             </div>
                             <img src="{{asset('assets/img/67b61da06092cd17329df26d/67bd987eda529b92af7c73e7_IcBaselineMoreHoriz.png')}}" loading="lazy" alt="" class="more-options-message" />
+                        </a>
+                    @elseif($chat->is_read === 0 && $chat->sent_to === session()->get('user')->id)
+                        <a href="{{route("messages.conversation", ['id' => $chat->id])}}" class="single-message new-message" data-id="{{session()->get('user')->id}}" data-other-id="{{$chat->user->id}}">
+                            <img src="{{asset('assets/img/users/' . $chat->user->photo)}}" loading="lazy" alt="" class="user-image" />
+                            <div class="message-sender-info">
+                                <div class="messaged-by-user-info">
+                                    <div class="messaged-by-fullname">{{$chat->user->full_name}}</div>
+                                    <div class="messaged-by-username">&#64;{{$chat->user->username}}</div>
+                                    @if($chat->last_message_time)
+                                        <div class="dot">·</div>
+                                        <div class="last-sent-time-text">{{$chat->last_message_time}}</div>
+                                    @endif
+                                </div>
+                                <div class="message-from-user new-message">{{$chat->last_message}}</div>
+                            </div>
+                            <img src="{{asset('assets/img/67b61da06092cd17329df26d/67bd987eda529b92af7c73e7_IcBaselineMoreHoriz.png')}}" loading="lazy" alt="" class="more-options-message" />
+                            <i class="fa-solid fa-circle newMessageIcon"></i>
                         </a>
                     @else
                         @if($chat->last_message_time)
@@ -108,7 +108,7 @@
                                         @endif
                                     </div>
                                     @if($chat->last_message)
-                                        <div class="message-from-user new-message">{{$chat->last_message}}</div>
+                                        <div class="message-from-user">{{$chat->last_message}}</div>
                                     @endif
                                 </div>
                                 <img src="{{asset('assets/img/67b61da06092cd17329df26d/67bd987eda529b92af7c73e7_IcBaselineMoreHoriz.png')}}" loading="lazy" alt="" class="more-options-message" />
@@ -118,7 +118,7 @@
                 @endforeach
             </div>
         </div>
-        <div class="chat">
+        <div class="chat" data-user-id="{{$activeChatUser->id}}">
             <div class="chat-user-fullname">{{$activeChatUser->full_name}}</div>
             <a href="{{route('profile', ['username' => $activeChatUser->username])}}" class="chat-user-info-wrapper">
                 <img src="{{asset('assets/img/users/' . $activeChatUser->photo)}}" loading="lazy" alt="" class="chat-user-image" />
@@ -207,6 +207,7 @@
             @else
                 <div class="send-message-div">
                     <div class="send-message-form">
+                        <div id="emojiPicker"></div>
                         <form
                                 id="email-form-2"
                                 method="get"
@@ -214,6 +215,30 @@
                         >
                             <input class="type-message-input w-input" placeholder="Start a new message" type="text" id="new-message-text" />
                         </form>
+                        <script type="module">
+                            import { EmojiButton } from 'https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@4.6.4/dist/index.min.js';
+
+
+                            const button = document.createElement("button");
+                            button.innerText = "😊";
+                            button.type = "button";
+                            document.getElementById("emojiPicker").appendChild(button);
+
+                            const picker = new EmojiButton({
+                                position: 'top-start',
+                                theme: 'auto'
+                            });
+
+                            const input = document.querySelector("#new-message-text");
+
+                            picker.on('emoji', emoji => {
+                                input.value += emoji;
+                            });
+
+                            button.addEventListener('click', () => {
+                                picker.togglePicker(button);
+                            });
+                        </script>
                     </div>
                     <div class="send-message-icon w-embed" disabled data-id="{{session()->get('user')->id}}" data-receiver-id="{{$activeChatUser->id}}" data-conversation-id="{{$chatId}}" data-other-user-column-name="{{$activeChatUser->column_name}}">
                         <svg

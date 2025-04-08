@@ -14,6 +14,18 @@ use NovaLite\Http\Response;
 
 class UserController extends Controller
 {
+    public function show(int $id, Request $request): Response
+    {
+        if($request->isAjax()){
+            $user = User::find($id);
+            return response()->json([
+                'username' => $user->username,
+                'full_name' => $user->full_name,
+                'photo' => asset('assets/img/users/'.$user->photo),
+            ]);
+        }
+        return response();
+    }
     public function update(int $id, Request $request) : Response
     {
        if($id !== session()->get('user')->id){
@@ -144,7 +156,6 @@ class UserController extends Controller
                 ->delete();
         }
     }
-
     public function unblock(int $id) : void
     {
         Database::table(BlockedUser::TABLE)
