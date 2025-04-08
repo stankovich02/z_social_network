@@ -192,7 +192,7 @@ document.addEventListener("click", function (event) {
             type: "POST",
             success: function(){
                 blockUserBtns.forEach(blockUserBtn => {
-                    blockUserBtn.parentElement.parentElement.parentElement.parentElement.remove();
+                    blockUserBtn.parentElement.parentElement.parentElement.remove();
                 })
                 actionPopupWrapper.style.display = "none";
                 document.body.style.overflow = "auto";
@@ -265,6 +265,22 @@ document.addEventListener("click", function (event) {
             }
         })
     }
+    if(event.target.classList.contains("block-user")){
+        const userId = event.target.getAttribute("data-id");
+        const username = event.target.getAttribute("data-username");
+        const actionPopupWrapper = document.querySelector("#action-popup-wrapper");
+        const confirmBlock = document.querySelector("#doActionBtn");
+        confirmBlock.className = "blockUserPopupBtn";
+        confirmBlock.textContent = "Block";
+        confirmBlock.setAttribute("data-id", userId);
+        confirmBlock.setAttribute("data-username", username);
+        let popupHeading = document.querySelector("#action-popup-wrapper h3");
+        popupHeading.textContent = `Block @${username}?`;
+        let popupText = document.querySelector("#action-popup-wrapper p");
+        popupText.textContent = `They will be able to see your public posts, but will no longer be able to engage with them. @${username} will also not be able to follow or message you, and you will not see notifications from them. `;
+        actionPopupWrapper.style.display = "block";
+        document.body.style.overflow = "hidden";
+    }
 
 });
 /*document.addEventListener("DOMContentLoaded", function () {
@@ -299,27 +315,6 @@ document.addEventListener("click", function (event) {
         observer.observe(post);
     });
 });*/
-if(document.querySelector(".block-user")){
-    let blockUserBtns = document.querySelectorAll(".block-user");
-    blockUserBtns.forEach(blockUserBtn => {
-        blockUserBtn.addEventListener("click", function (){
-            const userId = this.getAttribute("data-id");
-            const username = this.getAttribute("data-username");
-            const actionPopupWrapper = document.querySelector("#action-popup-wrapper");
-            const confirmBlock = document.querySelector("#doActionBtn");
-            confirmBlock.className = "blockUserPopupBtn";
-            confirmBlock.textContent = "Block";
-            confirmBlock.setAttribute("data-id", userId);
-            confirmBlock.setAttribute("data-username", username);
-            let popupHeading = document.querySelector("#action-popup-wrapper h3");
-            popupHeading.textContent = `Block @${username}?`;
-            let popupText = document.querySelector("#action-popup-wrapper p");
-            popupText.textContent = `They will be able to see your public posts, but will no longer be able to engage with them. @${username} will also not be able to follow or message you, and you will not see notifications from them. `;
-            actionPopupWrapper.style.display = "block";
-            document.body.style.overflow = "hidden";
-        });
-    })
-}
 function feedNewPostLogic(){
     function writeInputAndIcon(){
         let form = document.querySelector("#feedNewPost form");
@@ -610,7 +605,7 @@ $(window).on("scroll", function () {
     let scrollTop = $(window).scrollTop();
     let windowHeight = $(window).height();
 
-    if (scrollTop + windowHeight >= scrollHeight - 100) {
+    if (scrollTop + windowHeight >= scrollHeight) {
         loadMorePosts();
     }
 });
@@ -633,25 +628,26 @@ function loadMorePosts() {
                 const postElement = document.createElement("div");
                 postElement.classList.add("single-post");
                 postElement.setAttribute("data-id", post.id);
-                postElement.innerHTML = `
-                      <div class="post-more-options-wrapper">
+                const postMoreOptionsWrapper = document.createElement("div");
+                postMoreOptionsWrapper.classList.add("post-more-options-wrapper");
+                postMoreOptionsWrapper.innerHTML = `
                             <div class="more-options w-embed post-more-options">
                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--ph more-opt-ic" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 256">
                                     <path fill="currentColor" d="M144 128a16 16 0 1 1-16-16a16 16 0 0 1 16 16m-84-16a16 16 0 1 0 16 16a16 16 0 0 0-16-16m136 0a16 16 0 1 0 16 16a16 16 0 0 0-16-16"></path>
                                 </svg>
-                            </div>
-                            <div class="choose-post-option">
-                                    <div class="single-post-option block-user" data-id="${post.user.id}" data-username="${post.user.username}"><div class="block-icon w-embed"><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" height="100%" width="100%" class="iconify iconify--ic" role="img" aria-hidden="true" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2M4 12c0-4.42 3.58-8 8-8c1.85 0 3.55.63 4.9 1.69L5.69 16.9A7.9 7.9 0 0 1 4 12m8 8c-1.85 0-3.55-.63-4.9-1.69L18.31 7.1A7.9 7.9 0 0 1 20 12c0 4.42-3.58 8-8 8" fill="currentColor"></path></svg></div>Block &#64;${post.user.username}</div>`;
-                let blockUser = document.querySelector(`.block-user[data-id="${post.user.id}"]`);
+                            </div>`;
+                const choosePostOption = document.createElement("div");
+                choosePostOption.classList.add("choose-post-option");
+                choosePostOption.innerHTML = `  <div class="single-post-option block-user" data-id="${post.user.id}" data-username="${post.user.username}"><div class="block-icon w-embed"><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" height="100%" width="100%" class="iconify iconify--ic" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2M4 12c0-4.42 3.58-8 8-8c1.85 0 3.55.63 4.9 1.69L5.69 16.9A7.9 7.9 0 0 1 4 12m8 8c-1.85 0-3.55-.63-4.9-1.69L18.31 7.1A7.9 7.9 0 0 1 20 12c0 4.42-3.58 8-8 8" fill="currentColor"></path></svg></div>Block &#64;${post.user.username}`;
                 if(post.user.loggedInUserFollowing){
-                    blockUser.parentElement.innerHTML += `<div class="single-post-option unfollow-user" data-id="${post.user.id}" data-username="${post.user.username}"><i class="fa-solid fa-user-xmark"></i> Unfollow &#64;${post.user.username}</div>`;
+                    choosePostOption.innerHTML += `<div class="single-post-option unfollow-user" data-id="${post.user.id}" data-username="${post.user.username}"><i class="fa-solid fa-user-xmark"></i> Unfollow &#64;${post.user.username}</div>`;
                 }
                 else {
-                    blockUser.parentElement.innerHTML += `<div class="single-post-option follow-user" data-id="${post.user.id}" data-username="${post.user.username}"><i class="fa-solid fa-user-plus"></i> Follow &#64;${post.user.username}</div>`;
+                    choosePostOption.innerHTML += `<div class="single-post-option follow-user" data-id="${post.user.id}" data-username="${post.user.username}"><i class="fa-solid fa-user-plus"></i> Follow &#64;${post.user.username}</div>`;
                 }
+                postMoreOptionsWrapper.appendChild(choosePostOption);
+                postElement.appendChild(postMoreOptionsWrapper);
                 postElement.innerHTML += `
-                            </div>
-                        </div>
                         <a href="${post.user.profile_link}"><img src="${post.user.photo}" loading="eager" alt="" class="user-image" /></a>`;
                 let postInfoAndBody = document.createElement("div");
                 postInfoAndBody.classList.add("post-info-and-body");

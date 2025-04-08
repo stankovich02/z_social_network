@@ -3012,6 +3012,7 @@ textarea.w-input, textarea.w-select {
   border-radius: 24px 24px 0;
   padding: 10px;
   max-width: 70%;
+  position: relative;
 }
 
 .message-text {
@@ -3042,6 +3043,7 @@ textarea.w-input, textarea.w-select {
   border-radius: 24px 24px 24px 0;
   padding: 10px;
   max-width: 70%;
+  position: relative;
 }
 
 .received-message-info {
@@ -4311,6 +4313,29 @@ textarea.w-input, textarea.w-select {
   flex-direction: column;
   align-items: end;
 }
+.sent-message-more-options-wrapper{
+  position: absolute;
+  transform: translate(-50%, -50%);
+  left: -25px;
+  top: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  opacity: 0;
+  transition: all 0.3s;
+}
+.received-message-more-options-wrapper{
+  position: absolute;
+  transform: translate(-50%, -50%);
+  right: -55px;
+  top: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  opacity: 0;
+  transition: all 0.3s;
+}
+
 .single-follower-more-options-wrapper{
   display: flex;
   flex-direction: column;
@@ -4320,7 +4345,7 @@ textarea.w-input, textarea.w-select {
 .choose-post-option,.choose-comment-option{
   box-shadow: rgba(255, 255, 255, 0.2) 0 0 15px, rgba(255, 255, 255, 0.15) 0 0 3px 1px;
   background-color: black;
-  border-radius: 16px;
+  border-radius: 10px;
   width: 250px;
   font-weight: bold;
   position: absolute;
@@ -4328,10 +4353,10 @@ textarea.w-input, textarea.w-select {
   z-index: 5;
   display: none;
 }
-.choose-follower-option, .choose-profile-option{
+.choose-follower-option, .choose-profile-option, .choose-message-option{
   box-shadow: rgba(255, 255, 255, 0.2) 0 0 15px, rgba(255, 255, 255, 0.15) 0 0 3px 1px;
   background-color: black;
-  border-radius: 16px;
+  border-radius: 10px;
   width: 250px;
   font-weight: bold;
   position: absolute;
@@ -4339,13 +4364,26 @@ textarea.w-input, textarea.w-select {
   z-index: 5;
   display: none;
 }
+.choose-message-option{
+  width: 170px;
+}
+.sent-choose-message-option{
+  transform: translate(-50%, -50%);
+  left: -60px;
+  top: 50%;
+}
+.received-choose-message-option{
+  transform: translate(-50%, -50%);
+  left: 90px;
+  top: 50%;
+}
 .choose-profile-option{
   right: 20%;
 }
-.single-post-option:hover,.single-comment-option:hover, .single-follower-option:hover,.single-profile-option:hover{
-  background-color: #111212;
+.single-post-option:hover,.single-message-option:hover,.single-comment-option:hover, .single-follower-option:hover,.single-profile-option:hover{
+  background-color: rgb(22,24,28);
 }
-.single-post-option,.single-comment-option, .single-follower-option, .single-profile-option{
+.single-post-option,.single-message-option,.single-comment-option, .single-follower-option, .single-profile-option{
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -4355,13 +4393,13 @@ textarea.w-input, textarea.w-select {
 .delete-post,.delete-comment{
     color: red;
 }
-.post-more-options,.comment-more-options,.single-follower-more-options{
+.post-more-options,.comment-more-options,.single-follower-more-options,.message-more-options{
   color: #88888880;
   transition: all 0.5s;
   padding: 5px;
   border-radius: 50%;
 }
-.post-more-options:hover,.comment-more-options:hover, .single-follower-more-options:hover{
+.post-more-options:hover,.message-more-options:hover, .comment-more-options:hover, .single-follower-more-options:hover{
   color: #009dff;
   background-color: #5b708366;
 }
@@ -4707,15 +4745,15 @@ textarea.w-input, textarea.w-select {
   margin-top: 5px;
   width: 100%;
 }
-.single-follower-option:first-child, .single-post-option:first-child, .single-comment-option:first-child, .single-profile-option:first-child{
-  border-top-left-radius: 16px;
-  border-top-right-radius: 16px;
+.single-follower-option:first-child, .single-message-option:first-child,.single-post-option:first-child, .single-comment-option:first-child, .single-profile-option:first-child{
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
 }
-.single-follower-option:last-child, .single-post-option:last-child, .single-comment-option:last-child, .single-profile-option:last-child{
-  border-bottom-left-radius: 16px;
-  border-bottom-right-radius: 16px;
+.single-follower-option:last-child, .single-message-option:last-child, .single-post-option:last-child, .single-comment-option:last-child, .single-profile-option:last-child{
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
 }
-.single-follower-option i, .single-post-option i, .copy-profile i, .choose-comment-option .follow-user i, .choose-comment-option .unfollow-user i{
+.single-follower-option i, .single-message-option i, .single-post-option i, .copy-profile i, .choose-comment-option .follow-user i, .choose-comment-option .unfollow-user i{
   width: 1rem;
   height: 1rem;
   margin-right: 15px;

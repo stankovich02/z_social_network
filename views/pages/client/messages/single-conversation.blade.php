@@ -142,6 +142,18 @@
                         <div class="sent-message-wrapper {{$message->is_read ? "viewed" : ""}}" data-id="{{$message->id}}" >
                             <div class="sent-message">
                                 <p class="message-text">{{$message->message}}</p>
+                                <div class="sent-message-more-options-wrapper">
+                                    <div class="more-options w-embed message-more-options">
+                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--ph more-opt-ic" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 256">
+                                            <path fill="currentColor" d="M144 128a16 16 0 1 1-16-16a16 16 0 0 1 16 16m-84-16a16 16 0 1 0 16 16a16 16 0 0 0-16-16m136 0a16 16 0 1 0 16 16a16 16 0 0 0-16-16"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="choose-message-option sent-choose-message-option copy-message">
+                                        <div class="single-message-option">
+                                            <i class="fa-solid fa-copy"></i>Copy message
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="sent-message-info">
                                 <p class="sentInfoDate">{{$message->created_at}}</p>
@@ -150,6 +162,7 @@
                                     <p class="sentInfoText">{{$message->is_read ? "Seen" : "Sent"}}</p>
                                 @endif
                             </div>
+
                         </div>
                     @else
                         @if($message->is_read === 0 && !$isWrittenNewMessage )
@@ -165,10 +178,23 @@
                         <div class="received-message-wrapper {{$message->is_read ? "viewed" : ""}}" data-id="{{$message->id}}" >
                             <div class="received-message">
                                 <p class="message-text">{{$message->message}}</p>
+                                <div class="received-message-more-options-wrapper">
+                                    <div class="more-options w-embed message-more-options">
+                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--ph more-opt-ic" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 256">
+                                            <path fill="currentColor" d="M144 128a16 16 0 1 1-16-16a16 16 0 0 1 16 16m-84-16a16 16 0 1 0 16 16a16 16 0 0 0-16-16m136 0a16 16 0 1 0 16 16a16 16 0 0 0-16-16"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="choose-message-option received-choose-message-option copy-message">
+                                        <div class="single-message-option">
+                                            <i class="fa-solid fa-copy"></i>Copy message
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="received-message-info">
                                 <p>{{$message->created_at}}</p>
                             </div>
+
                         </div>
                     @endif
                 @endforeach

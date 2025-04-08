@@ -19,10 +19,28 @@ class HomeController extends Controller
     use CalculateDate;
     public function index() : View
     {
+        $blockedUsers = array_column(
+            Database::table('blocked_users')
+                ->where('blocked_by_user_id', '=', session()->get('user')->id)
+                ->get(),
+            'blocked_user_id'
+        );
+        $usersWhoBlockLoggedInUser = array_column(
+            Database::table('blocked_users')
+                ->where('blocked_user_id', '=', session()->get('user')->id)
+                ->get(),
+            'blocked_by_user_id'
+        );
         $posts = Post::with('user','image')
-                     ->where('user_id', '!=', session()->get('user')->id)
-                     ->orderBy('id', 'desc')->take(10)
-                     ->get();
+                     ->where('user_id', '!=', session()->get('user')->id);
+        if (count($blockedUsers) > 0) {
+            $posts = $posts->whereNotIn('user_id', $blockedUsers);
+        }
+        if (count($usersWhoBlockLoggedInUser) > 0) {
+            $posts = $posts->whereNotIn('user_id', $usersWhoBlockLoggedInUser);
+        }
+        $posts = $posts->orderBy('id', 'desc')->take(10)
+              ->get();
         $loggedInUserFollowing =  array_column(
             Database::table(UserFollower::TABLE)
                 ->where('user_id', '=', session()->get('user')->id)
@@ -43,18 +61,7 @@ class HomeController extends Controller
             $post->number_of_comments = $post->commentsCount($post->id);
             $post->user->loggedInUserFollowing = in_array($post->user->id, $loggedInUserFollowing);
         }
-        $blockedUsers = array_column(
-            Database::table('blocked_users')
-                ->where('blocked_by_user_id', '=', session()->get('user')->id)
-                ->get(),
-            'blocked_user_id'
-        );
-        $usersWhoBlockLoggedInUser = array_column(
-            Database::table('blocked_users')
-                ->where('blocked_user_id', '=', session()->get('user')->id)
-                ->get(),
-            'blocked_by_user_id'
-        );
+
         return view('pages.client.home', [
             'posts' => $posts,
             'blockedUsers' => $blockedUsers,

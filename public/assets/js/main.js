@@ -426,6 +426,18 @@ socket.onmessage = function (event) {
             <div class="sent-message-wrapper" data-id="${data.message_id}">
                 <div class="sent-message">
                     <p class="message-text">${data.message}</p>
+                     <div class="sent-message-more-options-wrapper">
+                        <div class="more-options w-embed message-more-options">
+                            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" class="iconify iconify--ph more-opt-ic" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 256">
+                                <path fill="currentColor" d="M144 128a16 16 0 1 1-16-16a16 16 0 0 1 16 16m-84-16a16 16 0 1 0 16 16a16 16 0 0 0-16-16m136 0a16 16 0 1 0 16 16a16 16 0 0 0-16-16"></path>
+                            </svg>
+                        </div>
+                        <div class="choose-message-option sent-choose-message-option copy-message">
+                            <div class="single-message-option">
+                                <i class="fa-solid fa-copy"></i>Copy message
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="sent-message-info">
                     <p class="sentInfoDate">${sentMessageDate}</p>
@@ -436,6 +448,42 @@ socket.onmessage = function (event) {
             }
         }
         else{
+            let allMessages = document.querySelector(".messages-wrapper .all-messages")
+            if(allMessages){
+               let chat = document.querySelector(`.single-message[data-other-id="${data.sent_from}"]`);
+               if (chat){
+                   let messageFromUser = chat.querySelector(".message-from-user");
+                   if(messageFromUser){
+                       messageFromUser.innerHTML = `${data.message}`;
+                   }
+
+                   const lastSentTime = chat.querySelector(".last-sent-time-text");
+                   if (lastSentTime) {
+                       lastSentTime.textContent = "now";
+                       startLiveTimer(lastSentTime, Date.now());
+                   }
+                   if(!chat.classList.contains("new-message")){
+                       chat.classList.add("new-message");
+                       chat.innerHTML += `<i class="fa-solid fa-circle newMessageIcon"></i>`;
+                   }
+               }
+               else{
+                    let html = `<a href="/messages/${data.conversation_id}" class="single-message new-message" data-id="${data.sent_to}" data-other-id="${data.sent_from}">
+                            <img src="{{asset('assets/img/users/' . $chat->user->photo)}}" loading="lazy" alt="" class="user-image" />
+                            <div class="message-sender-info">
+                                <div class="messaged-by-user-info">
+                                    <div class="messaged-by-fullname">{{$chat->user->full_name}}</div>
+                                    <div class="messaged-by-username">&#64;{{$chat->user->username}}</div>
+                                    <div class="dot">·</div>
+                                    <div class="last-sent-time-text">now</div>
+                                </div>
+                                <div class="message-from-user new-message">${data.message}</div>
+                            </div>
+                            <img src="{{asset('assets/img/67b61da06092cd17329df26d/67bd987eda529b92af7c73e7_IcBaselineMoreHoriz.png')}}" loading="lazy" alt="" class="more-options-message" />
+                            <i class="fa-solid fa-circle newMessageIcon"></i>
+                        </a>`;
+               }
+            }
             if(messageWrapper) {
                 let lastElement = messageWrapper.lastElementChild;
                 if(lastElement && lastElement.classList.contains("sent-message-wrapper")){
@@ -450,6 +498,18 @@ socket.onmessage = function (event) {
             <div class="received-message-wrapper" data-id="${data.message_id}">
                 <div class="received-message">
                    <p class="message-text">${data.message}</p>
+                   <div class="received-message-more-options-wrapper">
+                        <div class="more-options w-embed message-more-options">
+                            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" class="iconify iconify--ph more-opt-ic" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 256">
+                                <path fill="currentColor" d="M144 128a16 16 0 1 1-16-16a16 16 0 0 1 16 16m-84-16a16 16 0 1 0 16 16a16 16 0 0 0-16-16m136 0a16 16 0 1 0 16 16a16 16 0 0 0-16-16"></path>
+                            </svg>
+                        </div>
+                        <div class="choose-message-option received-choose-message-option copy-message">
+                            <div class="single-message-option">
+                                <i class="fa-solid fa-copy"></i>Copy message
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="received-message-info">${sentMessageDate}</div>
             </div>`;
@@ -470,18 +530,6 @@ socket.onmessage = function (event) {
         }
 
         setTimeout(scrollToBottom, 100);
-        let messageFromUser = document.querySelector(".active-chat .message-from-user");
-        if(messageFromUser){
-            messageFromUser.innerHTML = `${data.message}`;
-        }
-
-        const lastSentTime = document.querySelector(".active-chat .last-sent-time-text");
-        if (lastSentTime) {
-            lastSentTime.textContent = "now";
-
-
-            startLiveTimer(lastSentTime, Date.now());
-        }
     }
 
 };
