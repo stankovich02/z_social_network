@@ -48,6 +48,12 @@ document.addEventListener("click", function (event) {
         }
     }
     if (event.target.parentElement.classList.contains("post-more-options")) {
+        const allChooseOptions = document.querySelectorAll(".choose-post-option");
+        allChooseOptions.forEach(chooseOption => {
+            if(chooseOption.style.display === "block"){
+                chooseOption.style.display = "none";
+            }
+        })
         const chooseOption = event.target.parentElement.parentElement.querySelector(".choose-post-option");
 
         chooseOption.style.display = (chooseOption.style.display === "block") ? "none" : "block";

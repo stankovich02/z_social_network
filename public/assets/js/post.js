@@ -5,6 +5,12 @@ document.querySelector(".new-comment-text").addEventListener("input", function (
 });
 document.addEventListener("click", function (event) {
     if (event.target.parentElement.classList.contains("comment-more-options")) {
+        const allChooseOptions = document.querySelectorAll(".choose-comment-option");
+        allChooseOptions.forEach(chooseOption => {
+            if(chooseOption.style.display === "block"){
+                chooseOption.style.display = "none";
+            }
+        })
         const chooseOption = event.target.parentElement.parentElement.querySelector(".choose-comment-option");
         if(chooseOption.style.display === "block"){
             chooseOption.style.display = "none";
@@ -357,6 +363,12 @@ blockUserBtns.forEach(blockUserBtn => {
 
 let postMoreOptions = document.querySelector(".post-more-options");
 postMoreOptions.addEventListener("click", function (){
+    const allChooseOptions = document.querySelectorAll(".choose-post-option");
+    allChooseOptions.forEach(chooseOption => {
+        if(chooseOption.style.display === "block"){
+            chooseOption.style.display = "none";
+        }
+    })
     const chooseOption = this.parentElement.parentElement.querySelector(".choose-post-option");
 
     chooseOption.style.display = (chooseOption.style.display === "block") ? "none" : "block";

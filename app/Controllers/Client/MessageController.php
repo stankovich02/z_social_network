@@ -4,12 +4,12 @@ namespace App\Controllers\Client;
 
 use App\Models\BlockedUser;
 use App\Models\Conversation;
+use App\Models\LeftConversation;
 use App\Models\Message;
 use App\Models\User;
 use App\Traits\CalculateDate;
 use NovaLite\Database\Database;
 use NovaLite\Http\Controller;
-use NovaLite\Http\RedirectResponse;
 use NovaLite\Http\Request;
 use NovaLite\Http\Response;
 use NovaLite\Views\View;
@@ -20,10 +20,26 @@ class MessageController extends Controller
     public function index(Request $request) : View|Response
     {
         $loggedInUserId = session()->get('user')->id;
-        $lastChats = Conversation::where('user_id', '=', $loggedInUserId)
-                                 ->orWhere('other_user_id', '=', $loggedInUserId)
-                                 ->orderBy('last_message_time', 'DESC')
-                                 ->get();
+        $lastConversations = LeftConversation::where('user_id', '=', session()->get('user')->id)->get();
+        $conversationsWithMessages = [];
+        foreach ($lastConversations as $conversation) {
+            $lastMessage = Message::where('conversation_id', '=', $conversation->id)
+                                  ->orderBy('created_at', 'desc')
+                                  ->first();
+            if($lastMessage->created_at > $conversation->left_at){
+                $conversationsWithMessages[] = $conversation;
+            }
+        }
+        $leftConversationsIds = array_column($conversationsWithMessages, 'conversation_id');
+        $lastChats = Conversation::whereGroup(function ($q) use ($loggedInUserId) {
+            $q->where('user_id', '=', $loggedInUserId)
+              ->orWhere('other_user_id', '=', $loggedInUserId);
+        });
+        if($leftConversationsIds){
+            $lastChats = $lastChats->whereNotIn('id', $leftConversationsIds);
+        }
+        $lastChats = $lastChats->orderBy('last_message_time', 'DESC')
+                               ->get();
         foreach ($lastChats as $chat) {
             if($chat->user_id == $loggedInUserId){
                 $chat->user = User::where('id', '=', $chat->other_user_id)->first();
@@ -40,7 +56,6 @@ class MessageController extends Controller
                 $chat->last_message_time = $this->calculateLastMessageDate($chat->last_message_time);
             }
         }
-
         return view('pages.client.messages.index',[
             'chats' => $lastChats
         ]);
@@ -49,9 +64,25 @@ class MessageController extends Controller
     public function conversation(int $id) : View
     {
         $loggedInUserId = session()->get('user')->id;
-        $lastChats = Conversation::where('user_id', '=', $loggedInUserId)
-            ->orWhere('other_user_id', '=', $loggedInUserId)
-            ->orderBy('last_message_time', 'DESC')
+        $lastConversations = LeftConversation::where('user_id', '=', session()->get('user')->id)->get();
+        $conversationsWithMessages = [];
+        foreach ($lastConversations as $conversation) {
+            $lastMessage = Message::where('conversation_id', '=', $conversation->id)
+                ->orderBy('created_at', 'desc')
+                ->first();
+            if($lastMessage->created_at > $conversation->left_at){
+                $conversationsWithMessages[] = $conversation;
+            }
+        }
+        $leftConversationsIds = array_column($conversationsWithMessages, 'conversation_id');
+        $lastChats = Conversation::whereGroup(function ($q) use ($loggedInUserId) {
+            $q->where('user_id', '=', $loggedInUserId)
+                ->orWhere('other_user_id', '=', $loggedInUserId);
+        });
+        if($leftConversationsIds){
+            $lastChats = $lastChats->whereNotIn('id', $leftConversationsIds);
+        }
+        $lastChats = $lastChats->orderBy('last_message_time', 'DESC')
             ->get();
         foreach ($lastChats as $chat) {
             if($chat->user_id == $loggedInUserId){
@@ -76,10 +107,16 @@ class MessageController extends Controller
             ($activeChatUser->followers) . " Followers" : count($activeChatUser->followers) . " Follower";
         $activeChatUser->joined_date = date('F Y', strtotime($activeChatUser->created_at));
         $activeChatUser->column_name = $conversation->user_id == $loggedInUserId ? 'other_user_id' : 'user_id';
+        $leftConversation = LeftConversation::where('user_id', '=', $loggedInUserId)
+                                            ->where('conversation_id', '=', $id)
+                                            ->first();
         $messages = Message::with('conversation')
-                           ->where('conversation_id', '=', $id)
-                           ->orderBy('created_at', 'ASC')
-                           ->get();
+                           ->where('conversation_id', '=', $id);
+        if($leftConversation){
+            $messages = $messages->where('created_at', '>=',$leftConversation->left_at);
+        }
+        $messages = $messages->orderBy('created_at', 'ASC')
+                             ->get();
         $newMessages = 0;
         foreach ($messages as $message) {
             $message->created_at = $this->calculateMessageDate($message->created_at);

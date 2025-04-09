@@ -75,7 +75,18 @@
                                     <div class="message-from-user">{{$chat->last_message}}</div>
                                 @endif
                             </div>
-                            <img src="{{asset('assets/img/67b61da06092cd17329df26d/67bd987eda529b92af7c73e7_IcBaselineMoreHoriz.png')}}" loading="lazy" alt="" class="more-options-message" />
+                            <div class="single-message-more-options-wrapper">
+                                <div class="more-options w-embed single-message-more-options">
+                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--ph more-opt-ic" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 256">
+                                        <path fill="currentColor" d="M144 128a16 16 0 1 1-16-16a16 16 0 0 1 16 16m-84-16a16 16 0 1 0 16 16a16 16 0 0 0-16-16m136 0a16 16 0 1 0 16 16a16 16 0 0 0-16-16"></path>
+                                    </svg>
+                                </div>
+                                <div class="choose-single-message-option">
+                                    <div class="single-chat-option delete-conversation" data-id="{{$chat->id}}">
+                                        <i class="fa-regular fa-trash-can"></i>Delete conversation
+                                    </div>
+                                </div>
+                            </div>
                         </a>
                     @elseif($chat->is_read === 0 && $chat->sent_to === session()->get('user')->id)
                         <a href="{{route("messages.conversation", ['id' => $chat->id])}}" class="single-message new-message" data-id="{{session()->get('user')->id}}" data-other-id="{{$chat->user->id}}">
@@ -91,7 +102,18 @@
                                 </div>
                                 <div class="message-from-user new-message">{{$chat->last_message}}</div>
                             </div>
-                            <img src="{{asset('assets/img/67b61da06092cd17329df26d/67bd987eda529b92af7c73e7_IcBaselineMoreHoriz.png')}}" loading="lazy" alt="" class="more-options-message" />
+                            <div class="single-message-more-options-wrapper">
+                                <div class="more-options w-embed single-message-more-options">
+                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--ph more-opt-ic" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 256">
+                                        <path fill="currentColor" d="M144 128a16 16 0 1 1-16-16a16 16 0 0 1 16 16m-84-16a16 16 0 1 0 16 16a16 16 0 0 0-16-16m136 0a16 16 0 1 0 16 16a16 16 0 0 0-16-16"></path>
+                                    </svg>
+                                </div>
+                                <div class="choose-single-message-option">
+                                    <div class="single-message-option delete-conversation" data-id="{{$chat->id}}">
+                                        <i class="fa-regular fa-trash-can"></i>Delete conversation
+                                    </div>
+                                </div>
+                            </div>
                             <i class="fa-solid fa-circle newMessageIcon"></i>
                         </a>
                     @else
@@ -111,7 +133,18 @@
                                         <div class="message-from-user">{{$chat->last_message}}</div>
                                     @endif
                                 </div>
-                                <img src="{{asset('assets/img/67b61da06092cd17329df26d/67bd987eda529b92af7c73e7_IcBaselineMoreHoriz.png')}}" loading="lazy" alt="" class="more-options-message" />
+                                <div class="single-message-more-options-wrapper">
+                                    <div class="more-options w-embed single-message-more-options">
+                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--ph more-opt-ic" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 256">
+                                            <path fill="currentColor" d="M144 128a16 16 0 1 1-16-16a16 16 0 0 1 16 16m-84-16a16 16 0 1 0 16 16a16 16 0 0 0-16-16m136 0a16 16 0 1 0 16 16a16 16 0 0 0-16-16"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="choose-single-message-option">
+                                        <div class="single-message-option delete-conversation" data-id="{{$chat->id}}">
+                                            <i class="fa-regular fa-trash-can"></i>Delete conversation
+                                        </div>
+                                    </div>
+                                </div>
                             </a>
                         @endif
                     @endif

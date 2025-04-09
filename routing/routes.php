@@ -66,6 +66,7 @@ Router::middleware([\App\Middlewares\IsLoggedIn::class])->group(function () {
         Router::get('/{username}/following','following')->name('profile.following');
     });
 
+    Router::delete('/conversations/{id}', [\App\Controllers\Client\ConversationController::class, 'destroy'])->name('conversation.delete');
 });
 
 

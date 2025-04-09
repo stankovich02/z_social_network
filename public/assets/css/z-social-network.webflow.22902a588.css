@@ -2245,7 +2245,10 @@ textarea.w-input, textarea.w-select {
   display: flex;
   cursor: pointer;
 }
-
+.single-message-more-options.more-options{
+  width: 2.5rem;
+  height: 2.5rem;
+}
 .content {
   border-right: 1px solid #88888880;
   width: 700px;
@@ -2821,10 +2824,11 @@ textarea.w-input, textarea.w-select {
 .single-message {
   grid-column-gap: 10px;
   grid-row-gap: 10px;
-  align-items: flex-start;
+  align-items: center;
   padding: 15px;
   display: flex;
   cursor: pointer;
+  position: relative;
   text-decoration: none;
   transition: all 0.3s;
   border-right: 2px solid black;
@@ -2892,12 +2896,6 @@ textarea.w-input, textarea.w-select {
   height: 2.5rem;
   display: flex;
 }
-
-.more-options-message {
-  width: 20px;
-  display: none;
-}
-
 .new-message-indicator {
   color: #009dff;
   line-height: 1px;
@@ -4305,13 +4303,19 @@ textarea.w-input, textarea.w-select {
     height: 1rem;
     margin-right: 15px;
 }
-.post-more-options-wrapper,.comment-more-options-wrapper{
+.post-more-options-wrapper,.comment-more-options-wrapper,.single-message-more-options-wrapper{
   position: absolute;
   top: 5px;
   right: 5px;
   display: flex;
   flex-direction: column;
   align-items: end;
+}
+.single-message-more-options-wrapper{
+  transform: translate(-50%, -50%);
+  position: absolute;
+  top: 50%;
+  right: -15px;
 }
 .sent-message-more-options-wrapper{
   position: absolute;
@@ -4335,6 +4339,9 @@ textarea.w-input, textarea.w-select {
   opacity: 0;
   transition: all 0.3s;
 }
+.sent-message-more-options-wrapper.visibleOptions,.received-message-more-options-wrapper.visibleOptions{
+  opacity: 1;
+}
 
 .single-follower-more-options-wrapper{
   display: flex;
@@ -4353,7 +4360,7 @@ textarea.w-input, textarea.w-select {
   z-index: 5;
   display: none;
 }
-.choose-follower-option, .choose-profile-option, .choose-message-option{
+.choose-follower-option, .choose-profile-option, .choose-message-option, .choose-single-message-option{
   box-shadow: rgba(255, 255, 255, 0.2) 0 0 15px, rgba(255, 255, 255, 0.15) 0 0 3px 1px;
   background-color: black;
   border-radius: 10px;
@@ -4363,6 +4370,10 @@ textarea.w-input, textarea.w-select {
   top: 0;
   z-index: 5;
   display: none;
+}
+.choose-single-message-option{
+  width: 200px;
+  color: white;
 }
 .choose-message-option{
   width: 170px;
@@ -4380,10 +4391,10 @@ textarea.w-input, textarea.w-select {
 .choose-profile-option{
   right: 20%;
 }
-.single-post-option:hover,.single-message-option:hover,.single-comment-option:hover, .single-follower-option:hover,.single-profile-option:hover{
+.single-post-option:hover,.single-chat-option:hover,.single-message-option:hover,.single-comment-option:hover, .single-follower-option:hover,.single-profile-option:hover{
   background-color: rgb(22,24,28);
 }
-.single-post-option,.single-message-option,.single-comment-option, .single-follower-option, .single-profile-option{
+.single-post-option,.single-message-option,.single-chat-option,.single-comment-option, .single-follower-option, .single-profile-option{
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -4393,13 +4404,16 @@ textarea.w-input, textarea.w-select {
 .delete-post,.delete-comment{
     color: red;
 }
-.post-more-options,.comment-more-options,.single-follower-more-options,.message-more-options{
+.post-more-options,.comment-more-options,.single-follower-more-options,.message-more-options, .single-message-more-options{
   color: #88888880;
   transition: all 0.5s;
   padding: 5px;
   border-radius: 50%;
 }
-.post-more-options:hover,.message-more-options:hover, .comment-more-options:hover, .single-follower-more-options:hover{
+.single-message-more-options{
+  padding: 10px;
+}
+.post-more-options:hover,.message-more-options:hover,.single-message-more-options:hover, .comment-more-options:hover, .single-follower-more-options:hover{
   color: #009dff;
   background-color: #5b708366;
 }
@@ -4544,7 +4558,7 @@ textarea.w-input, textarea.w-select {
   color: #fff6;
   font-size: 15px;
 }
-.deletePostPopupBtn,.removeFollowerPopupBtn, .blockUserPopupBtn, .cancelPopupBtn,.deleteCommentPopupBtn, .blockUserCommentPopupBtn, .unfollowUserPopupBtn, .unblockUserPopupBtn{
+.deletePostPopupBtn,.removeFollowerPopupBtn, .blockUserPopupBtn, .cancelPopupBtn,.deleteCommentPopupBtn, .blockUserCommentPopupBtn, .unfollowUserPopupBtn, .unblockUserPopupBtn, .deleteConversationPopupBtn{
   width: 100%;
   margin-bottom: 10px;
   font-weight: 700;
@@ -4553,7 +4567,7 @@ textarea.w-input, textarea.w-select {
   transition: all 0.3s;
   margin-top: 20px;
 }
-.deletePostPopupBtn,.removeFollowerPopupBtn, .blockUserPopupBtn, .deleteCommentPopupBtn,.blockUserCommentPopupBtn{
+.deletePostPopupBtn,.removeFollowerPopupBtn, .blockUserPopupBtn, .deleteCommentPopupBtn,.blockUserCommentPopupBtn, .deleteConversationPopupBtn{
   background-color: rgb(244, 33, 46);
 }
 .unfollowUserPopupBtn, .unblockUserPopupBtn{
@@ -4745,15 +4759,15 @@ textarea.w-input, textarea.w-select {
   margin-top: 5px;
   width: 100%;
 }
-.single-follower-option:first-child, .single-message-option:first-child,.single-post-option:first-child, .single-comment-option:first-child, .single-profile-option:first-child{
+.single-follower-option:first-child, .single-chat-option:first-child, single-message-option:first-child,.single-post-option:first-child, .single-comment-option:first-child, .single-profile-option:first-child{
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
 }
-.single-follower-option:last-child, .single-message-option:last-child, .single-post-option:last-child, .single-comment-option:last-child, .single-profile-option:last-child{
+.single-follower-option:last-child, .single-chat-option:last-child, .single-message-option:last-child, .single-post-option:last-child, .single-comment-option:last-child, .single-profile-option:last-child{
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
 }
-.single-follower-option i, .single-message-option i, .single-post-option i, .copy-profile i, .choose-comment-option .follow-user i, .choose-comment-option .unfollow-user i{
+.single-follower-option i, .single-message-option i, .single-chat-option i, .single-post-option i, .copy-profile i, .choose-comment-option .follow-user i, .choose-comment-option .unfollow-user i{
   width: 1rem;
   height: 1rem;
   margin-right: 15px;
@@ -4780,6 +4794,9 @@ textarea.w-input, textarea.w-select {
   margin-bottom: 0;
 }
 .newMessageIcon{
+  right: 15px;
+  top: 10px;
+  position: absolute;
   font-size: 5px;
   color: #009dff;
 }
@@ -4852,4 +4869,7 @@ background-color: rgb(29, 155, 240);
 }
 #newMessagesChatNotification p{
   margin-bottom: 0;
+}
+.choose-single-message-option{
+  color: rgb(244,33,46);
 }
