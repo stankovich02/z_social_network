@@ -58,6 +58,7 @@ class ConversationController extends Controller
     {
         $query = $request->query('query');
         $loggedInUserId = session()->get('user')->id;
+        $peopleArray = [];
         $leftConversations = Database::table(LeftConversation::TABLE)
             ->where('user_id', '=', session()->get('user')->id)
             ->where('is_active', '=', 0)
@@ -72,21 +73,22 @@ class ConversationController extends Controller
         }
         $lastChats = $lastChats->orderBy('last_message_time', 'DESC')
             ->get();
-        $peopleArray = [];
-        foreach ($lastChats as $chat) {
-            if($chat->user_id == $loggedInUserId){
-                $chat->user = User::where('id', '=', $chat->other_user_id)->first();
-            }else{
-                $chat->user = User::where('id', '=', $chat->user_id)->first();
-            }
-            if(str_contains($chat->user->username, $query) || (str_contains($chat->user->full_name, $query))){
-                $peopleArray[] = [
-                    'conversation_link' => route('conversation.show', ['id' => $chat->id]),
-                    'id' => $chat->user->id,
-                    'username' => $chat->user->username,
-                    'full_name' => $chat->user->full_name,
-                    'photo' => asset('assets/img/users/' . $chat->user->photo),
-                ];
+        if(strlen($query) > 2){
+            foreach ($lastChats as $chat) {
+                if($chat->user_id == $loggedInUserId){
+                    $chat->user = User::where('id', '=', $chat->other_user_id)->first();
+                }else{
+                    $chat->user = User::where('id', '=', $chat->user_id)->first();
+                }
+                if(str_contains($chat->user->username, $query) || (str_contains($chat->user->full_name, $query))){
+                    $peopleArray[] = [
+                        'conversation_link' => route('messages.conversation', ['id' => $chat->id]),
+                        'id' => $chat->user->id,
+                        'username' => $chat->user->username,
+                        'full_name' => $chat->user->full_name,
+                        'photo' => asset('assets/img/users/' . $chat->user->photo),
+                    ];
+                }
             }
         }
         $messagesArray = [];

@@ -232,9 +232,37 @@ document.addEventListener("DOMContentLoaded", function () {
             behavior: "smooth"
         });
     }
+    if(chatWrapper){
+        let LSMessageId = localStorage.getItem('messageId');
+        if(LSMessageId){
+            let sentMessage = document.querySelector(`.sent-message-wrapper[data-id="${LSMessageId}"]`);
+            let receivedMessage = document.querySelector(`.received-message-wrapper[data-id="${LSMessageId}"]`);
+            if(sentMessage){
+                chatWrapper.scrollTo({
+                    top: sentMessage.offsetTop - chatWrapper.offsetTop - 30,
+                    behavior: "smooth"
+                });
+                sentMessage.classList.add("sent-searched-message");
+                setTimeout(function (){
+                    sentMessage.classList.remove("sent-searched-message");
+                }, 3000)
+            }
+            if(receivedMessage){
+                chatWrapper.scrollTo({
+                    top: receivedMessage.offsetTop - chatWrapper.offsetTop - 30,
+                    behavior: "smooth"
+                });
+                receivedMessage.classList.add("received-searched-message");
+                setTimeout(function (){
+                    receivedMessage.classList.remove("received-searched-message");
+                }, 3000)
+            }
+            localStorage.removeItem('messageId');
+        }
+    }
 });
 document.addEventListener("mouseover", function (event){
-    if(event.target.parentElement.classList.contains("message-more-options")){
+    if(event.target.parentElement && event.target.parentElement.classList.contains("message-more-options")){
         event.target.parentElement.parentElement.style.opacity = "1";
     }
 })
@@ -302,7 +330,7 @@ if(allMessages){
 }
 searchMessageInput.addEventListener("input", function (){
     let value = searchMessageInput.value.trim();
-    if(value.length > 2){
+    if(value.length > 0){
         let allMessages = document.querySelector(".all-messages");
         if(allMessages){
             allMessages.remove();
@@ -319,7 +347,62 @@ searchMessageInput.addEventListener("input", function (){
                 else{
                     searchDirectMessages = document.querySelector("#searchDirectMessages");
                 }
-                if(data.messages){
+                if(data.people.length > 0){
+                    let peopleResult;
+                    if(!document.querySelector("#peopleResult")){
+                        peopleResult = document.createElement('div');
+                        peopleResult.id = "peopleResult";
+                        peopleResult.innerHTML = `<div class="resultInfo"><i class="fa-solid fa-user"></i><p>People</p></div>`;
+                    }
+                    else{
+                        peopleResult = document.querySelector("#peopleResult");
+                    }
+                    let searchResultPeople;
+                    if(!document.querySelector("#searchResultPeople")){
+                        searchResultPeople = document.createElement('div');
+                        searchResultPeople.id = "searchResultPeople";
+                    }
+                    else{
+                        searchResultPeople = document.querySelector("#searchResultPeople");
+                        searchResultPeople.innerHTML = "";
+                    }
+                    data.people.forEach(p => {
+                        let singleResultUser = document.createElement("a");
+                        singleResultUser.className = "single-result-user";
+                        singleResultUser.setAttribute("href", p.conversation_link);
+                        singleResultUser.setAttribute("data-id", p.id);
+                        singleResultUser.innerHTML = `
+                         <img src="${p.photo}" loading="lazy" alt="" class="user-image" />`;
+                        let searchedUserInfo = document.createElement("div");
+                        searchedUserInfo.className = "searched-user-info";
+                        let fullNameText = p.full_name;
+                        let regex = new RegExp(`(${value})`, 'gi');
+                        fullNameText = fullNameText.replace(regex, '<span class="foundString">$1</span>');
+                        let searchedUserFullName = document.createElement("p");
+                        searchedUserFullName.className = "searched-user-fullname";
+                        searchedUserFullName.innerHTML = fullNameText;
+                        let usernameText = p.username;
+                        usernameText = usernameText.replace(regex, '<span class="foundString">$1</span>');
+                        let searchedUserUsername = document.createElement("p");
+                        searchedUserUsername.className = "searched-user-username";
+                        searchedUserUsername.innerHTML = "@" + usernameText;
+                        searchedUserInfo.appendChild(searchedUserFullName);
+                        searchedUserInfo.appendChild(searchedUserUsername);
+                        singleResultUser.appendChild(searchedUserInfo);
+                        searchResultPeople.appendChild(singleResultUser);
+                    })
+                    peopleResult.appendChild(searchResultPeople);
+                    if(document.querySelector("#messageResult")){
+                        document.querySelector("#messageResult").remove();
+                    }
+                    searchDirectMessages.appendChild(peopleResult);
+                }
+                else{
+                    if(document.querySelector("#peopleResult")){
+                        document.querySelector("#peopleResult").remove();
+                    }
+                }
+                if(data.messages.length > 0){
                     let messageResult;
                     if(!document.querySelector("#messageResult")){
                         messageResult = document.createElement('div');
@@ -327,7 +410,7 @@ searchMessageInput.addEventListener("input", function (){
                         messageResult.innerHTML = `<div class="resultInfo"><i class="fa-solid fa-envelope"></i><p>Messages</p></div>`;
                     }
                     else{
-                        searchDirectMessages = document.querySelector("#messageResult");
+                        messageResult = document.querySelector("#messageResult");
                     }
                     let searchResultMessages;
                     if(!document.querySelector("#searchResultMessages")){
@@ -362,7 +445,25 @@ searchMessageInput.addEventListener("input", function (){
                     messageResult.appendChild(searchResultMessages);
                     searchDirectMessages.appendChild(messageResult);
                 }
+                else{
+                    if(document.querySelector("#messageResult")){
+                        document.querySelector("#messageResult").remove();
+                    }
+                }
                 messagesWrapper.appendChild(searchDirectMessages);
+                let singleResultMessages = document.querySelectorAll(".single-result-message");
+                if(singleResultMessages){
+                    singleResultMessages.forEach(singleResultMessage => {
+                        singleResultMessage.addEventListener("click", function (e){
+                            e.preventDefault();
+                            let link = singleResultMessage.getAttribute("href");
+                            let messageId = singleResultMessage.getAttribute("data-id");
+                            console.log(messageId);
+                            localStorage.setItem('messageId', messageId);
+                            window.location.href = link;
+                        })
+                    })
+                }
             }
         })
     }
@@ -374,7 +475,6 @@ searchMessageInput.addEventListener("input", function (){
         if(!allMessages){
             let newAllMessages =document.createElement("div");
             newAllMessages.className = "all-messages";
-            console.log(oldMessagesHtml);
             newAllMessages.innerHTML = oldMessagesHtml;
             messagesWrapper.appendChild(newAllMessages);
         }
