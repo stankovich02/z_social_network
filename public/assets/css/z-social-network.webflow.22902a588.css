@@ -2824,7 +2824,6 @@ textarea.w-input, textarea.w-select {
 .single-message {
   grid-column-gap: 10px;
   grid-row-gap: 10px;
-  align-items: center;
   padding: 15px;
   display: flex;
   cursor: pointer;
@@ -3072,6 +3071,9 @@ textarea.w-input, textarea.w-select {
   border: 1px #000;
   width: 90%;
   margin-bottom: 0;
+  display: flex;
+  align-items: center;
+  column-gap: 5px;
 }
 
 .type-message-input {
@@ -3108,6 +3110,7 @@ textarea.w-input, textarea.w-select {
   width: 1.5rem;
   height: 1.5rem;
   display: flex;
+  cursor: pointer;
 }
 
 .top-profile-info {
@@ -3516,11 +3519,11 @@ textarea.w-input, textarea.w-select {
 }
 
 .new-message-top {
-  justify-content: space-between;
   align-items: center;
   padding-left: 15px;
   padding-right: 15px;
   display: flex;
+  column-gap: 30px;
 }
 
 .text-block-4 {
@@ -3543,19 +3546,24 @@ textarea.w-input, textarea.w-select {
 
 .search-chat-people-form {
   border-bottom: 1px solid #88888880;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   margin-top: 10px;
   margin-bottom: 0;
   padding: 5px 15px;
   display: flex;
+  column-gap: 5px;
 }
-
+.search-chat-people-form{
+  color: #009dff;
+  font-size: 15px;
+}
 .search-people-chat-input {
   background-color: #0000;
   border: 1px #000;
   width: 100%;
   margin-bottom: 0;
+  color: white;
 }
 
 .icon-embed-small-3 {
@@ -3572,12 +3580,12 @@ textarea.w-input, textarea.w-select {
   width: 95%;
 }
 
-.last-chats-wrapper {
+.new-message-result-wrapper {
   height: 350px;
   overflow: auto;
 }
 
-.single-last-chat-user {
+.single-new-message-user, .single-result-user {
   grid-column-gap: 10px;
   grid-row-gap: 10px;
   align-items: center;
@@ -3585,14 +3593,19 @@ textarea.w-input, textarea.w-select {
   padding-left: 15px;
   padding-right: 15px;
   display: flex;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+.single-new-message-user:hover, .single-result-user:hover, .single-result-message:hover{
+  background-color: rgb(22, 24, 28);
 }
 
-.last-chat-user-fullname {
+.new-message-user-fullname, .searched-user-fullname {
   font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
   font-weight: 700;
 }
 
-.last-chat-user-username {
+.new-message-user-username, .searched-user-username {
   color: #fff6;
 }
 
@@ -4872,4 +4885,69 @@ background-color: rgb(29, 155, 240);
 }
 .choose-single-message-option{
   color: rgb(244,33,46);
+}
+.pickEmoji{
+  color: #009dff;
+  font-size: 17px;
+  cursor: pointer;
+}
+#searchDirectMessages{
+  margin-top: 30px;
+}
+.single-result-message:hover{
+  background-color: rgb(22,24,28);
+}
+.resultInfo{
+  display: flex;
+  align-items: center;
+  column-gap: 15px;
+  padding: 15px;
+  border-bottom: 1px solid #88888880;
+}
+.resultInfo p{
+  margin-bottom: 0;
+  font-size: 20px;
+  font-weight: 700;
+}
+.single-result-user{
+  text-decoration: none;
+}
+.resultInfo i{
+  font-size: 20px;
+}
+.searched-user-fullname{
+  color: white;
+}
+.foundString{
+  background-color: rgba(255,212,0,1.00);
+  color: black;
+}
+.single-result-message{
+  text-decoration: none;
+  transition: all 0.3s;
+  display: flex;
+  flex-direction: column;
+}
+.searched-message-fullname{
+  color: white;
+  font-weight: 700;
+  margin-left: 5px;
+}
+.searched-messaged-sent-time,.searched-message-text{
+  color: #fff6;
+}
+.searched-message-text{
+  padding-left: 15px;
+  padding-right: 15px;
+}
+.single-result-message-info{
+  width: 100%;
+  display: flex;
+  column-gap: 5px;
+  align-items: center;
+  padding: 15px 15px 5px 15px;
+}
+.single-result-message-info img{
+  width: 30px;
+  height: 30px;
 }

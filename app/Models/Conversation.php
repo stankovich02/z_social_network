@@ -4,6 +4,7 @@ namespace App\Models;
 
 use NovaLite\Database\Model;
 use NovaLite\Database\Relations\BelongsTo;
+use NovaLite\Database\Relations\HasMany;
 
 class Conversation extends Model
 {
@@ -24,5 +25,10 @@ class Conversation extends Model
     public function otherUser() : BelongsTo
     {
         return $this->belongsTo(User::class, 'other_user_id');
+    }
+
+    public function leftConversations(): HasMany
+    {
+        return $this->hasMany(LeftConversation::class, 'conversation_id');
     }
 }

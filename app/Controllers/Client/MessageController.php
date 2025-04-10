@@ -8,6 +8,7 @@ use App\Models\LeftConversation;
 use App\Models\Message;
 use App\Models\User;
 use App\Traits\CalculateDate;
+use mysql_xdevapi\Table;
 use NovaLite\Database\Database;
 use NovaLite\Http\Controller;
 use NovaLite\Http\Request;
@@ -20,17 +21,11 @@ class MessageController extends Controller
     public function index(Request $request) : View|Response
     {
         $loggedInUserId = session()->get('user')->id;
-        $lastConversations = LeftConversation::where('user_id', '=', session()->get('user')->id)->get();
-        $conversationsWithMessages = [];
-        foreach ($lastConversations as $conversation) {
-            $lastMessage = Message::where('conversation_id', '=', $conversation->id)
-                                  ->orderBy('created_at', 'desc')
-                                  ->first();
-            if($lastMessage->created_at > $conversation->left_at){
-                $conversationsWithMessages[] = $conversation;
-            }
-        }
-        $leftConversationsIds = array_column($conversationsWithMessages, 'conversation_id');
+        $leftConversations = Database::table(LeftConversation::TABLE)
+                                     ->where('user_id', '=', session()->get('user')->id)
+                                     ->where('is_active', '=', 0)
+                                     ->get();
+        $leftConversationsIds = array_column($leftConversations, 'conversation_id');
         $lastChats = Conversation::whereGroup(function ($q) use ($loggedInUserId) {
             $q->where('user_id', '=', $loggedInUserId)
               ->orWhere('other_user_id', '=', $loggedInUserId);
@@ -64,17 +59,11 @@ class MessageController extends Controller
     public function conversation(int $id) : View
     {
         $loggedInUserId = session()->get('user')->id;
-        $lastConversations = LeftConversation::where('user_id', '=', session()->get('user')->id)->get();
-        $conversationsWithMessages = [];
-        foreach ($lastConversations as $conversation) {
-            $lastMessage = Message::where('conversation_id', '=', $conversation->id)
-                ->orderBy('created_at', 'desc')
-                ->first();
-            if($lastMessage->created_at > $conversation->left_at){
-                $conversationsWithMessages[] = $conversation;
-            }
-        }
-        $leftConversationsIds = array_column($conversationsWithMessages, 'conversation_id');
+        $leftConversations = Database::table(LeftConversation::TABLE)
+            ->where('user_id', '=', session()->get('user')->id)
+            ->where('is_active', '=', 0)
+            ->get();
+        $leftConversationsIds = array_column($leftConversations, 'conversation_id');
         $lastChats = Conversation::whereGroup(function ($q) use ($loggedInUserId) {
             $q->where('user_id', '=', $loggedInUserId)
                 ->orWhere('other_user_id', '=', $loggedInUserId);

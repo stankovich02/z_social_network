@@ -26,7 +26,6 @@ Router::middleware([\App\Middlewares\IsLoggedIn::class])->group(function () {
     Router::get('/logout', [\App\Controllers\AuthController::class, 'logout'])->name('logout');
     Router::get('/search', [\App\Controllers\Client\ExploreController::class, 'search'])->name('search');
 
-
     Router::post('/upload-post-image', [\App\Controllers\Client\ImageController::class, 'uploadPostImage'])->name('upload-post-image');
     Router::delete('/delete-post-image', [\App\Controllers\Client\ImageController::class, 'deletePostImage'])->name('delete-post-image');
 
@@ -60,13 +59,16 @@ Router::middleware([\App\Middlewares\IsLoggedIn::class])->group(function () {
         Router::post('/users/biography', 'addBiography')->name('add-biography');
     });
 
+
     Router::controller(\App\Controllers\Client\ProfileController::class)->group(function (){
         Router::get('/{username}','index')->name('profile');
         Router::get('/{username}/followers','followers')->name('profile.followers');
         Router::get('/{username}/following','following')->name('profile.following');
     });
-
+    Router::get('/search-new-conversation', [\App\Controllers\Client\ConversationController::class, 'searchNewConversation'])->name('search-new-conversation');
+    Router::get('/search-direct-messages', [\App\Controllers\Client\ConversationController::class, 'searchDirectMessages'])->name('search-direct-messages');
     Router::delete('/conversations/{id}', [\App\Controllers\Client\ConversationController::class, 'destroy'])->name('conversation.delete');
+
 });
 
 

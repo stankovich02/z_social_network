@@ -1,6 +1,53 @@
-
+let sendIcon = document.querySelector(".send-message-icon");
+if(sendIcon){
+    let userId = sendIcon.getAttribute("data-receiver-id");
+    let singleMessage = document.querySelector(`.single-message[data-other-id="${userId}"]`);
+    let sendMessageIcon = document.querySelector(".send-message-icon");
+    let conversationId = sendMessageIcon.getAttribute("data-conversation-id");
+    let loggedInUserId = sendMessageIcon.getAttribute("data-id");
+    let allMessages = document.querySelector(".all-messages");
+    if(!singleMessage){
+        $.ajax({
+            url: `/users/${userId}`,
+            type: 'GET',
+            success: function (user){
+                let html = `<a href="/messages/${conversationId}" class="single-message active-chat" data-id="${loggedInUserId}" data-other-id="${userId}">
+                            <img src="${user.photo}" loading="lazy" alt="" class="user-image" />
+                            <div class="message-sender-info">
+                                <div class="messaged-by-user-info">
+                                    <div class="messaged-by-fullname">${user.full_name}</div>
+                                    <div class="messaged-by-username">@${user.username}</div>
+                                </div>
+                                <div class="message-from-user"></div>
+                            </div>
+                            <div class="single-message-more-options-wrapper">
+                            <div class="more-options w-embed single-message-more-options">
+                                <svg xmlns="http://www.w3.org/2000/svg"  aria-hidden="true" role="img" class="iconify iconify--ph more-opt-ic" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 256">
+                                    <path fill="currentColor" d="M144 128a16 16 0 1 1-16-16a16 16 0 0 1 16 16m-84-16a16 16 0 1 0 16 16a16 16 0 0 0-16-16m136 0a16 16 0 1 0 16 16a16 16 0 0 0-16-16"></path>
+                                </svg>
+                            </div>
+                            <div class="choose-single-message-option">
+                                <div class="single-chat-option delete-conversation" data-id="${conversationId}">
+                                    <i class="fa-regular fa-trash-can"></i>Delete conversation
+                                </div>
+                            </div>
+                        </div>
+                        </a>`;
+                allMessages.insertAdjacentHTML('afterbegin', html);
+                const chat = document.querySelector(`.single-message[data-other-id="${userId}"]`);
+                const lastSentTime = chat.querySelector(".last-sent-time-text");
+                if (lastSentTime) {
+                    lastSentTime.textContent = "now";
+                    startLiveTimer(lastSentTime, Date.now());
+                }
+            },
+            error: function (err){
+                console.log(err)
+            }
+        })
+    }
+}
 document.addEventListener("click", function (event){
-
     if(event.target.parentElement.parentElement.classList.contains("can-send-icon") || event.target.parentElement.classList.contains("can-send-icon") || event.target.classList.contains("can-send-icon")){
         sendMessage();
         let sendMessageIcon = document.querySelector(".send-message-icon");
@@ -102,7 +149,7 @@ document.addEventListener("click", function (event){
             url: `/conversations/${conversationId}`,
             type: "DELETE",
             success: function(){
-
+                window.location.href = "/messages";
             },
             error: function(err){
                 console.log(err);
@@ -122,6 +169,28 @@ document.addEventListener("click", function (event){
         popupText.textContent = "This conversation will be deleted from your inbox.";
         actionPopupWrapper.style.display = "block";
         document.body.style.overflow = "hidden";
+    }
+    if(event.target.classList.contains("single-new-message-user") || event.target.parentElement.classList.contains("single-new-message-user") || event.target.parentElement.parentElement.classList.contains("single-new-message-user")){
+        let userId;
+        if(event.target.classList.contains("single-new-message-user")){
+            userId = event.target.getAttribute("data-id");
+        }
+        else if(event.target.parentElement.classList.contains("single-new-message-user")){
+            userId = event.target.parentElement.getAttribute("data-id");
+        }
+        else{
+            userId = event.target.parentElement.parentElement.getAttribute("data-id");
+        }
+        $.ajax({
+            url: `/navigate-to-conversation?userId=${userId}`,
+            type: "GET",
+            success: function(data){
+                window.location.href = data.route;
+            },
+        });
+    }
+    if(!event.target.classList.contains("single-message") && !event.target.classList.contains("user-image") && !event.target.classList.contains("message-sender-info") && !event.target.classList.contains("messaged-by-user-info") && !event.target.classList.contains("message-from-user") && !event.target.classList.contains("messaged-by-fullname") && !event.target.classList.contains("messaged-by-username") && !event.target.classList.contains("dot") && !event.target.classList.contains("last-sent-time-text") && (event.target.classList.contains("single-message-more-options-wrapper") || event.target.parentElement.classList.contains("single-message-more-options-wrapper") || event.target.parentElement.parentElement.classList.contains("single-message-more-options-wrapper"))){
+        event.preventDefault();
     }
 })
 let typeMessageInput = document.querySelector(".type-message-input");
@@ -180,14 +249,135 @@ document.addEventListener("mouseout", function (event){
         }
     }
 })
-let singleMessages = document.querySelectorAll(".single-message");
-if(singleMessages){
-    singleMessages.forEach(singleMessage => {
-        singleMessage.addEventListener("click", function (event){
-            if(!event.target.classList.contains("single-message") && !event.target.classList.contains("user-image") && !event.target.classList.contains("message-sender-info") && !event.target.classList.contains("messaged-by-user-info") && !event.target.classList.contains("message-from-user") && !event.target.classList.contains("messaged-by-fullname") && !event.target.classList.contains("messaged-by-username") && !event.target.classList.contains("dot") && !event.target.classList.contains("last-sent-time-text")){
-                event.preventDefault();
-            }
-
-        })
+let newMessageBtn = document.querySelector("#newMessageBtn")
+let newMessageIcon = document.querySelector(".new-message-icon")
+let newMessagePopup = document.querySelector(".new-message-popup");
+let searchPeopleInput = document.querySelector(".search-people-chat-input");
+if(newMessageBtn){
+    newMessageBtn.addEventListener("click", function (){
+        newMessagePopup.parentElement.style.display = "block";
+        searchPeopleInput.focus();
     })
 }
+if(newMessageIcon){
+    newMessageIcon.addEventListener("click", function (){
+        newMessagePopup.parentElement.style.display = "block";
+        searchPeopleInput.focus();
+    })
+}
+let newMessageSearchResultsWrapper = document.querySelector(".new-message-result-wrapper");
+let oldHtml = newMessageSearchResultsWrapper.innerHTML;
+searchPeopleInput.addEventListener("input", function (){
+    let value = searchPeopleInput.value.trim();
+    if(value.length > 2){
+        $.ajax({
+            url: `/search-new-conversation?query=${value}`,
+            type: "GET",
+            success: function (users){
+                let html = "";
+                    users.forEach(user => {
+                        html += `
+                <div class="single-new-message-user" data-id="${user.id}">
+                        <img src="${user.photo}" loading="lazy" alt="" class="user-image" />
+                        <div class="new-message-user-info">
+                            <div class="new-message-user-fullname">${user.full_name}</div>
+                            <div class="new-message-user-username">@${user.username}</div>
+                        </div>
+                    </div>`;
+                    })
+                newMessageSearchResultsWrapper.innerHTML = html;
+                }
+        })
+    }
+    else{
+        newMessageSearchResultsWrapper.innerHTML = oldHtml;
+    }
+})
+let searchMessageInput = document.querySelector("#message-search");
+let messagesWrapper = document.querySelector(".messages-wrapper");
+let oldMessagesHtml;
+let allMessages = document.querySelector(".all-messages");
+if(allMessages){
+    oldMessagesHtml = allMessages.innerHTML;
+}
+searchMessageInput.addEventListener("input", function (){
+    let value = searchMessageInput.value.trim();
+    if(value.length > 2){
+        let allMessages = document.querySelector(".all-messages");
+        if(allMessages){
+            allMessages.remove();
+        }
+        $.ajax({
+            url: `/search-direct-messages?query=${value}`,
+            type: "GET",
+            success: function (data){
+                let searchDirectMessages;
+                if(!document.querySelector("#searchDirectMessages")){
+                    searchDirectMessages = document.createElement('div');
+                    searchDirectMessages.id = "searchDirectMessages";
+                }
+                else{
+                    searchDirectMessages = document.querySelector("#searchDirectMessages");
+                }
+                if(data.messages){
+                    let messageResult;
+                    if(!document.querySelector("#messageResult")){
+                        messageResult = document.createElement('div');
+                        messageResult.id = "messageResult";
+                        messageResult.innerHTML = `<div class="resultInfo"><i class="fa-solid fa-envelope"></i><p>Messages</p></div>`;
+                    }
+                    else{
+                        searchDirectMessages = document.querySelector("#messageResult");
+                    }
+                    let searchResultMessages;
+                    if(!document.querySelector("#searchResultMessages")){
+                        searchResultMessages = document.createElement('div');
+                        searchResultMessages.id = "searchResultMessages";
+                    }
+                    else{
+                        searchResultMessages = document.querySelector("#searchResultMessages");
+                        searchResultMessages.innerHTML = "";
+                    }
+                    data.messages.forEach(message => {
+                        let singleResultMessage = document.createElement("a");
+                        singleResultMessage.className = "single-result-message";
+                        singleResultMessage.setAttribute("href", message.conversation_link);
+                        singleResultMessage.setAttribute("data-id", message.id);
+                        singleResultMessage.innerHTML = `
+                        <div class="single-result-message-info">
+                            <img src="${message.photo}" loading="lazy" alt="" class="user-image" />
+                            <div class="searched-message-fullname">${message.full_name}</div>
+                            <div class="dot">·</div>
+                            <div class="searched-messaged-sent-time">${message.created_at}</div>
+                        </div>`;
+                        let messageText = message.message;
+                        let regex = new RegExp(`(${value})`, 'gi');
+                        messageText = messageText.replace(regex, '<span class="foundString">$1</span>');
+                        let searchedMessageText = document.createElement("p");
+                        searchedMessageText.className = "searched-message-text";
+                        searchedMessageText.innerHTML = messageText;
+                        singleResultMessage.appendChild(searchedMessageText);
+                        searchResultMessages.appendChild(singleResultMessage);
+                    })
+                    messageResult.appendChild(searchResultMessages);
+                    searchDirectMessages.appendChild(messageResult);
+                }
+                messagesWrapper.appendChild(searchDirectMessages);
+            }
+        })
+    }
+    else{
+        let allMessages = document.querySelector(".all-messages");
+        if(document.querySelector("#searchDirectMessages")){
+            document.querySelector("#searchDirectMessages").remove();
+        }
+        if(!allMessages){
+            let newAllMessages =document.createElement("div");
+            newAllMessages.className = "all-messages";
+            console.log(oldMessagesHtml);
+            newAllMessages.innerHTML = oldMessagesHtml;
+            messagesWrapper.appendChild(newAllMessages);
+        }
+
+    }
+})

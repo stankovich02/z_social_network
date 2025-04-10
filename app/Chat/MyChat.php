@@ -60,6 +60,13 @@ class MyChat implements MessageComponentInterface, \Ratchet\MessageComponentInte
 
     private function saveMessageToDatabase($sentFrom,$sentTo, $message, $createdAt, $conversationId, $otherUserColumn) : int
     {
+        $stmt = $this->pdo->prepare("SELECT * FROM left_conversations WHERE conversation_id = ? AND is_active = 0");
+        $stmt->execute([$conversationId]);
+        $leftConversation = $stmt->fetchAll();
+        if($leftConversation){
+            $stmt = $this->pdo->prepare("UPDATE left_conversations SET is_active = 1 WHERE conversation_id = ?");
+            $stmt->execute([$conversationId]);
+        }
         $stmt = $this->pdo->prepare("INSERT INTO messages (conversation_id, sent_from,sent_to, message, created_at) VALUES (?, ?, ?, ?, ?)");
         $stmt->execute([$conversationId, $sentFrom, $sentTo, $message, $createdAt]);
         $insertedId = $this->pdo->lastInsertId();

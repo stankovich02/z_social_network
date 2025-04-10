@@ -246,16 +246,14 @@
                                 method="get"
                                 class="form-3"
                         >
-                            <input class="type-message-input w-input" placeholder="Start a new message" type="text" id="new-message-text" />
+                            <input class="type-message-input w-input" autocomplete="off" name="" placeholder="Start a new message" type="text" id="new-message-text" />
                         </form>
                         <script type="module">
                             import { EmojiButton } from 'https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@4.6.4/dist/index.min.js';
 
 
-                            const button = document.createElement("button");
-                            button.innerText = "😊";
-                            button.type = "button";
-                            document.getElementById("emojiPicker").appendChild(button);
+                            const html = '<i class="fa-regular fa-face-smile pickEmoji"></i>';
+                            document.getElementById("emojiPicker").innerHTML += html;
 
                             const picker = new EmojiButton({
                                 position: 'top-start',
@@ -263,13 +261,16 @@
                             });
 
                             const input = document.querySelector("#new-message-text");
+                            let sendMessageIcon = document.querySelector(".send-message-icon");
 
                             picker.on('emoji', emoji => {
-                                input.value += emoji;
+                                input.value += emoji.emoji;
+                                sendMessageIcon.classList.add("can-send-icon");
+                                sendMessageIcon.disabled = false;
                             });
-
-                            button.addEventListener('click', () => {
-                                picker.togglePicker(button);
+                            let emojiIcon = document.querySelector(".pickEmoji");
+                            emojiIcon.addEventListener('click', () => {
+                                picker.togglePicker(emojiIcon);
                             });
                         </script>
                     </div>
@@ -293,5 +294,49 @@
 
         </div>
     </section>
+    <div class="popup-wrapper">
+        <div class="new-message-popup">
+            <div class="new-message-top">
+                <div class="close-icon close-new-message w-embed">
+                    <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink"
+                            aria-hidden="true"
+                            role="img"
+                            class="iconify iconify--ic"
+                            width="100%"
+                            height="100%"
+                            preserveAspectRatio="xMidYMid meet"
+                            viewBox="0 0 24 24"
+                    >
+                        <path fill="currentColor" d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12z"></path>
+                    </svg>
+                </div>
+                <div class="text-block-4">New message</div>
+            </div>
+            <div class="search-chat-people-form w-form">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <form
+                        id="email-form-4"
+                        name="email-form-4"
+                        method="get"
+                        class="form-5"
+                >
+                    <input class="search-people-chat-input w-input" name="" autocomplete="off" placeholder="Search people" type="text" id="search-people" />
+                </form>
+            </div>
+            <div class="new-message-result-wrapper">
+                @foreach($chats as $chat)
+                    <div class="single-new-message-user" data-id="{{$chat->user->id}}">
+                        <img src="{{asset('assets/img/users/' . $chat->user->photo)}}" loading="lazy" alt="" class="user-image" />
+                        <div class="new-message-user-info">
+                            <div class="new-message-user-fullname">{{$chat->user->full_name}}</div>
+                            <div class="new-message-user-username">&#64;{{$chat->user->username}}</div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
     <script src="{{asset('assets/js/messages.js')}}"></script>
 @endsection

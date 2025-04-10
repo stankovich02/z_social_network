@@ -43,6 +43,9 @@ document.addEventListener("click", function (event) {
         if(document.querySelector("#newCommentTextArea")){
             document.querySelector("#newCommentTextArea").value = "";
         }
+        if(document.querySelector(".search-people-chat-input")){
+            document.querySelector(".search-people-chat-input").value = "";
+        }
 
     }
 });

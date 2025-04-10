@@ -15,7 +15,8 @@ class LeftConversation extends Model
     protected array $fillable = [
         'conversation_id',
         'user_id',
-        'left_at'
+        'left_at',
+        'is_active'
     ];
 
 }
