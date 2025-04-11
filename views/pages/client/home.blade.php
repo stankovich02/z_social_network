@@ -4,8 +4,8 @@
     <section class="content">
 
         <div class="posts-filter">
-            <div class="foryou-filter"><div class="post-filter-text">For you</div></div>
-            <div class="following-filter"><div class="post-filter-text active-post-filter">Following</div></div>
+            <div class="foryou-filter"><div class="post-filter-text active-post-filter">For you</div></div>
+            <div class="following-filter"><div class="post-filter-text">Following</div></div>
         </div>
         <div class="new-post" id="feedNewPost">
             <img src="{{asset('assets/img/users/' . session()->get('user')->photo)}}" loading="eager" alt="" class="user-image" />

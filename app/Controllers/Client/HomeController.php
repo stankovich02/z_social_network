@@ -2,12 +2,9 @@
 
 namespace App\Controllers\Client;
 
-use App\Models\BlockedUser;
 use App\Models\LikedPost;
-use App\Models\Nav;
 use App\Models\Post;
 use App\Models\RepostedPost;
-use App\Models\User;
 use App\Models\UserFollower;
 use App\Traits\CalculateDate;
 use NovaLite\Database\Database;
@@ -37,8 +34,17 @@ class HomeController extends Controller
                 ->get(),
             'post_id'
         );
+        $followedUsers = array_column(
+            Database::table(UserFollower::TABLE)
+                ->where('user_id', '=', session()->get('user')->id)
+                ->get(),
+            'follower_id'
+        );
         $posts = Post::with('user','image')
                      ->where('user_id', '!=', session()->get('user')->id);
+        if (count($followedUsers) > 0) {
+            $posts = $posts->whereNotIn('user_id', $followedUsers);
+        }
         if(count($viewedPosts) > 0){
             $posts = $posts->whereNotIn('id', $viewedPosts);
         }
@@ -50,12 +56,6 @@ class HomeController extends Controller
         }
         $posts = $posts->orderBy('id', 'desc')->take(10)
               ->get();
-        $loggedInUserFollowing =  array_column(
-            Database::table(UserFollower::TABLE)
-                ->where('user_id', '=', session()->get('user')->id)
-                ->get(),
-            'follower_id'
-        );
         foreach ($posts as $post) {
             $post->created_at = $this->calculatePostedDate($post->created_at);
             $post->number_of_likes = $post->likesCount($post->id);
@@ -68,7 +68,7 @@ class HomeController extends Controller
                                       ->where('post_id', '=', $post->id)
                                       ->count();
             $post->number_of_comments = $post->commentsCount($post->id);
-            $post->user->loggedInUserFollowing = in_array($post->user->id, $loggedInUserFollowing);
+            $post->user->loggedInUserFollowing = in_array($post->user->id, $followedUsers);
         }
 
         return view('pages.client.home', [

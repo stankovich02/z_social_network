@@ -27,17 +27,25 @@ class PostController extends Controller
     use CalculateDate;
 	public function index(Request $request) : Response
 	{
-        $posts = Post::with('user','image')
-                     ->orderBy('id', 'desc')
-                     ->take(10)
-                     ->skip($request->query('offset') + 1)
-                     ->get();
-        $loggedInUserFollowing =  array_column(
+        $followedUsers =  array_column(
             Database::table(UserFollower::TABLE)
                 ->where('user_id', '=', session()->get('user')->id)
                 ->get(),
             'follower_id'
         );
+        $filter = $request->query('filter');
+        if(count($followedUsers) === 0 && $filter === 'following'){
+            return response()->json([
+                'posts' => []
+            ]);
+        }
+        $viewedPosts = array_column(
+        Database::table('viewed_posts')
+            ->where('user_id', '=', session()->get('user')->id)
+            ->get(),
+        'post_id'
+        );
+        $posts = Post::with('user','image');
         $blockedUsers = array_column(
             Database::table('blocked_users')
                 ->where('blocked_by_user_id', '=', session()->get('user')->id)
@@ -50,10 +58,27 @@ class PostController extends Controller
                 ->get(),
             'blocked_by_user_id'
         );
+        if ($filter === 'following') {
+            $posts = $posts->whereIn('user_id', $followedUsers);
+        }
+        if($filter === 'for-you'){
+            $posts = $posts->whereNotIn('user_id', $followedUsers);
+        }
+        if (count($blockedUsers) > 0) {
+            $posts = $posts->whereNotIn('user_id', $blockedUsers);
+        }
+        if(count($viewedPosts) > 0){
+            $posts = $posts->whereNotIn('id', $viewedPosts);
+        }
+        if (count($usersWhoBlockLoggedInUser) > 0) {
+            $posts = $posts->whereNotIn('user_id', $usersWhoBlockLoggedInUser);
+        }
+        $posts = $posts->where('user_id', '!=', session()->get('user')->id)
+            ->orderBy('id', 'desc')
+            ->take(10)
+            ->get();
         $jsonPosts = [];
         foreach ($posts as $post) {
-            if(!in_array($post->user->id, $blockedUsers) && !in_array($post->user->id, $usersWhoBlockLoggedInUser) &&
-                $post->user->id !== session()->get('user')->id){
                 $jsonPosts[] = [
                     'id' => $post->id,
                     'content' => $post->content,
@@ -74,13 +99,12 @@ class PostController extends Controller
                         'photo' => asset('assets/img/users/' . $post->user->photo),
                         'username' => $post->user->username,
                         'full_name' => $post->user->full_name,
-                        'loggedInUserFollowing' => in_array($post->user->id, $loggedInUserFollowing),
+                        'loggedInUserFollowing' => in_array($post->user->id, $followedUsers),
                         'profile_link' => route('profile', ['username' => $post->user->username]),
                     ]
                 ];
-            }
         }
-        return \response()->json([
+        return response()->json([
             'posts' => $jsonPosts
         ]);
 	}

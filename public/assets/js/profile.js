@@ -482,7 +482,7 @@ if(document.querySelector(".block-user")){
             document.body.style.overflow = "hidden";
         });
     })
-}
+}php
 
 
 function nextBioBtnFunc(describeBio,saveProfile,popupLogo,returnBackBtn,closeIcon){

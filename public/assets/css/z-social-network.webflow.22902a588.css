@@ -2276,6 +2276,8 @@ textarea.w-input, textarea.w-select {
 
 .foryou-filter {
   width: 50%;
+  cursor: pointer;
+  transition: all 0.3s;
 }
 
 .post-filter-text {
@@ -2295,8 +2297,12 @@ textarea.w-input, textarea.w-select {
 
 .following-filter {
   width: 50%;
+  transition: all 0.3s;
+  cursor: pointer;
 }
-
+.foryou-filter:hover,.following-filter:hover{
+  background-color: rgba(231,233,234,0.1);
+}
 .new-post {
   grid-column-gap: 10px;
   grid-row-gap: 10px;
