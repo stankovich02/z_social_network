@@ -444,8 +444,7 @@
 <div class="save-text">Click to save updates</div>
 <button class="save-profile-btn w-button">Save</button>
 </div>
-</div>
-</div>
+</div></div>
 <div id="editProfileWrapper" class="popup-wrapper edit-popup">
 <div class="edit-profile-popup">
 <div class="top-edit-profile">
@@ -603,6 +602,9 @@
 </div>
 <p class="errorMsg" id="editError"></p>
 </div>
+</div>
+<div id="viewPictureWrapper">
+    <i class="fa-solid fa-xmark"></i>
 </div>
 <script src="{{asset('assets/js/profile.js')}}"></script>
 @endsection

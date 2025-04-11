@@ -31,8 +31,17 @@ class HomeController extends Controller
                 ->get(),
             'blocked_by_user_id'
         );
+        $viewedPosts = array_column(
+            Database::table('viewed_posts')
+                ->where('user_id', '=', session()->get('user')->id)
+                ->get(),
+            'post_id'
+        );
         $posts = Post::with('user','image')
                      ->where('user_id', '!=', session()->get('user')->id);
+        if(count($viewedPosts) > 0){
+            $posts = $posts->whereNotIn('id', $viewedPosts);
+        }
         if (count($blockedUsers) > 0) {
             $posts = $posts->whereNotIn('user_id', $blockedUsers);
         }

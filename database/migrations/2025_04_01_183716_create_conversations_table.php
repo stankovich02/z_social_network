@@ -7,7 +7,7 @@ class create_conversations_table
 {
 	public function up() : void
 	{
-		Schema::create('conversations', function (Migration $table) {
+		Schema::create(\App\Models\Conversation::TABLE, function (Migration $table) {
 			$table->id();
             $table->foreignId('user_id')->references('users')->onDelete('cascade');
             $table->foreignId('other_user_id')->references('users')->onDelete('cascade');
@@ -19,6 +19,6 @@ class create_conversations_table
 
 	public function down() : void
 	{
-		Schema::drop('conversations');
+		Schema::drop(\App\Models\Conversation::TABLE);
 	}
 }

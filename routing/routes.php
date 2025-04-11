@@ -33,7 +33,7 @@ Router::middleware([\App\Middlewares\IsLoggedIn::class])->group(function () {
     Router::controller(PostController::class)->group(function () {
         Router::resource('/posts');
         Router::get('/{username}/status/{id}', 'show')->name('post');
-        Router::post('/register-view', 'registerView')->name('register-view');
+        Router::post('/posts/mark-multiple-views', 'markMultipleViews')->name('posts.mark-multiple-views');
         Router::get('/posts/navigate/{id}', 'navigateToPost')->name('posts.navigate');
         Router::post("/posts/{id}/like", 'likePost')->name('posts.like');
         Router::post("/posts/{id}/repost", 'repostPost')->name('posts.repost');

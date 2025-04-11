@@ -67,4 +67,8 @@ class User extends Model
     {
         return $this->hasMany(UserFollower::class, 'follower_id');
     }
+    public function viewedPosts() : HasMany
+    {
+        return $this->hasMany(ViewedPost::class, 'user_id');
+    }
 }

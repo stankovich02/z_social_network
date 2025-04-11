@@ -412,3 +412,20 @@ if(document.querySelector("#single-post-info .block-user")){
     })
 }
 
+document.addEventListener("DOMContentLoaded", function (){
+        let postId = document.querySelector(".post-stats-icon").getAttribute("data-id");
+        $.ajax({
+            url: '/posts/mark-multiple-views',
+            type: 'POST',
+            data: {
+                post_ids: [postId]
+            },
+            success: function () {
+
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+})
+

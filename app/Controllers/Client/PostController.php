@@ -12,6 +12,7 @@ use App\Models\PostCommentNotification;
 use App\Models\PostNotification;
 use App\Models\RepostedPost;
 use App\Models\UserFollower;
+use App\Models\ViewedPost;
 use App\Traits\CalculateDate;
 use DateTime;
 use NovaLite\Database\Database;
@@ -232,13 +233,27 @@ class PostController extends Controller
         }
 		Post::delete($id);
 	}
-    public function registerView(Request $request) : void
+    public function markMultipleViews(Request $request) : void
     {
-        $postId = $request->input('post_id');
-        $post = Post::where('id', '=',$postId)->first();
-        if ($post) {
-            $post->views += 1;
-            $post->save();
+        $postIds = $request->input('post_ids');
+        $userId = session()->get('user')->id;
+        foreach ($postIds as $postId) {
+            $isViewed = Database::table(ViewedPost::TABLE)
+                ->where('user_id', '=', $userId)
+                ->where('post_id', '=', $postId)
+                ->first();
+            if(!$isViewed){
+                $post = Post::with('user')->where('id', '=',$postId)->first();
+                if($post->user_id !== $userId){
+                    $viewedPost = [
+                        'user_id' => $userId,
+                        'post_id' => $postId
+                    ];
+                    ViewedPost::create($viewedPost);
+                    $post->views = $post->views + 1;
+                    $post->save();
+                }
+            }
         }
     }
     public function likePost(int $id) : Response

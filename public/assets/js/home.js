@@ -570,6 +570,19 @@ document.querySelector("#feedNewPost .new-post-body").addEventListener("input", 
     postBtn.disabled = this.value.trim() === "";
     this.value.trim() === "" ? postBtn.classList.add("disabled-new-post-btn") : postBtn.classList.remove("disabled-new-post-btn");
 });
+let observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            let post = entry.target;
+            let postId = post.getAttribute("data-id");
+            if (!post.dataset.viewed) {
+                post.dataset.viewed = "true";
+                markPostAsViewed(postId);
+            }
+        }
+    });
+}, { threshold: 0.5 });
+let viewedPosts = new Set();
 document.addEventListener("DOMContentLoaded", function () {
     document.querySelector("#newCommentTextArea").addEventListener("input", function () {
         const replyBtn = document.querySelector("#replyBtn");
@@ -608,7 +621,39 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         })
     });
+
+    window.addEventListener("beforeunload", sendViewedPostsToServer);
+
+    observePosts();
 })
+function markPostAsViewed(postId){
+    viewedPosts.add(postId);
+}
+function sendViewedPostsToServer(){
+    if(viewedPosts.size === 0) return;
+
+    $.ajax({
+        url: '/posts/mark-multiple-views',
+        type: 'POST',
+        data: {
+            post_ids: Array.from(viewedPosts)
+        },
+        success: function () {
+            viewedPosts.clear();
+        },
+        error: function (err) {
+            console.log(err);
+        }
+    });
+}
+function observePosts(){
+    document.querySelectorAll(".single-post").forEach(post => {
+        if (!post.dataset.observing) {
+            observer.observe(post);
+            post.dataset.observing = "true";
+        }
+    });
+}
 let offset = 10;
 let isFetching = false;
 $(window).on("scroll", function () {
@@ -716,6 +761,7 @@ function loadMorePosts() {
             });
             offset += 10;
             isFetching = false;
+            observePosts();
         }
     });
 }

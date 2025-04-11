@@ -29,6 +29,10 @@ class Post extends Model
     {
         return $this->hasOne(ImagePost::class, 'post_id', 'id');
     }
+    public function comments() : HasMany
+    {
+        return $this->hasMany(Comment::class, 'post_id', 'id');
+    }
     public function likes() : HasMany
     {
         return $this->hasMany(LikedPost::class, 'post_id', 'id');
@@ -36,6 +40,10 @@ class Post extends Model
     public function reposts() : HasMany
     {
         return $this->hasMany(RepostedPost::class, 'post_id', 'id');
+    }
+    public function views(): HasMany
+    {
+        return $this->hasMany(ViewedPost::class, 'post_id', 'id');
     }
     public function likesCount(int $id) : int
     {
@@ -45,13 +53,12 @@ class Post extends Model
     {
         return RepostedPost::where('post_id', '=', $id)->count();
     }
-    public function comments() : HasMany
-    {
-        return $this->hasMany(Comment::class, 'post_id', 'id');
-    }
-
     public function commentsCount(int $id) : int
     {
         return Comment::where('post_id', '=', $id)->count();
+    }
+    public function viewsCount(int $id) : int
+    {
+        return ViewedPost::where('post_id', '=', $id)->count();
     }
 }

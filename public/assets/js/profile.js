@@ -416,6 +416,50 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         })
     });
+
+    let viewedPosts = new Set();
+
+    function markPostAsViewed(postId){
+        viewedPosts.add(postId);
+    }
+    function sendViewedPostsToServer(){
+        if(viewedPosts.size === 0) return;
+
+        $.ajax({
+            url: '/posts/mark-multiple-views',
+            type: 'POST',
+            data: {
+                post_ids: Array.from(viewedPosts)
+            },
+            success: function () {
+                viewedPosts.clear();
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    }
+    function observePosts(){
+        let observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    let post = entry.target;
+                    let postId = post.getAttribute("data-id");
+                    if (!post.dataset.viewed) {
+                        post.dataset.viewed = "true";
+                        markPostAsViewed(postId);
+                    }
+                }
+            });
+        }, { threshold: 0.5 });
+
+        document.querySelectorAll(".single-post").forEach(post => observer.observe(post));
+    }
+
+    window.addEventListener("beforeunload", sendViewedPostsToServer);
+
+
+    observePosts();
 })
 
 if(document.querySelector(".block-user")){
@@ -1067,4 +1111,37 @@ if(newMessageBtn){
         });
     })
 }
+
+let profileBanner = document.querySelector(".profile-banner");
+if(profileBanner){
+    profileBanner.addEventListener("click", function (){
+       let viewPictureWrapper = document.querySelector("#viewPictureWrapper");
+       let bannerImage = this.style.backgroundImage.slice(5, -2);
+       viewPictureWrapper.innerHTML +=  '<img src="' + bannerImage + '" alt=""/>';
+       viewPictureWrapper.style.display = "block";
+        let closeIcon = viewPictureWrapper.querySelector("i");
+        closeIcon.addEventListener("click", function (){
+            viewPictureWrapper.style.display = "none";
+            let clickedImage = viewPictureWrapper.querySelector("img");
+            clickedImage.remove();
+        })
+    })
+}
+let profilePicture = document.querySelector(".profile-image");
+if(profilePicture){
+    profilePicture.addEventListener("click", function (){
+        let viewPictureWrapper = document.querySelector("#viewPictureWrapper");
+        let profileImage = this.src;
+        viewPictureWrapper.innerHTML +=  '<img class="clickedProfileImage" src="' + profileImage + '" alt=""/>';
+        viewPictureWrapper.style.display = "block";
+        let closeIcon = viewPictureWrapper.querySelector("i");
+        closeIcon.addEventListener("click", function (){
+            viewPictureWrapper.style.display = "none";
+            let clickedProfileImage = document.querySelector(".clickedProfileImage");
+            clickedProfileImage.remove();
+        })
+    })
+}
+
+
 
