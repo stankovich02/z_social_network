@@ -5027,6 +5027,7 @@ background-color: rgb(29, 155, 240);
   align-items: center;
   margin-top: 15px;
   text-decoration: none;
+  z-index: 1;
 }
 #matchedFollowersPhotos{
   display: flex;

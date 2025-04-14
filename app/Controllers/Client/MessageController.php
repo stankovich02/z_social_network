@@ -7,6 +7,7 @@ use App\Models\Conversation;
 use App\Models\LeftConversation;
 use App\Models\Message;
 use App\Models\User;
+use App\Models\UserFollower;
 use App\Traits\CalculateDate;
 use mysql_xdevapi\Table;
 use NovaLite\Database\Database;
@@ -120,6 +121,43 @@ class MessageController extends Controller
                                               ->where('blocked_by_user_id', '=', $loggedInUserId)
                                               ->first();
         $chatIsBlocked = $userBlockedLoggedInUser || $loggedInUserBlockedUser;
+        $matchedFollowers = [];
+        $loggedInUserFollowing = array_column(
+            Database::table(UserFollower::TABLE)
+                ->where('user_id', '=', session()->get('user')->id)
+                ->get(),
+            'follower_id'
+        );
+        $profileUserFollowers = array_column(
+            Database::table(UserFollower::TABLE)
+                ->where('follower_id', '=', $otherUserId)
+                ->get(),
+            'user_id'
+        );
+        $matched = array_intersect($loggedInUserFollowing, $profileUserFollowers);
+        foreach ($matched as $id) {
+            $matchedUser = User::where('id', '=', $id)->first();
+            $matchedFollowers[] = [
+                'full_name' => $matchedUser->full_name,
+                'photo' => asset('assets/img/users/' . $matchedUser->photo),
+            ];
+        }
+        $matchedText = '';
+        $numOfRemaining = count($matchedFollowers) - 2;
+        $others = $numOfRemaining != 1 ? "$numOfRemaining others" : "$numOfRemaining other";
+        switch (count($matchedFollowers)) {
+            case 0:
+                $matchedText = "Not followed by anyone you’re following";
+                break;
+            case 1:
+                $matchedText = 'Followed by ' . $matchedFollowers[0]['full_name'];
+                break;
+            case 2:
+                $matchedText = 'Followed by ' . $matchedFollowers[0]['full_name'] . ' and ' . $matchedFollowers[1]['full_name'];
+                break;
+            default:
+                $matchedText = 'Followed by ' . $matchedFollowers[0]['full_name'] . ', ' . $matchedFollowers[1]['full_name'] . ' and ' . $others . ' you follow';
+        }
         return view('pages.client.messages.single-conversation',[
             'chatId' => $id,
             'chats' => $lastChats,
@@ -127,7 +165,9 @@ class MessageController extends Controller
             'numOfMessages' => count($messages),
             'chatIsBlocked' => $chatIsBlocked,
             'newMessages' => $newMessages,
-            'activeChatUser' => $activeChatUser
+            'activeChatUser' => $activeChatUser,
+            'matchedFollowers' => $matchedFollowers,
+            'matchedText' => $matchedText,
         ]);
     }
     public function navigateToConversation(Request $request) : Response

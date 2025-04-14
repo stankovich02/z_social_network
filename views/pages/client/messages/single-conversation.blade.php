@@ -165,6 +165,20 @@
                         <div class="chat-user-num-of-followers">{{$activeChatUser->number_of_followers}}</div>
                     </div>
                 </div>
+                @if(count($matchedFollowers) === 0)
+                    <div id="matchedFollowers">
+                        <p id="matchedFollowersText">{{$matchedText}}</p>
+                    </div>
+                @else
+                    <div id="matchedFollowers">
+                        <div id="matchedFollowersPhotos">
+                            @foreach($matchedFollowers as $index => $matchedFollower)
+                                <img src="{{$matchedFollower['photo']}}" alt="" class="matched-follower-image" />
+                            @endforeach
+                        </div>
+                        <p id="matchedFollowersText">{{$matchedText}}</p>
+                    </div>
+                @endif
             </a>
             <div class="chat-messages-wrapper">
                 <?php
