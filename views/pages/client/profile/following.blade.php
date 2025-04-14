@@ -26,11 +26,16 @@
             </div>
         </div>
         <div id="filterWrapper">
+            @if(count($matchedFollowers) > 0)
+                <a href="{{route('profile.followers_you_follow', ['username' => $user->username])}}" class="filterLink">
+                    <p class="w-65">Followers you know</p>
+                </a>
+            @endif
             <a href="{{route('profile.followers', ['username' => $user->username])}}" class="filterLink">
-                <p>Followers</p>
+                <p class="{{count($matchedFollowers) > 0 ? "w-65" : ""}}">Followers</p>
             </a>
             <a href="{{route('profile.following', ['username' => $user->username])}}" class="filterLink">
-                <p class="activeFollowFilter">Following</p>
+                <p class="activeFollowFilter {{count($matchedFollowers) > 0 ? "w-65" : ""}}">Following</p>
             </a>
         </div>
         <div id="following">

@@ -64,6 +64,7 @@ Router::middleware([\App\Middlewares\IsLoggedIn::class])->group(function () {
         Router::get('/{username}','index')->name('profile');
         Router::get('/{username}/followers','followers')->name('profile.followers');
         Router::get('/{username}/following','following')->name('profile.following');
+        Router::get('/{username}/followers_you_follow','followersYouFollow')->name('profile.followers_you_follow');
     });
     Router::get('/search-new-conversation', [\App\Controllers\Client\ConversationController::class, 'searchNewConversation'])->name('search-new-conversation');
     Router::get('/search-direct-messages', [\App\Controllers\Client\ConversationController::class, 'searchDirectMessages'])->name('search-direct-messages');

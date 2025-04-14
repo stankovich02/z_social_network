@@ -3167,7 +3167,7 @@ textarea.w-input, textarea.w-select {
 }
 
 .profile-image {
-  z-index: 5;
+  z-index: 0;
   border: 5px solid #000;
   border-radius: 50%;
   width: 150px;
@@ -4713,8 +4713,10 @@ textarea.w-input, textarea.w-select {
 #filterWrapper{
   width: 100%;
   display: flex;
+  justify-content: space-between;
   border-bottom: 1px solid #88888880;
 }
+
 #filterWrapper .filterLink{
   width: 50%;
   text-align: center;
@@ -4736,8 +4738,14 @@ textarea.w-input, textarea.w-select {
   color: white;
   font-weight: 700;
 }
-#filterWrapper .filterLink:hover{
-  background-color: rgba(231,233,234,0.1);
+#filterWrapper .filterLink:hover {
+  background-color: rgba(231, 233, 234, 0.1);
+}
+.w-33{
+   width: 33.33%!important;
+ }
+.w-65{
+  width: 65%!important;
 }
 .single-following-user, .single-follower-user{
   display: flex;
@@ -4779,6 +4787,7 @@ textarea.w-input, textarea.w-select {
 .user-following-bio, .user-follower-bio{
   margin-top: 5px;
   width: 100%;
+  color: white;
 }
 .single-follower-option:first-child, .single-chat-option:first-child, single-message-option:first-child,.single-post-option:first-child, .single-comment-option:first-child, .single-profile-option:first-child{
   border-top-left-radius: 10px;
@@ -4991,9 +5000,9 @@ background-color: rgb(29, 155, 240);
   transform: translate(-50%, -50%);
   position: absolute;
 }
-.clickedProfileImage{
+/*.clickedProfileImage{
   border-radius: 50%;
-}
+}*/
 #postEmojiImagePick{
   display: flex;
   align-items: center;
@@ -5007,4 +5016,39 @@ background-color: rgb(29, 155, 240);
 }
 #postEmojiImagePick .pickEmoji:hover,.new-comment-wrapper .pickEmoji:hover{
   background-color: rgba(29,155,240,0.1);
+}
+#matchedFollowersText{
+  color: rgb(113,118,123);
+  display: block;
+  margin-bottom: 0;
+}
+#matchedFollowers{
+  display: flex;
+  align-items: center;
+  margin-top: 15px;
+  text-decoration: none;
+}
+#matchedFollowersPhotos{
+  display: flex;
+  position: relative;
+  margin-right: 10px;
+  width: 40px;
+}
+.matched-follower-image{
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  position: absolute;
+  display: block;
+  top: 0;
+  left: 30%;
+  transform: translate(-50%, -50%);
+}
+.matched-follower-image:nth-child(2){
+  left: 60%;
+  z-index: -1;
+}
+.matched-follower-image:nth-child(3){
+  left: 80%;
+  z-index: -2;
 }

@@ -105,12 +105,27 @@
         ></path>
     </svg>
 </div>
-<div class="joined-date-text">Joined {{$joinedDate}}</div>
+<div class="joined-date-text">Joined {{$user->joinedDate}}</div>
 </div>
 <div class="follow-stats">
 <a href="{{route('profile.following', ['username' => $user->username])}}" class="following-stats">{{count($user->following)}} <span class="text-span-2">Following</span></a>
 <a href="{{route('profile.followers', ['username' => $user->username])}}" class="followers-stats">{{count($user->followers)}} <span class="text-span-3">{{count($user->followers) !== 1 ? "Followers" : "Follower"}}</span></a>
 </div>
+            @if(count($matchedFollowers) === 0)
+                <a id="matchedFollowers">
+                    <p id="matchedFollowersText">{{$matchedText}}</p>
+                </a>
+            @else
+                <a href="{{route('profile.followers_you_follow', ['username' => $user->username])}}" id="matchedFollowers">
+                    <div id="matchedFollowersPhotos">
+                        @foreach($matchedFollowers as $index => $matchedFollower)
+                            <img src="{{$matchedFollower['photo']}}" alt="" class="matched-follower-image" />
+                        @endforeach
+                    </div>
+                    <p id="matchedFollowersText">{{$matchedText}}</p>
+                </a>
+            @endif
+
 </div>
 </div>
     @if($loggedInUserBlockedUser)
