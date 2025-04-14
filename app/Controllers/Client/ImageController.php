@@ -15,7 +15,6 @@ class ImageController extends Controller
         $newName = uniqid() . '.' . $ext;
         $path = public_path('/assets/img/posts/' . $newName);
         move_uploaded_file($tmpName, $path);
-
         return asset('assets/img/posts/' . $newName);
     }
     public function deletePostImage(Request $request) : void

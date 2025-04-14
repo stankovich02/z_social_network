@@ -341,26 +341,7 @@ function feedNewPostLogic(){
         uploadPostImage.classList.add("upload-post-image");
         uploadPostImage.classList.add("w-embed");
         uploadPostImage.classList.add("icon-embed-xsmall");
-        uploadPostImage.innerHTML = `
-<i class="fa-regular fa-image"></i>
-                           <!-- <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                xmlns:xlink="http://www.w3.org/1999/xlink"
-                                aria-hidden="true"
-                                role="img"
-                                class="iconify iconify&#45;&#45;carbon"
-                                width="100%"
-                                height="100%"
-                                preserveAspectRatio="xMidYMid meet"
-                                viewBox="0 0 32 32"
-                        >
-                            <path fill="currentColor" d="M19 14a3 3 0 1 0-3-3a3 3 0 0 0 3 3m0-4a1 1 0 1 1-1 1a1 1 0 0 1 1-1"></path>
-                            <path
-                                    fill="currentColor"
-                                    d="M26 4H6a2 2 0 0 0-2 2v20a2 2 0 0 0 2 2h20a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2m0 22H6v-6l5-5l5.59 5.59a2 2 0 0 0 2.82 0L21 19l5 5Zm0-4.83l-3.59-3.59a2 2 0 0 0-2.82 0L18 19.17l-5.59-5.59a2 2 0 0 0-2.82 0L6 17.17V6h20Z"
-                            ></path>
-                        </svg>-->
-                            `;
+        uploadPostImage.innerHTML = `<i class="fa-regular fa-image"></i>`;
         postOptions.insertAdjacentHTML('afterbegin', uploadPostImage.outerHTML);
     }
     document.querySelector("#feedNewPost .post-options .upload-post-image").addEventListener("click", function () {
@@ -410,7 +391,7 @@ function feedNewPostLogic(){
                 fileInput.remove();
                 uploadPostImage.remove();
                 let postOptions = document.querySelector("#feedNewPost .post-options");
-                postOptions.style.justifyContent = "flex-end";
+                postOptions.style.justifyContent = "space-between";
                 const removePhotoIcon = document.querySelector("#feedNewPost .remove-photo");
                 const postBtn = document.querySelector("#feedPostBtn");
                 removePhotoIcon.addEventListener("click", function () {
@@ -537,33 +518,13 @@ function feedWriteInputAndIcon(){
     fileInput.name = "post-image";
     fileInput.classList.add("hidden-file-input");
     form.appendChild(fileInput);
-    let postOptions = document.querySelector("#feedNewPost .post-options");
-    postOptions.style.justifyContent = 'space-between';
+    let postEmojiImage = document.querySelector("#feedNewPost #postEmojiImagePick");
     let uploadPostImage = document.createElement("div");
     uploadPostImage.classList.add("upload-post-image");
     uploadPostImage.classList.add("w-embed");
     uploadPostImage.classList.add("icon-embed-xsmall");
-    uploadPostImage.innerHTML = `
-<i class="fa-regular fa-image"></i>
-                           <!-- <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                xmlns:xlink="http://www.w3.org/1999/xlink"
-                                aria-hidden="true"
-                                role="img"
-                                class="iconify iconify&#45;&#45;carbon"
-                                width="100%"
-                                height="100%"
-                                preserveAspectRatio="xMidYMid meet"
-                                viewBox="0 0 32 32"
-                        >
-                            <path fill="currentColor" d="M19 14a3 3 0 1 0-3-3a3 3 0 0 0 3 3m0-4a1 1 0 1 1-1 1a1 1 0 0 1 1-1"></path>
-                            <path
-                                    fill="currentColor"
-                                    d="M26 4H6a2 2 0 0 0-2 2v20a2 2 0 0 0 2 2h20a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2m0 22H6v-6l5-5l5.59 5.59a2 2 0 0 0 2.82 0L21 19l5 5Zm0-4.83l-3.59-3.59a2 2 0 0 0-2.82 0L18 19.17l-5.59-5.59a2 2 0 0 0-2.82 0L6 17.17V6h20Z"
-                            ></path>
-                        </svg>-->
-                            `;
-    postOptions.insertAdjacentHTML('afterbegin', uploadPostImage.outerHTML);
+    uploadPostImage.innerHTML = `<i class="fa-regular fa-image"></i>`;
+    postEmojiImage.appendChild(uploadPostImage);
 }
 document.querySelector("#feedNewPost .new-post-body").addEventListener("input", function () {
     const postBtn = document.querySelector("#feedPostBtn");
@@ -676,7 +637,7 @@ function loadMorePosts() {
         url: `/posts?offset=${offset}&filter=${filter}`,
         type: "GET",
         success: function (data){
-            if (posts.length === 0) {
+            if (data.posts.length === 0) {
                 $(window).off("scroll");
                 return;
             }
@@ -761,9 +722,13 @@ function loadMorePosts() {
                 postElement.innerHTML += postInfoAndBody.outerHTML;
                 container.appendChild(postElement);
             });
+            observePosts();
+            if (data.posts.length < 10) {
+                $(window).off("scroll");
+                return;
+            }
             offset += 10;
             isFetching = false;
-            observePosts();
         }
     });
 }
@@ -785,58 +750,58 @@ if(forYouFilter){
                     $(window).off("scroll");
                     return;
                 }
-
                 const container = document.getElementById("posts");
                 container.innerHTML = "";
-                data.posts.forEach(post => {
-                    const postElement = document.createElement("div");
-                    postElement.classList.add("single-post");
-                    postElement.setAttribute("data-id", post.id);
-                    const postMoreOptionsWrapper = document.createElement("div");
-                    postMoreOptionsWrapper.classList.add("post-more-options-wrapper");
-                    postMoreOptionsWrapper.innerHTML = `
+                if(data.posts){
+                    data.posts.forEach(post => {
+                        const postElement = document.createElement("div");
+                        postElement.classList.add("single-post");
+                        postElement.setAttribute("data-id", post.id);
+                        const postMoreOptionsWrapper = document.createElement("div");
+                        postMoreOptionsWrapper.classList.add("post-more-options-wrapper");
+                        postMoreOptionsWrapper.innerHTML = `
                             <div class="more-options w-embed post-more-options">
                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--ph more-opt-ic" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 256">
                                     <path fill="currentColor" d="M144 128a16 16 0 1 1-16-16a16 16 0 0 1 16 16m-84-16a16 16 0 1 0 16 16a16 16 0 0 0-16-16m136 0a16 16 0 1 0 16 16a16 16 0 0 0-16-16"></path>
                                 </svg>
                             </div>`;
-                    const choosePostOption = document.createElement("div");
-                    choosePostOption.classList.add("choose-post-option");
-                    choosePostOption.innerHTML = `  <div class="single-post-option block-user" data-id="${post.user.id}" data-username="${post.user.username}"><div class="block-icon w-embed"><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" height="100%" width="100%" class="iconify iconify--ic" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2M4 12c0-4.42 3.58-8 8-8c1.85 0 3.55.63 4.9 1.69L5.69 16.9A7.9 7.9 0 0 1 4 12m8 8c-1.85 0-3.55-.63-4.9-1.69L18.31 7.1A7.9 7.9 0 0 1 20 12c0 4.42-3.58 8-8 8" fill="currentColor"></path></svg></div>Block &#64;${post.user.username}`;
-                    if(post.user.loggedInUserFollowing){
-                        choosePostOption.innerHTML += `<div class="single-post-option unfollow-user" data-id="${post.user.id}" data-username="${post.user.username}"><i class="fa-solid fa-user-xmark"></i> Unfollow &#64;${post.user.username}</div>`;
-                    }
-                    else {
-                        choosePostOption.innerHTML += `<div class="single-post-option follow-user" data-id="${post.user.id}" data-username="${post.user.username}"><i class="fa-solid fa-user-plus"></i> Follow &#64;${post.user.username}</div>`;
-                    }
-                    postMoreOptionsWrapper.appendChild(choosePostOption);
-                    postElement.appendChild(postMoreOptionsWrapper);
-                    postElement.innerHTML += `
+                        const choosePostOption = document.createElement("div");
+                        choosePostOption.classList.add("choose-post-option");
+                        choosePostOption.innerHTML = `  <div class="single-post-option block-user" data-id="${post.user.id}" data-username="${post.user.username}"><div class="block-icon w-embed"><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" height="100%" width="100%" class="iconify iconify--ic" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2M4 12c0-4.42 3.58-8 8-8c1.85 0 3.55.63 4.9 1.69L5.69 16.9A7.9 7.9 0 0 1 4 12m8 8c-1.85 0-3.55-.63-4.9-1.69L18.31 7.1A7.9 7.9 0 0 1 20 12c0 4.42-3.58 8-8 8" fill="currentColor"></path></svg></div>Block &#64;${post.user.username}`;
+                        if(post.user.loggedInUserFollowing){
+                            choosePostOption.innerHTML += `<div class="single-post-option unfollow-user" data-id="${post.user.id}" data-username="${post.user.username}"><i class="fa-solid fa-user-xmark"></i> Unfollow &#64;${post.user.username}</div>`;
+                        }
+                        else {
+                            choosePostOption.innerHTML += `<div class="single-post-option follow-user" data-id="${post.user.id}" data-username="${post.user.username}"><i class="fa-solid fa-user-plus"></i> Follow &#64;${post.user.username}</div>`;
+                        }
+                        postMoreOptionsWrapper.appendChild(choosePostOption);
+                        postElement.appendChild(postMoreOptionsWrapper);
+                        postElement.innerHTML += `
                         <a href="${post.user.profile_link}"><img src="${post.user.photo}" loading="eager" alt="" class="user-image" /></a>`;
-                    let postInfoAndBody = document.createElement("div");
-                    postInfoAndBody.classList.add("post-info-and-body");
-                    postInfoAndBody.innerHTML = `<div class="post-info">
+                        let postInfoAndBody = document.createElement("div");
+                        postInfoAndBody.classList.add("post-info-and-body");
+                        postInfoAndBody.innerHTML = `<div class="post-info">
                                 <a href="${post.user.profile_link}" class="posted-by-fullname">${post.user.full_name}</a>
                                 <a href="${post.user.profile_link}" class="posted-by-username">&#64;${post.user.username}</a>
                                 <div class="dot">·</div>
                                 <div class="posted-on-date-text">${post.created_at}</div>
                             </div>`;
-                    let postBody = document.createElement("div");
-                    postBody.classList.add("post-body");
-                    if(post.content){
-                        postBody.innerHTML += `<p class="post-body-text">${post.content}</p>`;
-                    }
-                    if(post.image){
-                        postBody.innerHTML += `<img
+                        let postBody = document.createElement("div");
+                        postBody.classList.add("post-body");
+                        if(post.content){
+                            postBody.innerHTML += `<p class="post-body-text">${post.content}</p>`;
+                        }
+                        if(post.image){
+                            postBody.innerHTML += `<img
                                     src="${post.image}"
                                     loading="lazy"
                                     sizes="100vw"
                                     alt=""
                                     class="post-image"
                             />`;
-                    }
-                    postInfoAndBody.appendChild(postBody);
-                    postInfoAndBody.innerHTML += `
+                        }
+                        postInfoAndBody.appendChild(postBody);
+                        postInfoAndBody.innerHTML += `
                             <div class="post-reactions">
                                 <div class="post-comment-stats">
                                     <div class="post-stats-icon" data-id="${post.id}">
@@ -864,10 +829,11 @@ if(forYouFilter){
                                 </div>
                             </div>
                 `;
-                    postElement.innerHTML += postInfoAndBody.outerHTML;
-                    container.appendChild(postElement);
-                });
-                offset += 10;
+                        postElement.innerHTML += postInfoAndBody.outerHTML;
+                        container.appendChild(postElement);
+                    });
+                }
+                offset = 10;
                 isFetching = false;
                 observePosts();
             }
@@ -893,55 +859,56 @@ if(followingFilter){
 
                 const container = document.getElementById("posts");
                 container.innerHTML = "";
-                data.posts.forEach(post => {
-                    const postElement = document.createElement("div");
-                    postElement.classList.add("single-post");
-                    postElement.setAttribute("data-id", post.id);
-                    const postMoreOptionsWrapper = document.createElement("div");
-                    postMoreOptionsWrapper.classList.add("post-more-options-wrapper");
-                    postMoreOptionsWrapper.innerHTML = `
+                if(data.posts){
+                    data.posts.forEach(post => {
+                        const postElement = document.createElement("div");
+                        postElement.classList.add("single-post");
+                        postElement.setAttribute("data-id", post.id);
+                        const postMoreOptionsWrapper = document.createElement("div");
+                        postMoreOptionsWrapper.classList.add("post-more-options-wrapper");
+                        postMoreOptionsWrapper.innerHTML = `
                             <div class="more-options w-embed post-more-options">
                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--ph more-opt-ic" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 256">
                                     <path fill="currentColor" d="M144 128a16 16 0 1 1-16-16a16 16 0 0 1 16 16m-84-16a16 16 0 1 0 16 16a16 16 0 0 0-16-16m136 0a16 16 0 1 0 16 16a16 16 0 0 0-16-16"></path>
                                 </svg>
                             </div>`;
-                    const choosePostOption = document.createElement("div");
-                    choosePostOption.classList.add("choose-post-option");
-                    choosePostOption.innerHTML = `  <div class="single-post-option block-user" data-id="${post.user.id}" data-username="${post.user.username}"><div class="block-icon w-embed"><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" height="100%" width="100%" class="iconify iconify--ic" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2M4 12c0-4.42 3.58-8 8-8c1.85 0 3.55.63 4.9 1.69L5.69 16.9A7.9 7.9 0 0 1 4 12m8 8c-1.85 0-3.55-.63-4.9-1.69L18.31 7.1A7.9 7.9 0 0 1 20 12c0 4.42-3.58 8-8 8" fill="currentColor"></path></svg></div>Block &#64;${post.user.username}`;
-                    if(post.user.loggedInUserFollowing){
-                        choosePostOption.innerHTML += `<div class="single-post-option unfollow-user" data-id="${post.user.id}" data-username="${post.user.username}"><i class="fa-solid fa-user-xmark"></i> Unfollow &#64;${post.user.username}</div>`;
-                    }
-                    else {
-                        choosePostOption.innerHTML += `<div class="single-post-option follow-user" data-id="${post.user.id}" data-username="${post.user.username}"><i class="fa-solid fa-user-plus"></i> Follow &#64;${post.user.username}</div>`;
-                    }
-                    postMoreOptionsWrapper.appendChild(choosePostOption);
-                    postElement.appendChild(postMoreOptionsWrapper);
-                    postElement.innerHTML += `
+                        const choosePostOption = document.createElement("div");
+                        choosePostOption.classList.add("choose-post-option");
+                        choosePostOption.innerHTML = `  <div class="single-post-option block-user" data-id="${post.user.id}" data-username="${post.user.username}"><div class="block-icon w-embed"><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" height="100%" width="100%" class="iconify iconify--ic" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2M4 12c0-4.42 3.58-8 8-8c1.85 0 3.55.63 4.9 1.69L5.69 16.9A7.9 7.9 0 0 1 4 12m8 8c-1.85 0-3.55-.63-4.9-1.69L18.31 7.1A7.9 7.9 0 0 1 20 12c0 4.42-3.58 8-8 8" fill="currentColor"></path></svg></div>Block &#64;${post.user.username}`;
+                        if(post.user.loggedInUserFollowing){
+                            choosePostOption.innerHTML += `<div class="single-post-option unfollow-user" data-id="${post.user.id}" data-username="${post.user.username}"><i class="fa-solid fa-user-xmark"></i> Unfollow &#64;${post.user.username}</div>`;
+                        }
+                        else {
+                            choosePostOption.innerHTML += `<div class="single-post-option follow-user" data-id="${post.user.id}" data-username="${post.user.username}"><i class="fa-solid fa-user-plus"></i> Follow &#64;${post.user.username}</div>`;
+                        }
+                        postMoreOptionsWrapper.appendChild(choosePostOption);
+                        postElement.appendChild(postMoreOptionsWrapper);
+                        postElement.innerHTML += `
                         <a href="${post.user.profile_link}"><img src="${post.user.photo}" loading="eager" alt="" class="user-image" /></a>`;
-                    let postInfoAndBody = document.createElement("div");
-                    postInfoAndBody.classList.add("post-info-and-body");
-                    postInfoAndBody.innerHTML = `<div class="post-info">
+                        let postInfoAndBody = document.createElement("div");
+                        postInfoAndBody.classList.add("post-info-and-body");
+                        postInfoAndBody.innerHTML = `<div class="post-info">
                                 <a href="${post.user.profile_link}" class="posted-by-fullname">${post.user.full_name}</a>
                                 <a href="${post.user.profile_link}" class="posted-by-username">&#64;${post.user.username}</a>
                                 <div class="dot">·</div>
                                 <div class="posted-on-date-text">${post.created_at}</div>
                             </div>`;
-                    let postBody = document.createElement("div");
-                    postBody.classList.add("post-body");
-                    if(post.content){
-                        postBody.innerHTML += `<p class="post-body-text">${post.content}</p>`;
-                    }
-                    if(post.image){
-                        postBody.innerHTML += `<img
+                        let postBody = document.createElement("div");
+                        postBody.classList.add("post-body");
+                        if(post.content){
+                            postBody.innerHTML += `<p class="post-body-text">${post.content}</p>`;
+                        }
+                        if(post.image){
+                            postBody.innerHTML += `<img
                                     src="${post.image}"
                                     loading="lazy"
                                     sizes="100vw"
                                     alt=""
                                     class="post-image"
                             />`;
-                    }
-                    postInfoAndBody.appendChild(postBody);
-                    postInfoAndBody.innerHTML += `
+                        }
+                        postInfoAndBody.appendChild(postBody);
+                        postInfoAndBody.innerHTML += `
                             <div class="post-reactions">
                                 <div class="post-comment-stats">
                                     <div class="post-stats-icon" data-id="${post.id}">
@@ -969,10 +936,11 @@ if(followingFilter){
                                 </div>
                             </div>
                 `;
-                    postElement.innerHTML += postInfoAndBody.outerHTML;
-                    container.appendChild(postElement);
-                });
-                offset += 10;
+                        postElement.innerHTML += postInfoAndBody.outerHTML;
+                        container.appendChild(postElement);
+                    });
+                }
+                offset = 10;
                 isFetching = false;
                 observePosts();
             }

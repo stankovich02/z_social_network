@@ -111,8 +111,33 @@
             >
                 <textarea class="new-comment-text" placeholder="Post your reply"></textarea>
             </form>
+            <div id="commentEmojiPicker"></div>
         </div>
         <button id="postReplyComment" class="reply-comment disabled-new-comment w-button" disabled data-id="{{$post->id}}">Reply</button>
+        <script type="module">
+            import { EmojiButton } from 'https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@4.6.4/dist/index.min.js';
+
+            const html = '<i class="fa-regular fa-face-smile pickEmoji"></i>';
+            document.getElementById("commentEmojiPicker").innerHTML += html;
+
+            const picker = new EmojiButton({
+                position: 'top-start',
+                theme: 'auto'
+            });
+
+            const input = document.querySelector(".new-comment-text");
+            let submitCommentBtn = document.querySelector("#postReplyComment");
+
+            picker.on('emoji', emoji => {
+                input.value += emoji.emoji;
+                submitCommentBtn.classList.remove("disabled-new-comment");
+                submitCommentBtn.disabled = false;
+            });
+            let emojiIcon = document.querySelector(".new-comment-wrapper .pickEmoji");
+            emojiIcon.addEventListener('click', () => {
+                picker.togglePicker(emojiIcon);
+            });
+        </script>
     </div>
     <div class="other-comments">
         @foreach($post->comments as $comment)

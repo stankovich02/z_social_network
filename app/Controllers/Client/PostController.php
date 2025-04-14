@@ -58,17 +58,17 @@ class PostController extends Controller
                 ->get(),
             'blocked_by_user_id'
         );
+        if(count($viewedPosts) > 0){
+            $posts = $posts->whereNotIn('id', $viewedPosts);
+        }
         if ($filter === 'following') {
             $posts = $posts->whereIn('user_id', $followedUsers);
         }
-        if($filter === 'for-you'){
+        if($filter === 'for-you' && count($followedUsers) > 0){
             $posts = $posts->whereNotIn('user_id', $followedUsers);
         }
         if (count($blockedUsers) > 0) {
             $posts = $posts->whereNotIn('user_id', $blockedUsers);
-        }
-        if(count($viewedPosts) > 0){
-            $posts = $posts->whereNotIn('id', $viewedPosts);
         }
         if (count($usersWhoBlockLoggedInUser) > 0) {
             $posts = $posts->whereNotIn('user_id', $usersWhoBlockLoggedInUser);
@@ -76,6 +76,7 @@ class PostController extends Controller
         $posts = $posts->where('user_id', '!=', session()->get('user')->id)
             ->orderBy('id', 'desc')
             ->take(10)
+            ->skip($request->query('offset'))
             ->get();
         $jsonPosts = [];
         foreach ($posts as $post) {
@@ -241,18 +242,20 @@ class PostController extends Controller
         if($post->image){
             unlink(public_path('assets/img/posts/' . $post->image->image));
         }
-        $commentIds = [];
-        foreach ($post->comments as $comment) {
-            $commentIds[] = $comment->id;
+        if(count($post->comments) > 0){
+            $commentIds = [];
+            foreach ($post->comments as $comment) {
+                $commentIds[] = $comment->id;
+            }
+            $commentsNotificationsForDelete = Database::table(PostCommentNotification::TABLE)
+                ->whereIn('comment_id', $commentIds)
+                ->get();
+            foreach ($commentsNotificationsForDelete as $notification){
+                Notification::delete($notification->notification_id);
+            }
         }
         $postNotificationsForDelete = PostNotification::where('post_id', '=', $id)->get();
-        $commentsNotificationsForDelete = Database::table(PostCommentNotification::TABLE)
-                                                  ->whereIn('comment_id', $commentIds)
-                                                  ->get();
         foreach ($postNotificationsForDelete as $notification){
-            Notification::delete($notification->notification_id);
-        }
-        foreach ($commentsNotificationsForDelete as $notification){
             Notification::delete($notification->notification_id);
         }
 		Post::delete($id);

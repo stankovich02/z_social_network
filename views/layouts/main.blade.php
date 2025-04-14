@@ -50,13 +50,40 @@
                         </form>
                     </div>
                     <div class="post-options">
-                        <div class="icon-embed-xsmall w-embed upload-post-image">
-                            <i class="fa-regular fa-image"></i>
+                        <div id="postEmojiImagePick">
+                            <div id="popupEmojiPicker"></div>
+                            <div class="icon-embed-xsmall w-embed upload-post-image">
+                                <i class="fa-regular fa-image"></i>
+                            </div>
                         </div>
                         <button  class="submit-post-btn w-button disabled-new-post-btn" id="popupPostBtn" disabled>Post</button>
                     </div>
                 </div>
             </div>
+            <script type="module">
+                import { EmojiButton } from 'https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@4.6.4/dist/index.min.js';
+
+                const html = '<i class="fa-regular fa-face-smile pickEmoji"></i>';
+                document.getElementById("popupEmojiPicker").innerHTML += html;
+
+                const picker = new EmojiButton({
+                    position: 'top-start',
+                    theme: 'auto'
+                });
+
+                const input = document.querySelector("#post-body-2");
+                let submitPostBtn = document.querySelector("#popupPostBtn");
+
+                picker.on('emoji', emoji => {
+                    input.value += emoji.emoji;
+                    submitPostBtn.classList.remove("disabled-new-post-btn");
+                    submitPostBtn.disabled = false;
+                });
+                let emojiIcon = document.querySelector("#new-post-popup-wrapper .pickEmoji");
+                emojiIcon.addEventListener('click', () => {
+                    picker.togglePicker(emojiIcon);
+                });
+            </script>
         </div>
     </div>
     <div class="popup-wrapper" id="new-comment-popup-wrapper">

@@ -482,7 +482,7 @@ if(document.querySelector(".block-user")){
             document.body.style.overflow = "hidden";
         });
     })
-}php
+}
 
 
 function nextBioBtnFunc(describeBio,saveProfile,popupLogo,returnBackBtn,closeIcon){
@@ -734,11 +734,24 @@ profilePictureInput.addEventListener("change", function (){
             let editProfilePicture = document.querySelector(".edit-popup .edit-profile-pic img");
             let currentProfilePicturePickHeader = document.querySelector("#setupProfileWrapper .pick-header .current-profile-pic");
             let menuProfilePhoto = document.querySelector(".left-bar-menu .logged-in-user img");
+            let postUserImages = document.querySelectorAll(".single-post .user-image");
+            let loggedInUserUsername = document.querySelector(".profile-info-detailed .profile-username").textContent;
             img.src = data.newPhoto;
             profilePicture.src = data.newPhoto;
             editProfilePicture.src = data.newPhoto;
             currentProfilePicturePickHeader.src = data.newPhoto;
             menuProfilePhoto.src = data.newPhoto;
+            postUserImages.forEach(image => {
+                if(!image.parentElement.classList.contains("reposted-post")){
+                    image.src = data.newPhoto;
+                }
+                else{
+                    let repostedPost = image.parentElement;
+                    if(repostedPost.querySelector(".posted-by-username").textContent === loggedInUserUsername){
+                        image.src = data.newPhoto;
+                    }
+                }
+            })
             let profilePictureInput = document.querySelector("#pickProfilePicture");
             profilePictureInput.value = "";
             let removePhotoWrapper = document.querySelector(".pick-profile-picture .remove-new-photo-wrapper")
@@ -756,6 +769,17 @@ profilePictureInput.addEventListener("change", function (){
                         editProfilePicture.src = data.oldPhoto;
                         currentProfilePicturePickHeader.src = data.oldPhoto;
                         menuProfilePhoto.src = data.oldPhoto;
+                        postUserImages.forEach(image => {
+                            if(!image.parentElement.classList.contains("reposted-post")){
+                                image.src = data.oldPhoto;
+                            }
+                            else{
+                                let repostedPost = image.parentElement;
+                                if(repostedPost.querySelector(".posted-by-username").textContent === loggedInUserUsername){
+                                    image.src = data.oldPhoto;
+                                }
+                            }
+                        })
                         removePhotoWrapper.style.display = "none";
                         skipProfilePictureBtn.style.display = "block";
                         nextHeaderBtn.style.display = "none";
@@ -941,6 +965,8 @@ saveEditedProfileBtn.addEventListener("click", function (){
             let removeProfilePictureWrapper = document.querySelector(".edit-popup .edit-profile-pic .remove-new-photo-wrapper");
             let allPostsFullNames = document.querySelectorAll(".post-info-and-body .posted-by-fullname");
             let loggedOutFullName = document.querySelector("#logout-text #logged-user-fullname");
+            let postUserImages = document.querySelectorAll(".single-post .user-image");
+            let loggedInUserUsername = document.querySelector(".profile-info-detailed .profile-username").textContent;
             coverPicture.style.backgroundImage = `url(${data.coverImage})`;
             profilePicture.src = data.profileImage;
             profileFullName.textContent = data.fullName;
@@ -962,8 +988,19 @@ saveEditedProfileBtn.addEventListener("click", function (){
                 }
                 else{
                     let repostedPost = fullName.parentElement.parentElement.parentElement;
-                    if(repostedPost.querySelector(".reposted-info strong").textContent === "You"){
+                    if(repostedPost.querySelector(".posted-by-username").textContent === loggedInUserUsername){
                         fullName.textContent = data.fullName;
+                    }
+                }
+            })
+            postUserImages.forEach(image => {
+                if(!image.parentElement.classList.contains("reposted-post")){
+                    image.src = data.profileImage;
+                }
+                else{
+                    let repostedPost = image.parentElement;
+                    if(repostedPost.querySelector(".posted-by-username").textContent === loggedInUserUsername){
+                        image.src = data.profileImage;
                     }
                 }
             })
@@ -1117,29 +1154,33 @@ if(profileBanner){
     profileBanner.addEventListener("click", function (){
        let viewPictureWrapper = document.querySelector("#viewPictureWrapper");
        let bannerImage = this.style.backgroundImage.slice(5, -2);
-       viewPictureWrapper.innerHTML +=  '<img src="' + bannerImage + '" alt=""/>';
-       viewPictureWrapper.style.display = "block";
-        let closeIcon = viewPictureWrapper.querySelector("i");
-        closeIcon.addEventListener("click", function (){
-            viewPictureWrapper.style.display = "none";
-            let clickedImage = viewPictureWrapper.querySelector("img");
-            clickedImage.remove();
-        })
+       if(!bannerImage.includes("default")){
+           viewPictureWrapper.innerHTML +=  '<img src="' + bannerImage + '" alt=""/>';
+           viewPictureWrapper.style.display = "block";
+           let closeIcon = viewPictureWrapper.querySelector("i");
+           closeIcon.addEventListener("click", function (){
+               viewPictureWrapper.style.display = "none";
+               let clickedImage = viewPictureWrapper.querySelector("img");
+               clickedImage.remove();
+           })
+       }
     })
 }
 let profilePicture = document.querySelector(".profile-image");
 if(profilePicture){
     profilePicture.addEventListener("click", function (){
-        let viewPictureWrapper = document.querySelector("#viewPictureWrapper");
         let profileImage = this.src;
-        viewPictureWrapper.innerHTML +=  '<img class="clickedProfileImage" src="' + profileImage + '" alt=""/>';
-        viewPictureWrapper.style.display = "block";
-        let closeIcon = viewPictureWrapper.querySelector("i");
-        closeIcon.addEventListener("click", function (){
-            viewPictureWrapper.style.display = "none";
-            let clickedProfileImage = document.querySelector(".clickedProfileImage");
-            clickedProfileImage.remove();
-        })
+        if(!profileImage.includes("default")){
+            let viewPictureWrapper = document.querySelector("#viewPictureWrapper");
+            viewPictureWrapper.innerHTML +=  '<img class="clickedProfileImage" src="' + profileImage + '" alt=""/>';
+            viewPictureWrapper.style.display = "block";
+            let closeIcon = viewPictureWrapper.querySelector("i");
+            closeIcon.addEventListener("click", function (){
+                viewPictureWrapper.style.display = "none";
+                let clickedProfileImage = document.querySelector(".clickedProfileImage");
+                clickedProfileImage.remove();
+            })
+        }
     })
 }
 
