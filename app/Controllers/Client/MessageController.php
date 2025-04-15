@@ -8,7 +8,7 @@ use App\Models\LeftConversation;
 use App\Models\Message;
 use App\Models\User;
 use App\Models\UserFollower;
-use App\Traits\CalculateDate;
+use App\Traits\Calculate;
 use mysql_xdevapi\Table;
 use NovaLite\Database\Database;
 use NovaLite\Http\Controller;
@@ -18,7 +18,7 @@ use NovaLite\Views\View;
 
 class MessageController extends Controller
 {
-    use CalculateDate;
+    use Calculate;
     public function index(Request $request) : View|Response
     {
         $loggedInUserId = session()->get('user')->id;

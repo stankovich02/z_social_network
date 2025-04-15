@@ -13,7 +13,7 @@ use App\Models\PostNotification;
 use App\Models\RepostedPost;
 use App\Models\UserFollower;
 use App\Models\ViewedPost;
-use App\Traits\CalculateDate;
+use App\Traits\Calculate;
 use DateTime;
 use NovaLite\Database\Database;
 use NovaLite\Http\Controller;
@@ -24,7 +24,7 @@ use NovaLite\Views\View;
 
 class PostController extends Controller
 {
-    use CalculateDate;
+    use Calculate;
 	public function index(Request $request) : Response
 	{
         $followedUsers =  array_column(
@@ -86,9 +86,10 @@ class PostController extends Controller
                     'created_at' => $this->calculatePostedDate($post->created_at),
                     'image' => $post->image ? asset('assets/img/posts/' . $post->image->image) : null,
                     'post_link' => route('post', ['username' => $post->user->username, 'id' => $post->id]),
-                    'number_of_likes' => $post->likesCount($post->id),
-                    'number_of_reposts' => $post->repostsCount($post->id),
-                    'number_of_comments' => $post->commentsCount($post->id),
+                    'number_of_likes' => $this->calculateStatNumber($post->likesCount($post->id)),
+                    'number_of_reposts' => $this->calculateStatNumber($post->repostsCount($post->id)),
+                    'number_of_comments' => $this->calculateStatNumber($post->commentsCount($post->id)),
+                    'views' => $this->calculateStatNumber($post->views),
                     'user_liked' => LikedPost::where('user_id', '=', session()->get('user')->id)
                         ->where('post_id', '=', $post->id)
                         ->count(),
@@ -191,15 +192,25 @@ class PostController extends Controller
                 ->get(),
             'follower_id'
         );
-        $post->number_of_likes = $post->likesCount($post->id);
+        $post->number_of_likes = $this->calculateStatNumber($post->likesCount($post->id));
         $post->user_liked = LikedPost::where('user_id', '=', session()->get('user')->id)
             ->where('post_id', '=', $post->id)
             ->count();
-        $post->number_of_reposts = $post->repostsCount($post->id);
+        $post->number_of_reposts = $this->calculateStatNumber($post->repostsCount($post->id));
         $post->user_reposted = RepostedPost::where('user_id', '=', session()->get('user')->id)
             ->where('post_id', '=', $post->id)
             ->count();
-        $post->number_of_comments = $post->commentsCount($post->id);
+        $post->number_of_comments = $this->calculateStatNumber($post->commentsCount($post->id));
+        switch ($post->views){
+            case 0:
+                $post->views = 0;
+                break;
+            case 1:
+                $post->views = '<span class="text-span-4">1</span> View';
+                break;
+            default:
+                $post->views = "<span class='text-span-4'>" . $this->calculateStatNumber($post->views) . "</span> Views";
+        }
         $post->user->loggedInUserFollowing = in_array($post->user->id, $loggedInUserFollowing);
         $date = new DateTime($post->created_at);
         $postedOn = $date->format("g:i A - M j, Y");
@@ -215,6 +226,7 @@ class PostController extends Controller
             $comment->userLiked = LikedComment::where('user_id', '=', session()->get('user')->id)
                                 ->where('comment_id', '=', $comment->id)
                                 ->count();
+            $comment->likesCount = $this->calculateStatNumber(count($comment->likes));
         }
 		return view('pages.client.post', [
             'post' => $post,
@@ -327,7 +339,7 @@ class PostController extends Controller
                 }
             }
         }
-        $numOfLikes = LikedPost::where('post_id', '=', $id)->count();
+        $numOfLikes = $this->calculateStatNumber(LikedPost::where('post_id', '=', $id)->count());
         return response()->json([
             'likes' => $numOfLikes
         ]);

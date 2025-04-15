@@ -4,13 +4,13 @@ namespace App\Controllers\Client;
 
 use App\Models\ImagePost;
 use App\Models\Notification;
-use App\Traits\CalculateDate;
+use App\Traits\Calculate;
 use NovaLite\Http\Controller;
 use NovaLite\Views\View;
 
 class NotificationController extends Controller
 {
-    use CalculateDate;
+    use Calculate;
     public function index() : View
     {
         $userNotifications = Notification::with('user', 'notificationType','post_notification','post_comment_notification','post_notification.post','post_comment_notification.comment')->where('target_user_id', '=', session()->get('user')->id)->orderBy('id', 'desc')->get();

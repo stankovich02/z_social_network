@@ -71,7 +71,7 @@
             <div class="posted-date-date">{{$postedDate['date']}}</div>
             @if($post->views)
                 <div class="dot">·</div>
-                <div class="num-of-views"><span class="text-span-4">{{$post->views}}</span> {{$post->views > 1 ? "Views" : "View"}}</div>
+                <div class="num-of-views">{!! $post->views !!}</div>
             @endif
         </div>
         <div class="post-reactions single-post-reactions">
@@ -182,7 +182,7 @@
                                 <div class="comment-stats-icon w-embed" data-cid="{{$comment->id}}" data-pid="{{$post->id}}">
                                     <i class="fa-heart post-ic {{$comment->userLiked ? "likedComment fa-solid" : "fa-regular"}}"></i>
                                 </div>
-                                <div class="comment-reactions-stats-num {{$comment->userLiked ? "likedComment" : ""}}">{{count($comment->likes) > 0 ? count($comment->likes) : ""}}</div>
+                                <div class="comment-reactions-stats-num {{$comment->userLiked ? "likedComment" : ""}}">{{$comment->likesCount > 0 ? $comment->likesCount : ""}}</div>
                             </div>
                         </div>
                     </div>

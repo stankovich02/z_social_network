@@ -8,7 +8,7 @@ use App\Models\Notification;
 use App\Models\Post;
 use App\Models\PostCommentNotification;
 use App\Models\PostNotification;
-use App\Traits\CalculateDate;
+use App\Traits\Calculate;
 use NovaLite\Database\Database;
 use NovaLite\Http\Controller;
 use NovaLite\Http\Request;
@@ -16,7 +16,7 @@ use NovaLite\Http\Response;
 
 class CommentController extends Controller
 {
-    use CalculateDate;
+    use Calculate;
     public function store(int $id, Request $request)
     {
         $comment = $request->input('comment');
@@ -129,7 +129,7 @@ class CommentController extends Controller
                 }
             }
         }
-        $numOfLikes = LikedComment::where('comment_id', '=', $commentId)->count();
+        $numOfLikes = $this->calculateStatNumber(LikedComment::where('comment_id', '=', $commentId)->count());
         return response()->json([
             'likes' => $numOfLikes
         ]);

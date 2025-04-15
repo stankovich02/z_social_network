@@ -58,8 +58,4 @@ class Post extends Model
     {
         return Comment::where('post_id', '=', $id)->count();
     }
-    public function viewsCount(int $id) : int
-    {
-        return ViewedPost::where('post_id', '=', $id)->count();
-    }
 }

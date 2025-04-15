@@ -5,7 +5,7 @@ namespace App\Traits;
 use DateTime;
 use DateTimeZone;
 
-trait CalculateDate
+trait Calculate
 {
     public function calculatePostedDate($createdAt) : string
     {
@@ -25,19 +25,6 @@ trait CalculateDate
             return date("M j", $timestamp);
         }
     }
-  /*  public function calculateMessageDate($date) : string
-    {
-        $timestamp = strtotime($date);
-        $now = time();
-        $diff = $now - $timestamp;
-        if ($diff < 86400) {
-            return date("g:i A", $timestamp);
-        } elseif ($diff < 172800) {
-            return "Yesterday, " . date("g:i A", $timestamp);
-        } else {
-            return date("M j, Y, g:i A", $timestamp);
-        }
-    }*/
     public function calculateMessageDate($date, $timezone = 'Europe/Belgrade') {
         $dateTime = new DateTime($date, new DateTimeZone($timezone));
         $now = new DateTime('now', new DateTimeZone($timezone));
@@ -56,7 +43,6 @@ trait CalculateDate
     }
     public function calculateLastMessageDate($date) : string
     {
-        //under 60s -> "now", 1-60 mins -> "x m", 1-24h -> "x h", 1-7d -> "x d", 7d+ -> "M j"
         $timestamp = strtotime($date);
         $now = time();
         $diff = $now - $timestamp;
@@ -73,6 +59,20 @@ trait CalculateDate
             return $days . "d";
         } else {
             return date("M j", $timestamp);
+        }
+    }
+    public function calculateStatNumber($number)
+    {
+        if ($number < 1000) {
+            return $number;
+        } elseif ($number < 10000) {
+            return round($number / 1000, 1) . "K";
+        } elseif ($number < 100000) {
+            return round($number / 1000, 1) . "K";
+        } elseif ($number < 1000000) {
+            return round($number / 1000, 1) . "K";
+        } else {
+            return round($number / 1000000, 1) . "M";
         }
     }
 

@@ -6,14 +6,14 @@ use App\Models\Conversation;
 use App\Models\LeftConversation;
 use App\Models\Message;
 use App\Models\User;
-use App\Traits\CalculateDate;
+use App\Traits\Calculate;
 use NovaLite\Database\Database;
 use NovaLite\Http\Controller;
 use NovaLite\Http\Request;
 
 class ConversationController extends Controller
 {
-    use CalculateDate;
+    use Calculate;
     public function searchNewConversation(Request $request)
     {
         $query = $request->query('query');
