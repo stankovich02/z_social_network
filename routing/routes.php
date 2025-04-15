@@ -21,6 +21,7 @@ Router::middleware([\App\Middlewares\IsLoggedIn::class])->group(function () {
     Router::get('/navigate-to-conversation', [\App\Controllers\Client\MessageController::class, 'navigateToConversation'])->name('messages.navigate');
 
     Router::get('/notifications', [\App\Controllers\Client\NotificationController::class, 'index'])->name('notifications');
+    Router::get('/notifications/{id}', [\App\Controllers\Client\NotificationController::class, 'show'])->name('notifications.show');
     Router::post('/notifications/{id}/read', [\App\Controllers\Client\NotificationController::class, 'read'])->name('notifications.read');
 
     Router::get('/logout', [\App\Controllers\AuthController::class, 'logout'])->name('logout');

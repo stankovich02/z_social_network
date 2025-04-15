@@ -35,10 +35,12 @@ class ProfileController extends Controller
         $user->joinedDate = date('F Y', strtotime($user->created_at));
         foreach ($user->posts as $post) {
             $post->type = Post::ORIGINAL_POST;
+            $post->content = preg_replace('/#(\w+)/', '<span class="hashtag">#$1</span>', $post->content);
             $post->views = $this->calculateStatNumber($post->views);
         }
         foreach ($user->repostedPosts as $repostedPost) {
             $repostedPost->type = Post::REPOSTED_POST;
+            $repostedPost->content = preg_replace('/#(\w+)/', '<span class="hashtag">#$1</span>', $repostedPost->content);
             $repostedPost->views = $this->calculateStatNumber($repostedPost->views);
         }
         if($username !== session()->get('user')->username) {

@@ -20,6 +20,7 @@ document.addEventListener("click", function (event) {
         const actionPopupWrapper = document.querySelector("#action-popup-wrapper");
         const confirmDelete = document.querySelector("#doActionBtn");
         confirmDelete.className = "deletePostPopupBtn";
+        confirmDelete.textContent = "Delete";
         const cancelDelete = document.querySelector("#cancelAction");
         let popupHeading = document.querySelector("#action-popup-wrapper h3");
         popupHeading.textContent = "Delete post?";
@@ -456,8 +457,13 @@ function feedSendPost(){
                     <div class="posted-by-username">@${post.user.username}</div>
                     <div class="dot">·</div>
                     <div class="posted-on-date-text">now</div>
-                </div>
-                <div class="post-body"><p class="post-body-text">${post.content}</p></div>`;
+                </div>`;
+                let postBody = document.createElement("div");
+                postBody.classList.add("post-body");
+                let regex = /#(\w+)/g;
+                let content = post.content.replace(regex, '<span class="hashtag">#$1</span>');
+                postBody.innerHTML = `<p class="post-body-text">${content}</p>`;
+                newPostHtml += postBody.outerHTML;
                     if(post.image){
                         newPostHtml += `<img
                             src="${post.image}"
@@ -679,7 +685,9 @@ function loadMorePosts() {
                 let postBody = document.createElement("div");
                 postBody.classList.add("post-body");
                 if(post.content){
-                    postBody.innerHTML += `<p class="post-body-text">${post.content}</p>`;
+                    let regex = /#(\w+)/g;
+                    let content = post.content.replace(regex, '<span class="hashtag">#$1</span>');
+                    postBody.innerHTML += `<p class="post-body-text">${content}</p>`;
                 }
                 if(post.image){
                     postBody.innerHTML += `<img
@@ -789,7 +797,9 @@ if(forYouFilter){
                         let postBody = document.createElement("div");
                         postBody.classList.add("post-body");
                         if(post.content){
-                            postBody.innerHTML += `<p class="post-body-text">${post.content}</p>`;
+                            let regex = /#(\w+)/g;
+                            let content = post.content.replace(regex, '<span class="hashtag">#$1</span>');
+                            postBody.innerHTML += `<p class="post-body-text">${content}</p>`;
                         }
                         if(post.image){
                             postBody.innerHTML += `<img
@@ -896,7 +906,9 @@ if(followingFilter){
                         let postBody = document.createElement("div");
                         postBody.classList.add("post-body");
                         if(post.content){
-                            postBody.innerHTML += `<p class="post-body-text">${post.content}</p>`;
+                            let regex = /#(\w+)/g;
+                            let content = post.content.replace(regex, '<span class="hashtag">#$1</span>');
+                            postBody.innerHTML += `<p class="post-body-text">${content}</p>`;
                         }
                         if(post.image){
                             postBody.innerHTML += `<img

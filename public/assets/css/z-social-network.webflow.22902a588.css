@@ -5053,3 +5053,11 @@ background-color: rgb(29, 155, 240);
   left: 80%;
   z-index: -2;
 }
+.highlight-comment{
+  background-color: #1796ff26;
+}
+.hashtag{
+  color: #009dff;
+  font-weight: 700;
+  cursor: pointer;
+}

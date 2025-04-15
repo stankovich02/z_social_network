@@ -427,5 +427,18 @@ document.addEventListener("DOMContentLoaded", function (){
                 console.log(err);
             }
         });
+        let commentId = localStorage.getItem("commentId");
+        if(commentId){
+            let otherComments = document.querySelector(".other-comments");
+            let comment = document.querySelector(`.other-comments .single-comment[data-id="${commentId}"]`);
+            window.scrollTo({
+                top: comment.offsetTop - otherComments.offsetTop - 30,
+                behavior: "smooth"
+            });
+            comment.classList.add("highlight-comment");
+            setTimeout(function (){
+                comment.classList.remove("highlight-comment");
+            }, 4000);
+        }
 })
 

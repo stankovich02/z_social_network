@@ -91,7 +91,7 @@
                             </div>
                             <div class="post-body">
                                 @if($post->content)
-                                    <p class="post-body-text">{{$post->content}}</p>
+                                    <p class="post-body-text">{!!$post->content!!}</p>
                                 @endif
                                 @if($post->image)
                                     <img

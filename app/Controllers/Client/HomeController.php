@@ -69,6 +69,7 @@ class HomeController extends Controller
                                       ->count();
             $post->number_of_comments = $this->calculateStatNumber($post->commentsCount($post->id));
             $post->views = $this->calculateStatNumber($post->views);
+            $post->content = preg_replace('/#(\w+)/', '<span class="hashtag">#$1</span>', $post->content);
             $post->user->loggedInUserFollowing = in_array($post->user->id, $followedUsers);
         }
 

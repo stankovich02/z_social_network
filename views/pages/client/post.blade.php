@@ -59,7 +59,7 @@
         </div>
         <div class="post-body">
            @if($post->content)
-                <p class="post-body-text">{{$post->content}}</p>
+                <p class="post-body-text">{!!$post->content!!}</p>
            @endif
            @if($post->image)
                 <img src="{{asset('assets/img/posts/' . $post->image->image)}}" loading="lazy" alt="" class="post-image" />
@@ -142,7 +142,7 @@
     <div class="other-comments">
         @foreach($post->comments as $comment)
             @if(!in_array($comment->user->id, $blockedUsers) && !in_array($comment->user->id, $usersWhoBlockLoggedInUser))
-                <div class="single-comment">
+                <div class="single-comment" data-id="{{$comment->id}}">
                     <div class="comment-more-options-wrapper">
                         <div class="more-options w-embed comment-more-options">
                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--ph more-opt-ic" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 256">

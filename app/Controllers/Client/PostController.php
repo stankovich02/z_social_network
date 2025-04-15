@@ -197,6 +197,7 @@ class PostController extends Controller
             ->where('post_id', '=', $post->id)
             ->count();
         $post->number_of_reposts = $this->calculateStatNumber($post->repostsCount($post->id));
+        $post->content = preg_replace('/#(\w+)/', '<span class="hashtag">#$1</span>', $post->content);
         $post->user_reposted = RepostedPost::where('user_id', '=', session()->get('user')->id)
             ->where('post_id', '=', $post->id)
             ->count();

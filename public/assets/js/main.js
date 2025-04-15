@@ -178,8 +178,13 @@ function sendPost(){
                     <div class="posted-by-username">@${post.user.username}</div>
                     <div class="dot">·</div>
                     <div class="posted-on-date-text">now</div>
-                </div>
-                <div class="post-body"><p class="post-body-text">${post.content}</p></div>`;
+                </div>`;
+                    let postBody = document.createElement("div");
+                    postBody.classList.add("post-body");
+                    let regex = /#(\w+)/g;
+                    let content = post.content.replace(regex, '<span class="hashtag">#$1</span>');
+                    postBody.innerHTML = `<p class="post-body-text">${content}</p>`;
+                    newPostHtml += postBody.outerHTML;
                     if(post.image){
                         newPostHtml += `<img
                             src="${post.image}"
@@ -290,9 +295,6 @@ function timeAgo(createdAt) {
 
 
 socket.onopen = function () {
-/*    let loggedInUser = document.querySelector(".logged-in-user");
-    let userId = loggedInUser.getAttribute("data-id");
-    socket.send(JSON.stringify({ user_id: userId }));*/
     if(document.querySelector(".chat-messages-wrapper")){
         let observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {

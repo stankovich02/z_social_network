@@ -6,6 +6,8 @@ use App\Models\ImagePost;
 use App\Models\Notification;
 use App\Traits\Calculate;
 use NovaLite\Http\Controller;
+use NovaLite\Http\Request;
+use NovaLite\Http\Response;
 use NovaLite\Views\View;
 
 class NotificationController extends Controller
@@ -25,6 +27,18 @@ class NotificationController extends Controller
         return view('pages.client.notifications',[
             'notifications' => $userNotifications
         ]);
+    }
+
+    public function show(int $id, Request $request) : Response
+    {
+        if($request->query('type') === 'comment'){
+            $notification = Notification::with('post_comment_notification')->where('id', '=', $id)->first();
+            return response()->json([
+                'commentId' => $notification->post_comment_notification->comment_id,
+                'link' => $notification->link
+            ]);
+        }
+        return response()->json([]);
     }
     public function read(int $id) : void
     {
