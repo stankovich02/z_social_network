@@ -8,7 +8,9 @@ use NovaLite\Database\Relations\BelongsTo;
 class Nav extends Model
 {
     const TABLE = 'navs';
+
     protected string $table = self::TABLE;
+
     protected array $fillable = [
         'name',
         'route',

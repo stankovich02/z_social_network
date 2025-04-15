@@ -8,7 +8,9 @@ use NovaLite\Database\Relations\BelongsTo;
 class LikedComment extends Model
 {
 	const TABLE = 'liked_comments';
+
     protected string $table = self::TABLE;
+
     protected array $fillable = ['comment_id', 'user_id'];
     public function user() : BelongsTo
     {

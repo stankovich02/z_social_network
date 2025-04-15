@@ -10,6 +10,7 @@ class ImagePost extends Model
 	const TABLE = 'image_posts';
 
     protected string $table = self::TABLE;
+
     protected array $fillable = [
         'post_id',
         'image',

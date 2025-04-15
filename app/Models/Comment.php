@@ -9,7 +9,9 @@ use NovaLite\Database\Relations\HasMany;
 class Comment extends Model
 {
 	const TABLE = 'comments';
+
     protected string $table = self::TABLE;
+
     protected array $fillable = [
         'post_id',
         'user_id',

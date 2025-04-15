@@ -15,6 +15,7 @@ class Post extends Model
 	const TABLE = 'posts';
 
     protected string $table = self::TABLE;
+
     protected array $fillable = [
         'user_id',
         'content',

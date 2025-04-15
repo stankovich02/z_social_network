@@ -8,8 +8,11 @@ use NovaLite\Database\Relations\BelongsTo;
 class PostNotification extends Model
 {
 	const TABLE = 'posts_notifications';
+
     protected string $table = self::TABLE;
+
     protected array $fillable = ['post_id', 'notification_id'];
+
     protected bool $timestamps = false;
 
     public function post() : BelongsTo

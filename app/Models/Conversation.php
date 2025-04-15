@@ -9,7 +9,9 @@ use NovaLite\Database\Relations\HasMany;
 class Conversation extends Model
 {
     const TABLE = 'conversations';
+
     protected string $table = self::TABLE;
+
     protected array $fillable = [
         'user_id',
         'other_user_id',

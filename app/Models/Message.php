@@ -13,6 +13,7 @@ class Message extends Model
 
     protected array $fillable = [
         'sent_from',
+        'conversation_id',
         'sent_to',
         'message',
         'is_read',

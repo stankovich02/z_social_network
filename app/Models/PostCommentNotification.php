@@ -8,8 +8,11 @@ use NovaLite\Database\Relations\BelongsTo;
 class PostCommentNotification extends Model
 {
 	const TABLE = 'posts_comments_notifications';
+
     protected string $table = self::TABLE;
+
     protected array $fillable = ['comment_id', 'notification_id'];
+
     protected bool $timestamps = false;
 
     public function comment() : BelongsTo

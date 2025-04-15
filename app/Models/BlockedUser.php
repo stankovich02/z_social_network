@@ -8,6 +8,7 @@ use NovaLite\Database\Relations\BelongsTo;
 class BlockedUser extends Model
 {
     const TABLE = 'blocked_users';
+
 	protected string $table = self::TABLE;
 
     protected array $fillable = [

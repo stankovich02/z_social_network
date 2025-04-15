@@ -7,7 +7,7 @@ use NovaLite\Database\Relations\BelongsTo;
 
 class RepostedPost extends Model
 {
-	    const TABLE = 'reposted_posts';
+    const TABLE = 'reposted_posts';
 
     protected string $table = self::TABLE;
 

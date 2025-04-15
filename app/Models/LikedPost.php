@@ -8,8 +8,11 @@ use NovaLite\Database\Relations\BelongsTo;
 class LikedPost extends Model
 {
     const TABLE = 'liked_posts';
+
     protected string $table = self::TABLE;
+
     protected array $fillable = ['user_id', 'post_id'];
+
     protected bool $timestamps = false;
 
     public function user() : BelongsTo
