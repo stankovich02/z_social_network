@@ -48,6 +48,10 @@ document.addEventListener("click", function (event) {
         }
 
     }
+    if(event.target.classList.contains("hashtag")){
+        let hashtag = event.target.innerText;
+        window.location.href = "/explore?q=" + encodeURIComponent(hashtag);
+    }
 });
 function writeInputAndIcon(){
     let form = document.querySelector(".new-post-popup-create form");
@@ -292,7 +296,6 @@ function timeAgo(createdAt) {
             `, ${date.toLocaleTimeString(undefined, timeOptions)}`;
     }
 }
-
 
 socket.onopen = function () {
     if(document.querySelector(".chat-messages-wrapper")){

@@ -25,7 +25,7 @@
                     <div class="top-username-text">&#64;{{$user->username}}</div>
                 </div>
             </div>
-            <div id="filterWrapper">
+            <div class="filterWrapper">
                 @if(count($matchedFollowers) > 0)
                     <a href="{{route('profile.followers_you_follow', ['username' => $user->username])}}" class="filterLink">
                         <p class="w-65">Followers you know</p>

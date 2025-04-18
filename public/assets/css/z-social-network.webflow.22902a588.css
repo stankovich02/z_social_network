@@ -2441,7 +2441,12 @@ textarea.w-input, textarea.w-select {
   color: white;
   margin-bottom: 0;
 }
-
+#post .post-body-text{
+  font-size: 17px;
+}
+.single-post .post-body-text{
+  font-size: 15px;
+}
 .post-reactions {
   color: #fff6;
   justify-content: space-between;
@@ -2496,19 +2501,19 @@ textarea.w-input, textarea.w-select {
 
 .search-div {
   color: #fff6;
-  border: 1px solid #88888880;
+  border: 2px solid #88888880;
   border-radius: 30px;
   flex-flow: row;
   justify-content: center;
   align-items: center;
   width: 100%;
-  margin-top: 10px;
   margin-left: auto;
   margin-right: auto;
   padding-left: 10px;
   padding-right: 10px;
   display: flex;
   position: relative;
+  transition: all 0.2s;
 }
 
 .icon-embed-xsmall-2 {
@@ -2550,11 +2555,13 @@ textarea.w-input, textarea.w-select {
 
 .search-results {
   border: 1px solid #88888880;
-  width: 80%;
-  margin-left: auto;
-  margin-right: auto;
+  width: 100%;
   max-height: 420px;
   overflow: auto;
+  position: absolute;
+  top: 42px;
+  left: 0;
+  border-radius: 10px;
 }
 
 .single-search-result {
@@ -2568,9 +2575,11 @@ textarea.w-input, textarea.w-select {
   padding-right: 15px;
   display: flex;
   text-decoration: none;
+  background-color: black;
+  transition: all 0.3s;
 }
 .single-search-result:hover{
-  background-color: #111212;
+  background-color: rgb(22,24,28);
 }
 
 .search-result-user-image {
@@ -2583,6 +2592,7 @@ textarea.w-input, textarea.w-select {
   width: 80%;
   margin-left: auto;
   margin-right: auto;
+  position: relative;
 }
 
 .search-wrapper.messages-search-wrapper {
@@ -4661,7 +4671,7 @@ textarea.w-input, textarea.w-select {
 #other-profile-features .new-message:hover,#other-profile-features .more-profile-ic:hover{
   background-color: rgba(239,243,244,0.1);
 }
-#other-profile-features button, #following button, #followers button{
+#other-profile-features button, #following button, #followers button, #searchedPeople button{
   padding: 5px 12px;
   border-radius: 20px;
   transition: all 0.3s;
@@ -4710,21 +4720,21 @@ textarea.w-input, textarea.w-select {
   padding: 0 5px;
   border-radius: 2px;
 }
-#filterWrapper{
+.filterWrapper{
   width: 100%;
   display: flex;
   justify-content: space-between;
   border-bottom: 1px solid #88888880;
 }
 
-#filterWrapper .filterLink{
+.filterWrapper .filterLink{
   width: 50%;
   text-align: center;
   transition: all 0.3s;
   cursor: pointer;
   text-decoration: none;
 }
-#filterWrapper .filterLink p{
+.filterWrapper .filterLink p{
   width: 25%;
   margin-left: auto;
   margin-right: auto;
@@ -4733,12 +4743,12 @@ textarea.w-input, textarea.w-select {
   padding: 20px 0 15px 0;
   font-size: 15px;
 }
-#filterWrapper .filterLink .activeFollowFilter{
+.filterWrapper .filterLink .activeFollowFilter{
   border-bottom: 3px solid #009dff;
   color: white;
   font-weight: 700;
 }
-#filterWrapper .filterLink:hover {
+.filterWrapper .filterLink:hover {
   background-color: rgba(231, 233, 234, 0.1);
 }
 .w-33{
@@ -4757,7 +4767,7 @@ textarea.w-input, textarea.w-select {
 .single-following-user:hover,.single-follower-user:hover{
   background-color: rgba(255,255,255,0.03);
 }
-.user-following-information,.user-follower-information{
+.user-following-information,.user-follower-information, .searched-user-information{
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -4768,7 +4778,7 @@ textarea.w-input, textarea.w-select {
 .single-following-user .user-following-fullname, .single-follower-user .user-follower-fullname,.single-follower-user .choose-follower-option{
   color: white;
 }
-.user-following-fullname-and-username,.user-follower-fullname-and-username{
+.user-following-fullname-and-username,.user-follower-fullname-and-username, .searched-user-fullname-and-username{
   width: 70%;
   display: flex;
   flex-wrap: wrap;
@@ -4777,14 +4787,14 @@ textarea.w-input, textarea.w-select {
 .user-follower-fullname-and-username .followsBackInfo{
   margin-top: 0;
 }
-.user-following-fullname-and-username .user-following-fullname, .user-follower-fullname-and-username .user-follower-fullname{
+.user-following-fullname-and-username .user-following-fullname, .user-follower-fullname-and-username .user-follower-fullname, .searched-user-fullname-and-username .searched-user-fullname{
   font-weight: 700;
   width: 100%;
 }
-.user-following-fullname-and-username .user-following-username,.user-follower-fullname-and-username .user-follower-username{
+.user-following-fullname-and-username .user-following-username,.user-follower-fullname-and-username .user-follower-username, .searched-user-fullname-and-username .searched-user-username{
   color: #fff6;
 }
-.user-following-bio, .user-follower-bio{
+.user-following-bio, .user-follower-bio, .searched-user-bio{
   margin-top: 5px;
   width: 100%;
   color: white;
@@ -5060,4 +5070,78 @@ background-color: rgb(29, 155, 240);
   color: #009dff;
   font-weight: 700;
   cursor: pointer;
+}
+#explore .filterWrapper{
+  margin-top: 10px;
+}
+#explore .filterLink{
+  width: 25%;
+}
+#explore .filterLink p{
+  width: 40%;
+}
+#searchPeopleResult{
+  border-bottom: 1px solid #88888880;
+  padding-bottom: 20px;
+}
+#searchResults{
+  padding-bottom: 100px;
+}
+#searchResults .resultInfo{
+  border-bottom: 0;
+}
+#searchedPeople .user-following-fullname{
+  color: white;
+}
+#searchedPeople .single-result-user{
+  padding-top: 10px;
+  padding-bottom: 10px;
+  height: auto;
+}
+#viewAllPeople, #viewAllPosts{
+  padding: 15px;
+}
+#viewAllPeople a, #viewAllPosts a{
+  font-size: 15px;
+  color: #009dff;
+  text-decoration: none;
+  cursor: pointer;
+}
+#searchPostsResult .single-post:last-child{
+  border-bottom: 0;
+}
+#top-search{
+  padding-top: 10px;
+  width: 700px;
+  background-color: black;
+  border-right: 1px solid #88888880;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+#searchByWord{
+  background-color: black;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  padding: 15px 30px;
+  transition: all 0.3s;
+  cursor: pointer;
+  border-bottom: 1px solid #88888880;
+  color: white;
+  text-decoration: none;
+}
+#searchByWord i{
+  font-size: 20px;
+  margin-right: 20px;
+}
+#searchByWord p{
+  margin-bottom: 0;
+  font-size: 15px;
+}
+#searchByWord:hover{
+  background-color: rgb(22,24,28);
 }

@@ -2,8 +2,15 @@ const searchInput = document.getElementById("Search");
 document.getElementById("searchForm").addEventListener("submit", function(event) {
     event.preventDefault();
 });
+let searchDiv = document.querySelector(".search-div");
+searchInput.addEventListener("focus", () => {
+    searchDiv.style.border = "2px solid rgb(29, 155, 240)";
+})
+searchInput.addEventListener("blur", () => {
+    searchDiv.style.border = "2px solid #88888880";
+})
 searchInput.addEventListener("input", (event) => {
-    if(searchInput.value.length > 2){
+    if(searchInput.value.length > 1){
         event.preventDefault();
         $.ajax({
             url: "/search",
@@ -11,7 +18,7 @@ searchInput.addEventListener("input", (event) => {
             data: {
                 search: searchInput.value
             },
-            success: function(users){
+            success: function(data){
                 const searchWrapper = document.querySelector(".search-wrapper");
                 let searchResults = document.querySelector(".search-results");
                 if (!searchResults) {
@@ -21,7 +28,13 @@ searchInput.addEventListener("input", (event) => {
                 } else {
                     searchResults.innerHTML = "";
                 }
-                users.forEach((user) => {
+                searchResults.innerHTML += `
+                  <a href="${data.searchPage}?q=${encodeURIComponent(searchInput.value)}" id="searchByWord">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <p>${searchInput.value}</p>
+                  </a>
+                `;
+                data.users.forEach((user) => {
                     searchResults.innerHTML += `
                     <a class="single-search-result" href="${user.profile_url}">
                         <img src="${user.photo}" loading="lazy" alt="" class="search-result-user-image" />
@@ -31,12 +44,6 @@ searchInput.addEventListener("input", (event) => {
                             </div>
                     </a>`;
                 })
-
-                if (users.length === 0) {
-                    searchResults.style.display = "none";
-                } else {
-                    searchResults.style.display = "block";
-                }
             },
             error: function(err){
                 console.log(err)
