@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use NovaLite\Database\Database;
 use NovaLite\Database\Model;
 use NovaLite\Database\Relations\BelongsTo;
 use NovaLite\Database\Relations\HasMany;
@@ -32,5 +33,23 @@ class Conversation extends Model
     public function leftConversations(): HasMany
     {
         return $this->hasMany(LeftConversation::class, 'conversation_id');
+    }
+    public function lastChats() : array
+    {
+        $loggedInUserId = session()->get('user')->id;
+        $leftConversations = Database::table(LeftConversation::TABLE)
+            ->where('user_id', '=', $loggedInUserId)
+            ->where('is_active', '=', 0)
+            ->get();
+        $leftConversationsIds = array_column($leftConversations, 'conversation_id');
+        $lastChats = Conversation::whereGroup(function ($q) use ($loggedInUserId) {
+            $q->where('user_id', '=', $loggedInUserId)
+                ->orWhere('other_user_id', '=', $loggedInUserId);
+        });
+        if($leftConversationsIds){
+            $lastChats = $lastChats->whereNotIn('id', $leftConversationsIds);
+        }
+       return $lastChats->orderBy('last_message_time', 'DESC')
+            ->get();
     }
 }

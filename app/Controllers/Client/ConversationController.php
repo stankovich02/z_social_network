@@ -10,11 +10,12 @@ use App\Traits\Calculate;
 use NovaLite\Database\Database;
 use NovaLite\Http\Controller;
 use NovaLite\Http\Request;
+use NovaLite\Http\Response;
 
 class ConversationController extends Controller
 {
     use Calculate;
-    public function searchNewConversation(Request $request)
+    public function searchNewConversation(Request $request) : Response
     {
         $query = $request->query('query');
         $loggedInUserId = session()->get('user')->id;
@@ -54,13 +55,13 @@ class ConversationController extends Controller
         return response()->json($usersArray);
     }
 
-    public function searchDirectMessages(Request $request)
+    public function searchDirectMessages(Request $request) : Response
     {
         $query = $request->query('query');
         $loggedInUserId = session()->get('user')->id;
         $peopleArray = [];
         $leftConversations = Database::table(LeftConversation::TABLE)
-            ->where('user_id', '=', session()->get('user')->id)
+            ->where('user_id', '=', $loggedInUserId)
             ->where('is_active', '=', 0)
             ->get();
         $leftConversationsIds = array_column($leftConversations, 'conversation_id');

@@ -27,25 +27,6 @@ class PostController extends Controller
     use Calculate;
 	public function index(Request $request) : Response
 	{
-        $followedUsers =  array_column(
-            Database::table(UserFollower::TABLE)
-                ->where('user_id', '=', session()->get('user')->id)
-                ->get(),
-            'follower_id'
-        );
-        $filter = $request->query('filter');
-        if(count($followedUsers) === 0 && $filter === 'following'){
-            return response()->json([
-                'posts' => []
-            ]);
-        }
-        $viewedPosts = array_column(
-        Database::table('viewed_posts')
-            ->where('user_id', '=', session()->get('user')->id)
-            ->get(),
-        'post_id'
-        );
-        $posts = Post::with('user','image');
         $blockedUsers = array_column(
             Database::table('blocked_users')
                 ->where('blocked_by_user_id', '=', session()->get('user')->id)
@@ -58,6 +39,27 @@ class PostController extends Controller
                 ->get(),
             'blocked_by_user_id'
         );
+        $viewedPosts = array_column(
+            Database::table('viewed_posts')
+                ->where('user_id', '=', session()->get('user')->id)
+                ->get(),
+            'post_id'
+        );
+        $followedUsers =  array_column(
+            Database::table(UserFollower::TABLE)
+                ->where('user_id', '=', session()->get('user')->id)
+                ->get(),
+            'follower_id'
+        );
+        $filter = $request->query('filter');
+        if(count($followedUsers) === 0 && $filter === 'following'){
+            return response()->json([
+                'posts' => []
+            ]);
+        }
+
+        $posts = Post::with('user','image');
+
         if(count($viewedPosts) > 0){
             $posts = $posts->whereNotIn('id', $viewedPosts);
         }

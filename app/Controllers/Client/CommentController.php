@@ -17,7 +17,7 @@ use NovaLite\Http\Response;
 class CommentController extends Controller
 {
     use Calculate;
-    public function store(int $id, Request $request)
+    public function store(int $id, Request $request) : Response
     {
         $comment = $request->input('comment');
         $newComment = [
@@ -85,7 +85,7 @@ class CommentController extends Controller
         ]);
     }
 
-    public function like(int $postId,int $commentId)
+    public function like(int $postId,int $commentId) : Response
     {
         $alreadyLiked = LikedComment::where('user_id', '=', session()->get('user')->id)
             ->where('comment_id', '=', $commentId)

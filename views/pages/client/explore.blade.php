@@ -59,10 +59,12 @@
     @if($query)
         <div id="searchResults">
             @if(count($users))
-                <div id="searchPeopleResult">
-                    <div class="resultInfo">
-                        <p>People</p>
-                    </div>
+                <div id="searchPeopleResult" @if($filter === "people")style="border-bottom: 0" @endif>
+                    @if($filter === "top")
+                        <div class="resultInfo">
+                            <p>People</p>
+                        </div>
+                    @endif
                     <div id="searchedPeople">
                         @foreach($users as $user)
                             <a class="single-result-user" href="{{route('profile', ['username' => $user->username])}}" data-id="{{$user->id}}">
@@ -80,9 +82,9 @@
                             </a>
                         @endforeach
                     </div>
-                    @if(count($users) > 3)
+                    @if(count($users) > 3 && $filter !== "people")
                         <div id="viewAllPeople">
-                            <a href="/explore?filter=people">View all</a>
+                            <a href="{{route('explore')}}?q={{rawurlencode($query)}}&filter=people">View all</a>
                         </div>
                     @endif
                 </div>
@@ -158,9 +160,9 @@
                                 </div>
                             </div>
                         @endforeach
-                        @if(count($posts) > 5)
+                        @if(count($posts) === 5 && $filter !== "posts")
                             <div id="viewAllPosts">
-                                <a href="/explore?filter=posts">View all</a>
+                                <a href="{{route('explore')}}?q={{rawurlencode($query)}}&filter=posts">View all</a>
                             </div>
                         @endif
                     </div>

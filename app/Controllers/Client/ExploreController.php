@@ -2,9 +2,7 @@
 
 namespace App\Controllers\Client;
 
-use App\Models\LikedPost;
 use App\Models\Post;
-use App\Models\RepostedPost;
 use App\Models\User;
 use App\Models\UserFollower;
 use App\Traits\Calculate;
@@ -17,6 +15,11 @@ use NovaLite\Views\View;
 class ExploreController extends Controller
 {
     use Calculate;
+    private Post $postModel;
+    public function __construct()
+    {
+        $this->postModel = new Post();
+    }
     public function index(Request $request) : View
     {
         $filter = "top";
@@ -90,13 +93,16 @@ class ExploreController extends Controller
 
             }
             if(count($userIds) > 0){
-                $posts = $posts->whereIn('user_id', $userIds);
+                $posts = $posts->orWhereIn('user_id', $userIds);
             }
             if($filter === "latest"){
                 $posts = $posts->orderBy('created_at', 'desc');
             }
             else{
                 $posts = $posts->orderBy('views', 'desc');
+            }
+            if($filter === "top") {
+                $posts = $posts->take(5);
             }
             $posts = $posts->get();
             $followedUsers = array_column(
@@ -105,21 +111,7 @@ class ExploreController extends Controller
                     ->get(),
                 'follower_id'
             );
-            foreach ($posts as $post) {
-                $post->created_at = $this->calculatePostedDate($post->created_at);
-                $post->number_of_likes = $this->calculateStatNumber($post->likesCount($post->id));
-                $post->user_liked = LikedPost::where('user_id', '=', session()->get('user')->id)
-                    ->where('post_id', '=', $post->id)
-                    ->count();
-                $post->number_of_reposts = $this->calculateStatNumber($post->repostsCount($post->id));
-                $post->user_reposted = RepostedPost::where('user_id', '=', session()->get('user')->id)
-                    ->where('post_id', '=', $post->id)
-                    ->count();
-                $post->number_of_comments = $this->calculateStatNumber($post->commentsCount($post->id));
-                $post->views = $this->calculateStatNumber($post->views);
-                $post->content = preg_replace('/#(\w+)/', '<span class="hashtag">#$1</span>', $post->content);
-                $post->user->loggedInUserFollowing = in_array($post->user->id, $followedUsers);
-            }
+            $posts = $this->postModel->makePosts($posts, $followedUsers);
         }
 
         return view('pages.client.explore', [

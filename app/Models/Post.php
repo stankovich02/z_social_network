@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\Calculate;
 use NovaLite\Database\Model;
 use NovaLite\Database\Relations\BelongsTo;
 use NovaLite\Database\Relations\HasMany;
@@ -9,6 +10,7 @@ use NovaLite\Database\Relations\HasOne;
 
 class Post extends Model
 {
+    use Calculate;
     const ORIGINAL_POST = 'original_post';
     const REPOSTED_POST = 'reposted_post';
 
@@ -57,5 +59,25 @@ class Post extends Model
     public function commentsCount(int $id) : int
     {
         return Comment::where('post_id', '=', $id)->count();
+    }
+    public function makePosts($posts, $followedUsers) : array
+    {
+        foreach ($posts as $post) {
+            $post->created_at = $this->calculatePostedDate($post->created_at);
+            $post->number_of_likes = $this->calculateStatNumber($post->likesCount($post->id));
+            $post->user_liked = LikedPost::where('user_id', '=', session()->get('user')->id)
+                ->where('post_id', '=', $post->id)
+                ->count();
+            $post->number_of_reposts = $this->calculateStatNumber($post->repostsCount($post->id));
+
+            $post->user_reposted = RepostedPost::where('user_id', '=', session()->get('user')->id)
+                ->where('post_id', '=', $post->id)
+                ->count();
+            $post->number_of_comments = $this->calculateStatNumber($post->commentsCount($post->id));
+            $post->views = $this->calculateStatNumber($post->views);
+            $post->content = preg_replace('/#(\w+)/', '<span class="hashtag">#$1</span>', $post->content);
+            $post->user->loggedInUserFollowing = in_array($post->user->id, $followedUsers);
+        }
+        return $posts;
     }
 }

@@ -2,24 +2,22 @@
 
 namespace App\Controllers;
 
-use App\Mail\MailSender;
 use App\Mail\VerificationEmail;
-use App\Models\Nav;
 use App\Models\User;
 use App\Requests\RegisterUserRequest;
-use Illuminate\Support\Facades\Mail;
 use NovaLite\Database\Database;
 use NovaLite\Http\Controller;
 use NovaLite\Http\RedirectResponse;
 use NovaLite\Http\Request;
+use NovaLite\Views\View;
 
 class AuthController extends Controller
 {
-    public function index()
+    public function index() : View
     {
         return view('pages.start');
     }
-    public function register(RegisterUserRequest $request)
+    public function register(RegisterUserRequest $request) : RedirectResponse
     {
         $newUser = $request->getAll();
         $newUser['password'] = password_hash($request->input('password'), PASSWORD_DEFAULT);

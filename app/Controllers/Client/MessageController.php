@@ -19,23 +19,15 @@ use NovaLite\Views\View;
 class MessageController extends Controller
 {
     use Calculate;
+    private Conversation $conversation;
+    public function __construct()
+    {
+        $this->conversation = new Conversation();
+    }
     public function index(Request $request) : View|Response
     {
         $loggedInUserId = session()->get('user')->id;
-        $leftConversations = Database::table(LeftConversation::TABLE)
-                                     ->where('user_id', '=', session()->get('user')->id)
-                                     ->where('is_active', '=', 0)
-                                     ->get();
-        $leftConversationsIds = array_column($leftConversations, 'conversation_id');
-        $lastChats = Conversation::whereGroup(function ($q) use ($loggedInUserId) {
-            $q->where('user_id', '=', $loggedInUserId)
-              ->orWhere('other_user_id', '=', $loggedInUserId);
-        });
-        if($leftConversationsIds){
-            $lastChats = $lastChats->whereNotIn('id', $leftConversationsIds);
-        }
-        $lastChats = $lastChats->orderBy('last_message_time', 'DESC')
-                               ->get();
+        $lastChats = $this->conversation->lastChats();
         foreach ($lastChats as $chat) {
             if($chat->user_id == $loggedInUserId){
                 $chat->user = User::where('id', '=', $chat->other_user_id)->first();
@@ -60,20 +52,7 @@ class MessageController extends Controller
     public function conversation(int $id) : View
     {
         $loggedInUserId = session()->get('user')->id;
-        $leftConversations = Database::table(LeftConversation::TABLE)
-            ->where('user_id', '=', session()->get('user')->id)
-            ->where('is_active', '=', 0)
-            ->get();
-        $leftConversationsIds = array_column($leftConversations, 'conversation_id');
-        $lastChats = Conversation::whereGroup(function ($q) use ($loggedInUserId) {
-            $q->where('user_id', '=', $loggedInUserId)
-                ->orWhere('other_user_id', '=', $loggedInUserId);
-        });
-        if($leftConversationsIds){
-            $lastChats = $lastChats->whereNotIn('id', $leftConversationsIds);
-        }
-        $lastChats = $lastChats->orderBy('last_message_time', 'DESC')
-            ->get();
+        $lastChats = $this->conversation->lastChats();
         foreach ($lastChats as $chat) {
             if($chat->user_id == $loggedInUserId){
                 $chat->user = User::where('id', '=', $chat->other_user_id)->first();
