@@ -402,7 +402,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 let newCommentMessage = document.createElement('div')
                 newCommentMessage.id = "message-popup";
                 newCommentMessage.innerHTML = `<p>Your comment was sent.</p><a href="${data.post_link}">View</a>`;
-                localStorage.setItem('commentID', data.comment_id);
+                localStorage.setItem('commentId', data.comment_id);
                 document.body.appendChild(newCommentMessage);
                 setTimeout(function (){
                     newCommentMessage.classList.add('show-message-popup');

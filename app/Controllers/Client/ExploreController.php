@@ -27,10 +27,16 @@ class ExploreController extends Controller
         if($request->query('filter')){
             $filter = $request->query('filter');
         }
-        $words = explode(" ", $query);
+        $words = $query ? explode(' ', $query) : [];
         if($query && ($filter === "top" || $filter === "people")){
             if((str_contains($words[0], '#') && strlen($words[0]) > 3) || (!str_contains($words[0], '#') && strlen
                     ($words[0]) > 2)){
+                $followedUsers =  array_column(
+                    Database::table(UserFollower::TABLE)
+                        ->where('user_id', '=', session()->get('user')->id)
+                        ->get(),
+                    'follower_id'
+                );
                 $users = User::with('followers');
                 foreach ($words as $index => $word) {
                     if(str_contains($word, '#')){
@@ -54,6 +60,10 @@ class ExploreController extends Controller
                     ->get();
                 foreach ($users as $user) {
                     $user->followers_count = count($user->followers);
+                    $user->loggedInUserFollowsUser = in_array($user->id, $followedUsers);
+                    $user->userFollowsLoggedInUser = UserFollower::where('user_id', '=', $user->id)
+                        ->where('follower_id', '=', session()->get('user')->id)
+                        ->count();
                 }
                 usort($users, function ($a, $b) {
                     return $b->followers_count <=> $a->followers_count;
@@ -77,8 +87,11 @@ class ExploreController extends Controller
                 if(strlen($word) > 2){
                     $usersWithWord = array_column(
                        Database::table('users')
-                               ->where('username', 'like', "%{$word}%")
-                               ->orWhere('full_name', 'like', "%{$word}%")
+                               ->whereGroup(function ($q) use ($word) {
+                                   $q->where('username', 'like', "%{$word}%")
+                                       ->orWhere('full_name', 'like', "%{$word}%");
+                               })
+                               ->where('id', '!=', session()->get('user')->id)
                                ->get(),
                         'id'
                     );

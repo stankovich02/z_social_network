@@ -74,7 +74,13 @@
                                         <div class="searched-user-fullname">{{$user->full_name}}</div>
                                         <div class="searched-user-username">&#64;{{$user->username}}</div>
                                     </div>
-                                    <button class="followingBtn" data-id="" data-username="">Following</button>
+                                    @if($user->userFollowsLoggedInUser && !$user->loggedInUserFollowsUser)
+                                        <button class="followBackBtn" data-id="{{$user->id}}" data-username="{{$user->username}}">Follow back</button>
+                                    @elseif($user->loggedInUserFollowsUser)
+                                        <button class="followingBtn" data-id="{{$user->id}}" data-username="{{$user->username}}">Following</button>
+                                    @else
+                                        <button class="followBtn" data-id="{{$user->id}}" data-username="{{$user->username}}">Follow</button>
+                                    @endif
                                     @if($user->biography)
                                         <div class="searched-user-bio">{{$user->biography}}</div>
                                     @endif

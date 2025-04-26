@@ -295,38 +295,6 @@ document.addEventListener("click", function (event) {
     }
 
 });
-/*document.addEventListener("DOMContentLoaded", function () {
-    let observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                let post = entry.target;
-                let postId = post.getAttribute("data-id");
-                if (!post.dataset.viewed) {
-                    post.dataset.viewed = "true";
-                    $.ajax({
-                        url: "/register-view",
-                        type: "POST",
-                        data: {
-                            post_id: postId
-                        },
-                        success: function (data) {
-                            if (data.success) {
-
-                            }
-                        },
-                        error: function (err) {
-                            console.log(err);
-                        }
-                    })
-                }
-            }
-        });
-    }, { threshold: 1.0 });
-
-    document.querySelectorAll(".single-post").forEach(post => {
-        observer.observe(post);
-    });
-});*/
 function feedNewPostLogic(){
     function writeInputAndIcon(){
         let form = document.querySelector("#feedNewPost form");
@@ -574,7 +542,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 let newCommentMessage = document.createElement('div')
                 newCommentMessage.id = "message-popup";
                 newCommentMessage.innerHTML = `<p>Your comment was sent.</p><a href="${data.post_link}">View</a>`;
-                localStorage.setItem('commentID', data.comment_id);
+                localStorage.setItem('commentId', data.comment_id);
                 document.body.appendChild(newCommentMessage);
                 setTimeout(function (){
                     newCommentMessage.classList.add('show-message-popup');

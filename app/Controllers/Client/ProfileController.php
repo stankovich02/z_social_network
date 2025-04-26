@@ -81,9 +81,17 @@ class ProfileController extends Controller
                     $matchedText = 'Followed by ' . $matchedFollowers[0]['full_name'] . ', ' . $matchedFollowers[1]['full_name'] . ' and ' . $others . ' you follow';
             }
         }
-        $mergedPosts = [];
         if($user->posts && $user->repostedPosts) {
             $mergedPosts = array_merge($user->posts, $user->repostedPosts);
+        }
+        else if($user->posts) {
+            $mergedPosts = $user->posts;
+        }
+        else if($user->repostedPosts) {
+            $mergedPosts = $user->repostedPosts;
+        }
+        else {
+            $mergedPosts = [];
         }
         usort($mergedPosts, function ($a, $b) {
             return strtotime($b->created_at) <=> strtotime($a->created_at);
