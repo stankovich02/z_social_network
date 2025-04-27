@@ -30,7 +30,7 @@ class NavSeeder extends Seeder
         ],
         [
             'name' => 'Profile',
-            'route' => '/profile',
+            'route' => '/{username}',
             'icon_id' => 5
         ],
     ];

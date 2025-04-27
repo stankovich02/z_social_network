@@ -3,7 +3,7 @@
         <a href="{{route('home')}}" aria-current="page" class="w-inline-block w--current"><img src="{{asset("assets/img/67b61da06092cd17329df26d/67c47292b287cfef93ba2a67_logo2.png")}}" loading="lazy" alt="" class="logo" /></a>
         <div class="menu">
             @foreach(App\Models\Nav::with('icon')->get() as $index => $nav)
-                    <a href="@if($nav->route === '/') {{$nav->route . session()->get('user')->username}} @else {{$nav->route}} @endif" class="single-link w-inline-block">
+                    <a href="@if($nav->route === '/{username}'){{"/" . session()->get('user')->username}} @else{{$nav->route}} @endif" class="single-link w-inline-block @if($requestUri === $nav->route)current-page @elseif($nav->route === "/{username}" && $requestUri == "/" . session()->get('user')->username)current-page @elseif(str_contains($requestUri, $nav->route) && $nav->route == "/messages")current-page @endif">
                         <div class="icon-embed-medium link-icon w-embed">
                             <?php
                             $newNotifications = App\Models\Notification::where('is_read','=',0)->where('target_user_id', '=', session()->get('user')->id)->count();
@@ -24,13 +24,14 @@
                                     xmlns:xlink="http://www.w3.org/1999/xlink"
                                     aria-hidden="true"
                                     role="img"
-                                    class="{{$nav->icon->className}}"
+                                    class="{{$nav->name === "Profile" && $requestUri === "/" . session()->get('user')->username ? "iconify iconify--heroicons
+" : $nav->icon->className}}"
                                     width="100%"
                                     height="100%"
                                     preserveAspectRatio="xMidYMid meet"
                                     viewBox="0 0 24 24"
                             >
-                                <path fill="currentColor" d="{{$nav->icon->path_d}}"></path>
+                                <path @if($nav->name === "Profile" && $requestUri === "/" . session()->get('user')->username) fill-rule='even-odd' clip-rule='evenodd' @endif fill="{{$nav->name === "Profile"  && $requestUri !== "/" . session()->get('user')->username? "none" : "currentColor"}}" @if($nav->name === "Profile" && $requestUri !== "/" . session()->get('user')->username) stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" @endif d="{{App\Models\Nav::getActivePathD($nav)}}"></path>
                             </svg>
                         </div>
                         <div class="link-text">{{$nav->name}}</div>

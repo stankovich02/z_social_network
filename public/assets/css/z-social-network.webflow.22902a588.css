@@ -2809,7 +2809,7 @@ textarea.w-input, textarea.w-select {
 .header {
   justify-content: flex-end;
   align-items: flex-start;
-  width: 35%;
+  width: 700px;
   height: 100vh;
   display: flex;
 }
@@ -5158,4 +5158,7 @@ background-color: rgb(29, 155, 240);
 }
 #action-popup-wrapper{
   z-index: 4;
+}
+.current-page .link-text{
+  font-weight: bold;
 }

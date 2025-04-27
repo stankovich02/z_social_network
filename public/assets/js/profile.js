@@ -484,7 +484,6 @@ if(document.querySelector(".block-user")){
     })
 }
 
-
 function nextBioBtnFunc(describeBio,saveProfile,popupLogo,returnBackBtn,closeIcon){
     let nextBioBtn = document.querySelector(".describe-bio .next-profile-btn");
     nextBioBtn.addEventListener("click", function (){
@@ -623,11 +622,37 @@ function editProfileBtnFunc(){
     if(editProfileBtn){
         editProfileBtn.addEventListener("click", function (){
             let editProfileWrapper = document.querySelector("#editProfileWrapper");
-            editProfileWrapper.style.display = "block";
-            let closeIcon = document.querySelector("#editProfileWrapper .close-icon");
-            closeIcon.addEventListener("click", function (){
-                editProfileWrapper.style.display = "none";
+            let loggedInUser = document.querySelector(".logged-in-user");
+            let userId = loggedInUser.getAttribute("data-id");
+            $.ajax({
+                url: `/users/${userId}/edit`,
+                type: "GET",
+                success: function(user){
+                    let removeHeaderPhotoWrapper = document.querySelector(".edit-popup .pick-header-img-wrapper .remove-new-photo-wrapper");
+                    removeHeaderPhotoWrapper.style.display = "none";
+                    let removeProfilePhotoWrapper = document.querySelector(".edit-popup .edit-profile-pic .remove-new-photo-wrapper");
+                    let pickHeaderImg = document.querySelector(".edit-popup .pick-header-img-wrapper .pick-header-img");
+                    pickHeaderImg.style.backgroundImage = `url(${user.cover_photo})`;
+                    let pickProfileImg = document.querySelector(".edit-popup .edit-profile-pic img");
+                    pickProfileImg.src = user.photo;
+                    let currentNameInput = document.querySelector(".edit-popup .current-name-input");
+                    let currentBioTextarea = document.querySelector(".edit-popup .current-biography-input");
+                    currentNameInput.value = user.full_name;
+                    currentBioTextarea.value = user.biography;
+                    removeProfilePhotoWrapper.style.display = "none";
+                    editProfileWrapper.style.display = "block";
+                    let closeIcon = document.querySelector("#editProfileWrapper .close-icon");
+                    closeIcon.addEventListener("click", function (){
+                        editProfileWrapper.style.display = "none";
+                    })
+                },
+                error: function(err){
+                    console.log(err);
+                }
+
             })
+          
+            
 
         });
     }

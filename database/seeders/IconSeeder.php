@@ -12,7 +12,7 @@ class IconSeeder extends Seeder
             'divClass' => 'icon-embed-medium link-icon',
             'className' => 'iconify iconify--ic',
             'viewBox' => '0 0 24 24',
-            'path_d' => 'M10 20v-6h4v6h5v-8h3L12 3L2 12h3v8z',
+            'path_d' => 'm12 5.69l5 4.5V18h-2v-6H9v6H7v-7.81zM12 3L2 12h3v8h6v-6h2v6h6v-8h3z',
         ],
         [
             'divClass' => 'icon-embed-medium link-icon',
@@ -34,9 +34,9 @@ class IconSeeder extends Seeder
         ],
         [
             'divClass' => 'icon-embed-medium link-icon',
-            'className' => 'iconify iconify--bx',
+            'className' => 'iconify iconify--heroicons',
             'viewBox' => '0 0 24 24',
-            'path_d' => 'M7.5 6.5C7.5 8.981 9.519 11 12 11s4.5-2.019 4.5-4.5S14.481 2 12 2S7.5 4.019 7.5 6.5zM20 21h1v-1c0-3.859-3.141-7-7-7h-4c-3.86 0-7 3.141-7 7v1h17z',
+            'path_d' => 'M15.75 6a3.75 3.75 0 1 1-7.5 0a3.75 3.75 0 0 1 7.5 0M4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.9 17.9 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632',
         ],
         [
             'divClass' => 'user-icon',

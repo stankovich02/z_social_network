@@ -48,6 +48,7 @@ Router::middleware([\App\Middlewares\IsLoggedIn::class])->group(function () {
 
     Router::controller(UserController::class)->group(function (){
         Router::get('/users/{id}', 'show')->name('users.show');
+        Router::get('/users/{id}/edit', 'edit')->name('users.edit');
         Router::post('/users/{id}/block', 'block')->name('users.block');
         Router::post('/users/{id}/unblock', 'unblock')->name('users.unblock');
         Router::post('/users/{id}/follow', 'follow')->name('users.follow');

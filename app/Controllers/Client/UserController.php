@@ -26,6 +26,21 @@ class UserController extends Controller
         }
         return response();
     }
+    public function edit(int $id) : Response
+    {
+        $user = User::where('id', '=', $id)->first();
+        if($user->id !== session()->get('user')->id){
+            return response()->setStatusCode(Response::HTTP_FORBIDDEN)->json([
+                'editError' => 'You are not allowed to edit other users information.'
+            ]);
+        }
+        return response()->json([
+            'full_name' => $user->full_name,
+            'biography' => $user->biography,
+            'cover_photo' => asset('assets/img/users-covers/' . $user->cover_photo),
+            'photo' => asset('assets/img/users/' . $user->photo)
+        ]);
+    }
     public function update(int $id, Request $request) : Response
     {
        if($id !== session()->get('user')->id){

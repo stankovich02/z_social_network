@@ -9,6 +9,9 @@
     @include("fixed.client.head")
 </head>
 <body class="body">
+    @php
+    $requestUri = $_SERVER['REQUEST_URI'];
+    @endphp
     <div class="container">
         @include("fixed.client.header")
 
