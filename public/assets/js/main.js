@@ -21,18 +21,56 @@ textareas.forEach(textarea => {
 const loggedInUserInfo = document.querySelector(".logged-in-user");
 loggedInUserInfo.addEventListener("click", () => {
     const logoutWrapper = document.querySelector("#logout-wrapper");
-    if(logoutWrapper.style.display === "flex"){
-        logoutWrapper.style.display = "none";
+    const profileHeaderWrapper = document.querySelector("#profileHeaderWrapper");
+    if(window.innerWidth > 500){
+        if(logoutWrapper.style.display === "flex"){
+            logoutWrapper.style.display = "none";
+        }
+        else{
+            logoutWrapper.style.display = "flex";
+        }
     }
     else{
-        logoutWrapper.style.display = "flex";
+        const profileHeader = document.querySelector("#profileHeader");
+        if(profileHeaderWrapper.style.display === "block"){
+            profileHeaderWrapper.style.display = "none";
+            setTimeout(() => {
+                profileHeader.style.transform = "translateX(-100%)";
+            }, 50);
+        }
+        else{
+            profileHeaderWrapper.style.display = "block";
+            setTimeout(() => {
+                profileHeader.style.transform = "translateX(0%)";
+            }, 50);
+        }
     }
 })
+if(window.innerWidth < 500){
+    window.addEventListener("scroll", function () {
+        const header = document.querySelector(".header");
+        if (window.scrollY > 50) {
+            header.style.opacity = "0.3";
+        }
+        else{
+            header.style.opacity = "1";
+        }
+    });
+}
+
 document.addEventListener("click", function (event) {
     const loggedInUserInfo = document.querySelector(".logged-in-user");
     const logoutWrapper = document.querySelector("#logout-wrapper");
+    const profileHeaderWrapper = document.querySelector("#profileHeaderWrapper");
     if (!loggedInUserInfo.contains(event.target)) {
         logoutWrapper.style.display = "none";
+    }
+    if (!loggedInUserInfo.contains(event.target)) {
+        profileHeaderWrapper.style.display = "none";
+        const profileHeader = document.querySelector("#profileHeader");
+        setTimeout(() => {
+            profileHeader.style.transform = "translateX(-100%)";
+        }, 50);
     }
     if(event.target.parentElement.classList.contains("close-icon")){
         let popup = document.querySelectorAll(".popup-wrapper");
@@ -601,6 +639,24 @@ function scrollToBottom() {
     if (chatContainer) {
         chatContainer.scrollTop = chatContainer.scrollHeight;
     }
+}
+window.addEventListener("resize", function () {
+if(window.innerWidth < 991){
+    let postBtn = document.querySelector(".post-btn");
+    postBtn.innerHTML = '<i class="fa-solid fa-feather"></i>';
+}
+else{
+    let postBtn = document.querySelector(".post-btn");
+    postBtn.innerHTML = 'Post';
+}
+});
+if(window.innerWidth < 991){
+    let postBtn = document.querySelector(".post-btn");
+    postBtn.innerHTML = '<i class="fa-solid fa-feather"></i>';
+}
+else{
+    let postBtn = document.querySelector(".post-btn");
+    postBtn.innerHTML = 'Post';
 }
 
 

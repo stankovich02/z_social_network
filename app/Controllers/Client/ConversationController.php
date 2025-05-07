@@ -42,8 +42,11 @@ class ConversationController extends Controller
                           ->whereGroup(function ($q) use ($query) {
                             $q->where('username', 'like', "%{$query}%")
                               ->orWhere('full_name', 'like', "%{$query}%");
-                        })->whereNotIn('id', $userIds)
-                          ->get();
+                        });
+        if($userIds){
+            $otherUsers = $otherUsers->whereNotIn('id', $userIds);
+        }
+        $otherUsers = $otherUsers->get();
         foreach ($otherUsers as $otherUser) {
             $usersArray[] = [
                 'id' => $otherUser->id,
