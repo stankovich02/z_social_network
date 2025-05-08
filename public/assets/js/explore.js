@@ -7,12 +7,14 @@ document.addEventListener("click", function (event) {
             }
         })
         const chooseOption = event.target.parentElement.parentElement.querySelector(".choose-post-option");
-
+        const chooseOptionsWrapper = document.querySelector("#chooseOptionsWrapper");
         if(chooseOption.style.display === "block"){
             chooseOption.style.display = "none";
+            chooseOptionsWrapper.style.display = "none";
         }
         else{
             chooseOption.style.display = "block";
+            chooseOptionsWrapper.style.display = "block";
         }
     }
     if(!event.target.classList.contains("more-opt-ic")){
@@ -174,6 +176,8 @@ document.addEventListener("click", function (event) {
     }
     if(event.target.classList.contains("cancelPopupBtn")){
         const actionPopupWrapper = document.querySelector("#action-popup-wrapper");
+        let chooseOptionsWrapper = document.querySelector("#chooseOptionsWrapper");
+        chooseOptionsWrapper.style.display = "none";
         actionPopupWrapper.style.display = "none";
         document.body.style.overflow = "auto";
     }

@@ -140,6 +140,8 @@ document.addEventListener("click", function (event){
     }
     if(event.target.className === "cancelPopupBtn"){
         let actionPopupWrapper = document.querySelector("#action-popup-wrapper");
+        let chooseOptionsWrapper = document.querySelector("#chooseOptionsWrapper");
+        chooseOptionsWrapper.style.display = "none";
         actionPopupWrapper.style.display = "none";
         document.body.style.overflow = "auto";
     }

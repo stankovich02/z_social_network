@@ -127,6 +127,8 @@ document.addEventListener("click", function (event) {
     }
     if(event.target.classList.contains("cancelPopupBtn")){
         const actionPopupWrapper = document.querySelector("#action-popup-wrapper");
+        let chooseOptionsWrapper = document.querySelector("#chooseOptionsWrapper");
+        chooseOptionsWrapper.style.display = "none";
         actionPopupWrapper.style.display = "none";
         document.body.style.overflow = "auto";
     }
@@ -377,6 +379,8 @@ postMoreOptions.addEventListener("click", function (){
 if(document.querySelector(".delete-post")){
     let deletePost = document.querySelector(".delete-post");
     deletePost.addEventListener("click", function (){
+        let chooseOptionsWrapper = document.querySelector("#chooseOptionsWrapper");
+        chooseOptionsWrapper.style.display = "none";
         const postId = this.getAttribute("data-id");
         const actionPopupWrapper = document.querySelector("#action-popup-wrapper");
         const confirmDelete = document.querySelector("#doActionBtn");

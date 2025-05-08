@@ -55,8 +55,10 @@ document.addEventListener("click", function (event) {
             }
         })
         const chooseOption = event.target.parentElement.parentElement.querySelector(".choose-post-option");
-
+        const chooseOptionsWrapper = document.querySelector("#chooseOptionsWrapper");
+        chooseOptionsWrapper.style.display = (chooseOption.style.display === "block") ? "none" : "block";
         chooseOption.style.display = (chooseOption.style.display === "block") ? "none" : "block";
+
     }
     if(event.target.className === "deletePostPopupBtn"){
         const postId = event.target.getAttribute("data-id");
@@ -98,6 +100,8 @@ document.addEventListener("click", function (event) {
     }
     if(event.target.className === "cancelPopupBtn"){
         let actionPopupWrapper = document.querySelector("#action-popup-wrapper");
+        let chooseOptionsWrapper = document.querySelector("#chooseOptionsWrapper");
+        chooseOptionsWrapper.style.display = "none";
         actionPopupWrapper.style.display = "none";
         document.body.style.overflow = "auto";
     }
@@ -180,6 +184,8 @@ document.addEventListener("click", function (event) {
         document.body.style.overflow = "hidden";
     }
     if (event.target.classList.contains("delete-post")) {
+        let chooseOptionsWrapper = document.querySelector("#chooseOptionsWrapper");
+        chooseOptionsWrapper.style.display = "none";
         const postId = event.target.getAttribute("data-id");
         const actionPopupWrapper = document.querySelector("#action-popup-wrapper");
         const confirmDelete = document.querySelector("#doActionBtn");

@@ -7,15 +7,20 @@ document.addEventListener("click", function (event) {
             }
         })
         const chooseOption = event.target.parentElement.parentElement.querySelector(".choose-post-option");
-
+        const chooseOptionsWrapper = document.querySelector("#chooseOptionsWrapper");
         if(chooseOption.style.display === "block"){
             chooseOption.style.display = "none";
+            chooseOptionsWrapper.style.display = "none";
         }
         else{
+            chooseOptionsWrapper.style.display = "block";
             chooseOption.style.display = "block";
+
         }
     }
     if (event.target.classList.contains("delete-post")) {
+        let chooseOptionsWrapper = document.querySelector("#chooseOptionsWrapper");
+        chooseOptionsWrapper.style.display = "none";
         const postId = event.target.getAttribute("data-id");
         const actionPopupWrapper = document.querySelector("#action-popup-wrapper");
         const confirmDelete = document.querySelector("#doActionBtn");
@@ -216,6 +221,8 @@ document.addEventListener("click", function (event) {
     }
     if(event.target.classList.contains("cancelPopupBtn")){
         const actionPopupWrapper = document.querySelector("#action-popup-wrapper");
+        let chooseOptionsWrapper = document.querySelector("#chooseOptionsWrapper");
+        chooseOptionsWrapper.style.display = "none";
         actionPopupWrapper.style.display = "none";
         document.body.style.overflow = "auto";
     }
@@ -417,6 +424,7 @@ function feedSendPost() {
                     </div>
                     <div class="choose-post-option">
                             <div class="single-post-option delete-post" data-id="${post.id}"><div class="trash-icon w-embed"><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" height="100%" width="100%" class="iconify iconify--bx" role="img" aria-hidden="true"  xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M6 7H5v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7H6zm10.618-3L15 2H9L7.382 4H3v2h18V4z"></path></svg></div>Delete</div>
+                            <button id="cancelOption" class="cancelPopupBtn">Cancel</button>
                     </div>
                 </div>
         <img src="${post.user.photo}" loading="eager" alt="" class="user-image" />

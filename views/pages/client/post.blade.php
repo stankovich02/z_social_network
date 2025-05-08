@@ -40,6 +40,7 @@
                     <div class="single-post-option follow-user" data-id="{{$post->user->id}}" data-username="{{$post->user->username}}"><i class="fa-solid fa-user-plus"></i> Follow &#64;{{$post->user->username}}</div>
                 @endif
             @endif
+                <button id="cancelOption" class="cancelPopupBtn">Cancel</button>
             </div>
         </div>
        @if($reposted)

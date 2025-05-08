@@ -153,6 +153,7 @@
             <button id="cancelAction" class="cancelPopupBtn">Cancel</button>
         </div>
     </div>
+    <div id="chooseOptionsWrapper"></div>
     <script src="https://unpkg.com/emoji-button@4.6.0/dist/emoji-button.min.js"></script>
 
     <script src="{{asset('assets/js/webflow.a0aa6ca1.8803622a53cb8314.js')}}" type="text/javascript"></script>

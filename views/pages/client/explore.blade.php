@@ -112,7 +112,9 @@
                                         @else
                                             <div class="single-post-option follow-user" data-id="{{$post->user->id}}" data-username="{{$post->user->username}}"><i class="fa-solid fa-user-plus"></i> Follow &#64;{{$post->user->username}}</div>
                                         @endif
+                                        <button id="cancelOption" class="cancelPopupBtn">Cancel</button>
                                     </div>
+
                                 </div>
 
                                 <a href="{{route('profile', ['username' => $post->user->username])}}"><img src="{{asset('assets/img/users/' . $post->user->photo)}}" loading="eager" alt="" class="user-image" /></a>
