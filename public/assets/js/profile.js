@@ -731,6 +731,8 @@ function editTypingFunc(){
 }
 typingBio();
 editTypingFunc();
+const topHeaderNav = document.querySelector("#topHeaderNav");
+topHeaderNav.remove();
 let profilePictureInput = document.querySelector("#pickProfilePicture");
 let addProfilePictureIcon = document.querySelector(".pick-profile-picture .add-new-photo-icon");
 let editProfilePictureInput = document.querySelector("#editProfilePicture");

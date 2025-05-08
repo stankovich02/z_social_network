@@ -18,35 +18,19 @@ textareas.forEach(textarea => {
         this.style.height = this.scrollHeight + 'px';
     });
 })
-const loggedInUserInfo = document.querySelector(".logged-in-user");
-loggedInUserInfo.addEventListener("click", () => {
-    const logoutWrapper = document.querySelector("#logout-wrapper");
-    const profileHeaderWrapper = document.querySelector("#profileHeaderWrapper");
-    if(window.innerWidth > 500){
+if(window.innerWidth > 500){
+    const loggedInUserInfo = document.querySelector(".logged-in-user");
+    loggedInUserInfo.addEventListener("click", () => {
+        const logoutWrapper = document.querySelector("#logout-wrapper");
         if(logoutWrapper.style.display === "flex"){
             logoutWrapper.style.display = "none";
         }
         else{
             logoutWrapper.style.display = "flex";
         }
-    }
-    else{
-        const profileHeader = document.querySelector("#profileHeader");
-        if(profileHeaderWrapper.style.display === "block"){
-            profileHeaderWrapper.style.display = "none";
-            setTimeout(() => {
-                profileHeader.style.transform = "translateX(-100%)";
-            }, 50);
-        }
-        else{
-            profileHeaderWrapper.style.display = "block";
-            setTimeout(() => {
-                profileHeader.style.transform = "translateX(0%)";
-            }, 50);
-        }
-    }
-})
-if(window.innerWidth < 500){
+    })
+}
+if(window.innerWidth < 501){
     window.addEventListener("scroll", function () {
         const header = document.querySelector(".header");
         if (window.scrollY > 50) {
@@ -56,16 +40,37 @@ if(window.innerWidth < 500){
             header.style.opacity = "1";
         }
     });
+    const navImage = document.querySelector("#navImage")
+    if(navImage){
+        navImage.addEventListener("click", function () {
+            const profileHeader = document.querySelector("#profileHeader");
+            const profileHeaderWrapper = document.querySelector("#profileHeaderWrapper");
+            if(profileHeaderWrapper.style.display === "block"){
+                profileHeaderWrapper.style.display = "none";
+                setTimeout(() => {
+                    profileHeader.style.transform = "translateX(-100%)";
+                }, 50);
+            }
+            else{
+                profileHeaderWrapper.style.display = "block";
+                setTimeout(() => {
+                    profileHeader.style.transform = "translateX(0%)";
+                }, 50);
+            }
+        })
+    }
+
 }
 
 document.addEventListener("click", function (event) {
     const loggedInUserInfo = document.querySelector(".logged-in-user");
     const logoutWrapper = document.querySelector("#logout-wrapper");
     const profileHeaderWrapper = document.querySelector("#profileHeaderWrapper");
+    const topHeaderNav = document.querySelector("#topHeaderNav");
     if (!loggedInUserInfo.contains(event.target)) {
         logoutWrapper.style.display = "none";
     }
-    if (!loggedInUserInfo.contains(event.target)) {
+    if (!topHeaderNav.contains(event.target)) {
         profileHeaderWrapper.style.display = "none";
         const profileHeader = document.querySelector("#profileHeader");
         setTimeout(() => {
@@ -640,16 +645,6 @@ function scrollToBottom() {
         chatContainer.scrollTop = chatContainer.scrollHeight;
     }
 }
-window.addEventListener("resize", function () {
-if(window.innerWidth < 991){
-    let postBtn = document.querySelector(".post-btn");
-    postBtn.innerHTML = '<i class="fa-solid fa-feather"></i>';
-}
-else{
-    let postBtn = document.querySelector(".post-btn");
-    postBtn.innerHTML = 'Post';
-}
-});
 if(window.innerWidth < 991){
     let postBtn = document.querySelector(".post-btn");
     postBtn.innerHTML = '<i class="fa-solid fa-feather"></i>';

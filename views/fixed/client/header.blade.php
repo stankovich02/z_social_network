@@ -67,32 +67,36 @@
     
     </div>
 </div>
-<div id="profileHeaderWrapper">
-    <div id="profileHeader">
-        <div id="headerProfileInfo">
-            <img class="user-image" src="{{asset('assets/img/users/' . session()->get('user')->photo)}}" alt="">
-            <p id="headerUserFullname">{{session()->get('user')->full_name}}</p>
-            <p id="headerUserUsername">&#64;{{session()->get('user')->username}}</p>
-            <div class="follow-stats">
-                <a href="{{route('profile.following', ['username' => $user->username])}}" class="following-stats">{{count($user->following)}} <span class="text-span-2">Following</span></a>
-                <a href="{{route('profile.followers', ['username' => $user->username])}}" class="followers-stats">{{count($user->followers)}} <span class="text-span-3">{{count($user->followers) !== 1 ? "Followers" : "Follower"}}</span></a>
-                </div>
-        </div>
-        <div id="profileHeaderMenu">
-            <a href="/stanke2002" class="single-link w-inline-block">
-                <div class="icon-embed-medium link-icon w-embed">
-                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--heroicons" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
-                        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.75 6a3.75 3.75 0 1 1-7.5 0a3.75 3.75 0 0 1 7.5 0M4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.9 17.9 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632"></path>
-                    </svg>
-                </div>
-                <div class="link-text">Profile</div>
-            </a>
-            <a href="/logout" class="single-link w-inline-block">
-                <div class="icon-embed-medium link-icon w-embed">
-                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                </div>
-                <div class="link-text">Log out</div>
-            </a>
+    <div id="profileHeaderWrapper">
+        <div id="profileHeader">
+            <div id="headerProfileInfo">
+                <img class="user-image" src="{{asset('assets/img/users/' . session()->get('user')->photo)}}" alt="">
+                <p id="headerUserFullname">{{session()->get('user')->full_name}}</p>
+                <p id="headerUserUsername">&#64;{{session()->get('user')->username}}</p>
+                {{--<div class="follow-stats">
+                    <a href="{{route('profile.following', ['username' => $user->username])}}" class="following-stats">{{count($user->following)}} <span class="text-span-2">Following</span></a>
+                    <a href="{{route('profile.followers', ['username' => $user->username])}}" class="followers-stats">{{count($user->followers)}} <span class="text-span-3">{{count($user->followers) !== 1 ? "Followers" : "Follower"}}</span></a>
+                </div>--}}
+            </div>
+            <div id="profileHeaderMenu">
+                <a href="/stanke2002" class="single-link w-inline-block">
+                    <div class="icon-embed-medium link-icon w-embed">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--heroicons" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.75 6a3.75 3.75 0 1 1-7.5 0a3.75 3.75 0 0 1 7.5 0M4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.9 17.9 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632"></path>
+                        </svg>
+                    </div>
+                    <div class="link-text">Profile</div>
+                </a>
+                <a href="/logout" class="single-link w-inline-block">
+                    <div class="icon-embed-medium link-icon w-embed">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    </div>
+                    <div class="link-text">Log out</div>
+                </a>
+            </div>
         </div>
     </div>
-</div>
+    <div id="topHeaderNav">
+        <img src="{{asset('assets/img/users/' . session()->get('user')->photo)}}" class="user-image" alt="user" id="navImage"/>
+        <a href="{{route('home')}}" aria-current="page" class="w-inline-block w--current"><img id="topHeaderLogo" src="{{asset("assets/img/logo_large.png")}}" alt="logo" class="logo" /></a>
+    </div>

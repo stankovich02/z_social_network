@@ -2,7 +2,6 @@
 @section('title') Home @endsection
 @section('content')
     <section class="content">
-
         <div class="posts-filter">
             <div class="foryou-filter"><div class="post-filter-text active-post-filter">For you</div></div>
             <div class="following-filter"><div class="post-filter-text">Following</div></div>
