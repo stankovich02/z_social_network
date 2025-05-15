@@ -2632,8 +2632,11 @@ textarea.w-input, textarea.w-select {
   border-bottom: 1px solid #88888880;
   padding: 20px 30px;
   display: flex;
+  transition: all 0.3s;
 }
-
+.single-notification:hover{
+  background-color: rgba(255,255,255,0.03);
+}
 .single-notification.new-notification {
   background-color: #001935;
 }
@@ -3136,17 +3139,22 @@ textarea.w-input, textarea.w-select {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.8rem;
+  height: 1.8rem;
   display: flex;
+  transition: all 0.3s;
+  border-radius: 50%;
+  padding: 5px;
   cursor: pointer;
 }
-
+.new-message-icon:hover{
+  background-color: rgba(239, 243, 244, 0.1);
+}
 .top-profile-info {
   grid-column-gap: 50px;
   grid-row-gap: 50px;
   align-items: center;
-  padding: 8px 20px;
+  padding: 8px 10px;
   display: flex;
 }
 
@@ -3273,7 +3281,7 @@ textarea.w-input, textarea.w-select {
   text-decoration: none;
   color: white;
 }
-c
+
 .text-span-2 {
   color: #fff6;
   font-weight: 400;
@@ -3299,7 +3307,7 @@ c
   grid-column-gap: 30px;
   grid-row-gap: 30px;
   align-items: center;
-  padding: 15px 20px;
+  padding: 8px 10px;
   display: flex;
 }
 
@@ -3333,7 +3341,7 @@ c
   grid-column-gap: 10px;
   grid-row-gap: 10px;
   border-bottom: 1px solid #88888880;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: flex-start;
   padding: 20px;
   display: flex;
@@ -3355,7 +3363,7 @@ c
 .new-comment {
   width: 500px;
   margin-bottom: 0;
-  margin-right: 20px;
+  margin-right: 50px;
 }
 
 .reply-comment {
@@ -4506,6 +4514,12 @@ c
 .returnBackLink{
   text-decoration: none;
   color: white;
+  transition: all 0.3s;
+  padding: 10px;
+  border-radius: 50%;
+}
+.returnBackLink:hover{
+  background-color: rgba(239,243, 244, 0.1);
 }
 .comments-on-comment-stats,.liked-on-comment-stats{
   cursor: pointer;
@@ -5020,9 +5034,16 @@ background-color: rgb(29, 155, 240);
   transform: translate(-50%, -50%);
   position: absolute;
 }
-/*.clickedProfileImage{
+.clickedProfileImage{
+  max-height: 50%!important;
+  width: auto!important;
+  height: auto!important;
+  top: 50%;
+  left: 50%;
   border-radius: 50%;
-}*/
+  transform: translate(-50%, -50%);
+  position: absolute;
+}
 #postEmojiImagePick{
   display: flex;
   align-items: center;
@@ -5396,6 +5417,9 @@ background-color: rgb(29, 155, 240);
   .post-comment-stats:hover{
     color: #fff6;
   }
+  .returnBackLink:hover{
+    background-color: black;
+  }
   .comment-stats-icon i:hover {
     color: #fff6;
   }
@@ -5432,6 +5456,9 @@ background-color: rgb(29, 155, 240);
   .filterWrapper .filterLink:hover {
     background-color: black;
   }
+  .new-message-icon:hover{
+    background-color: black;
+  }
   .single-following-user:hover,.single-follower-user:hover{
     background-color: black;
   }
@@ -5450,6 +5477,9 @@ background-color: rgb(29, 155, 240);
   .logged-in-user:hover{
     background-color: black;
   }
+  .single-notification:hover{
+    background-color: transparent;
+  }
   .new-post-popup{
     width: 60%;
     max-width: 80%;
@@ -5459,6 +5489,10 @@ background-color: rgb(29, 155, 240);
   #register-login-popup{
     width: 70%;
     max-width: 70%;
+  }
+  .clickedProfileImage{
+    max-height: 40%!important;
+    max-width: 80%!important;
   }
 }
 @media (max-width: 768px) {
@@ -5643,6 +5677,26 @@ background-color: rgb(29, 155, 240);
 @media (max-width: 450px) {
   .post-filter-text{
     width: 60%;
+  }
+  .post-info{
+    width: 60%;
+    flex-wrap: wrap;
+  }
+  #profileHeader{
+    width: 70%;
+  }
+}
+@media (max-width: 400px) {
+  .post-info{
+    width: 70%;
+  }
+  .post-reactions{
+    width: 90%;
+  }
+}
+@media (max-width: 350px) {
+  #profileHeader{
+    width: 80%;
   }
 }
 @media (max-width: 330px) {

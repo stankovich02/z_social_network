@@ -60,9 +60,9 @@ class PostController extends Controller
 
         $posts = Post::with('user','image');
 
-        if(count($viewedPosts) > 0){
+        /*if(count($viewedPosts) > 0){
             $posts = $posts->whereNotIn('id', $viewedPosts);
-        }
+        }*/
         if ($filter === 'following') {
             $posts = $posts->whereIn('user_id', $followedUsers);
         }
