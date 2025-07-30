@@ -3048,6 +3048,11 @@ textarea.w-input, textarea.w-select {
   margin-bottom: 0;
   font-size: 15px;
   font-weight: 400;
+  word-wrap: break-word;          /* Staro svojstvo za kompatibilnost */
+  overflow-wrap: break-word;      /* Novo svojstvo */
+  word-break: break-all;          /* Prekida čak i u sredini riječi */
+  white-space: normal;            /* Omogućava prelamanje */
+  hyphens: auto;
 }
 
 .sent-message-info {
@@ -5242,6 +5247,9 @@ background-color: rgb(29, 155, 240);
 }
 #cancelOption{
   display: none;
+}
+#email-form-2{
+  width: 90%;
 }
 /*RESPONSIVE*/
 @media (max-width: 1700px) {

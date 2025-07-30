@@ -23,6 +23,7 @@ class MyChat implements MessageComponentInterface, \Ratchet\MessageComponentInte
         if (isset($data['user_id'])) {
             $this->clients[$data['user_id']] = $from;
             echo "User {$data['user_id']} connected.\n";
+            echo "His ip address is: " . $from->remoteAddress . "\n";
             return;
         }
         if (isset($data['sent_from']) && isset($data['sent_to']) && isset($data['message'])) {

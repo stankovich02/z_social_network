@@ -1,6 +1,28 @@
 @extends('layouts.main')
 @section('title') Home @endsection
 @section('content')
+    {{--<script src="https://www.paypal.com/sdk/js?client-id=AUU1ecrUCn-RpYHK-UIstj8cIjTGYSqtcTY1GQpKhZmEfuUSavgmJ9sNHdS6SQWhhQTmdiIwfHbM1vqI&currency=EUR"></script>
+
+    <div id="paypal-button-container"></div>
+
+    <script>
+        paypal.Buttons({
+            createOrder: function(data, actions) {
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: '10.00' // cena
+                        }
+                    }]
+                });
+            },
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    alert('Uplatu izvršio: ' + details.payer.name.given_name);
+                });
+            }
+        }).render('#paypal-button-container');
+    </script>--}}
     <section class="content">
         <div class="posts-filter">
             <div class="foryou-filter"><div class="post-filter-text active-post-filter">For you</div></div>
