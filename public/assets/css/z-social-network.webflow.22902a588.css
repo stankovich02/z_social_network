@@ -5702,6 +5702,9 @@ background-color: rgb(29, 155, 240);
     opacity: 0;
     transition: all 1s;
   }
+  .messages{
+    padding-bottom: 0;
+  }
 }
 @media (max-width: 450px) {
   .post-filter-text{

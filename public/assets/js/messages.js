@@ -224,12 +224,8 @@ document.addEventListener("DOMContentLoaded", function () {
     let selectMessageWrapper = document.querySelector("#selectMessageNotification");
     if(!selectMessageWrapper && window.location.pathname.includes("/messages/") && window.innerWidth < 992){
         let messagesWrapper = document.querySelector(".messages-wrapper");
-        let header = document.querySelector(".header");
         if(messagesWrapper){
             messagesWrapper.style.display = "none";
-        }
-        if(header){
-            header.style.display = "none";
         }
         let chat = document.querySelector(".chat");
         if(chat){
@@ -240,6 +236,12 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
 
+    }
+    let header = document.querySelector(".header");
+    let topHeaderNav = document.querySelector("#topHeaderNav");
+    if(window.innerWidth < 501 && header && window.location.pathname.includes("/messages/")){
+        header.style.display = "none";
+        topHeaderNav.style.display = "none";
     }
     let chatWrapper = document.querySelector(".chat-messages-wrapper");
     let newMessagesNotification = document.getElementById("newMessagesChatNotification");
