@@ -220,11 +220,27 @@ if(typeMessageInput){
         }
     })
 }
-let chatContainer = document.querySelector(".chat-messages-wrapper");
-if (chatContainer) {
-    chatContainer.scrollTop = chatContainer.scrollHeight;
-}
 document.addEventListener("DOMContentLoaded", function () {
+    let selectMessageWrapper = document.querySelector("#selectMessageNotification");
+    if(!selectMessageWrapper && window.location.pathname.includes("/messages/") && window.innerWidth < 992){
+        let messagesWrapper = document.querySelector(".messages-wrapper");
+        let header = document.querySelector(".header");
+        if(messagesWrapper){
+            messagesWrapper.style.display = "none";
+        }
+        if(header){
+            header.style.display = "none";
+        }
+        let chat = document.querySelector(".chat");
+        if(chat){
+            chat.style.display = "block";
+            let chatContainer = document.querySelector(".chat-messages-wrapper");
+            if (chatContainer) {
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+        }
+
+    }
     let chatWrapper = document.querySelector(".chat-messages-wrapper");
     let newMessagesNotification = document.getElementById("newMessagesChatNotification");
 

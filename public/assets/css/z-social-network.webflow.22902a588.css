@@ -2834,7 +2834,7 @@ textarea.w-input, textarea.w-select {
 
 .messages-wrapper {
   border-right: 1px solid #88888880;
-  width: 40%;
+  width: 45%;
   min-height: 100vh;
 }
 
@@ -5265,6 +5265,9 @@ background-color: rgb(29, 155, 240);
   .content{
     width: 50%;
   }
+  .messages{
+    width: calc(100% - 320px);
+  }
 }
 @media (max-width: 1500px) {
   #opening-wrapper{
@@ -5282,6 +5285,9 @@ background-color: rgb(29, 155, 240);
   .content{
     width: 50%;
   }
+  .messages{
+    width: calc(100% - 320px);
+  }
 }
 @media (max-width: 1300px) {
   #opening-wrapper{
@@ -5289,47 +5295,6 @@ background-color: rgb(29, 155, 240);
   }
   #opening-wrapper img{
     width: 30%;
-  }
-}
-@media (max-width: 1200px) {
-  #register-login-popup{
-    width: 60%;
-    max-width: 60%;
-  }
-  .header{
-    width: 400px;
-  }
-  #logout-wrapper{
-    left: 120px;
-  }
-  .content{
-    width: 50%;
-  }
-}
-@media (max-width: 1100px) {
-  .header{
-    width: 350px;
-  }
-  #logout-wrapper{
-    left: 70px;
-  }
-  .content{
-    width: 60%;
-  }
-}
-@media (max-width: 991px) {
-  #opening-wrapper{
-    width: 90%;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-  }
-  #opening-wrapper img{
-    width: 50px;
-    margin-bottom: 50px;
-  }
-  #login-password{
-    width: calc(100% - 20px);
   }
   .left-bar-menu .single-link .link-text{
     display: none;
@@ -5353,7 +5318,7 @@ background-color: rgb(29, 155, 240);
   }
   .header{
     width: 100px;
-  
+
   }
   .left-bar-menu{
     width: 100px;
@@ -5380,6 +5345,47 @@ background-color: rgb(29, 155, 240);
   }
   #logout-text:hover{
     background-color: black;
+  }
+}
+@media (max-width: 1200px) {
+  #register-login-popup{
+    width: 60%;
+    max-width: 60%;
+  }
+/*  .header{
+    width: 400px;
+  }*/
+  #logout-wrapper{
+    left: 120px;
+  }
+/*  .content{
+    width: 50%;
+  }*/
+}
+@media (max-width: 1100px) {
+/*  .header{
+    width: 350px;
+  }*/
+  #logout-wrapper{
+    left: 70px;
+  }
+/*  .content{
+    width: 60%;
+  }*/
+}
+@media (max-width: 991px) {
+  #opening-wrapper{
+    width: 90%;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  #opening-wrapper img{
+    width: 50px;
+    margin-bottom: 50px;
+  }
+  #login-password{
+    width: calc(100% - 20px);
   }
   .foryou-filter:hover,.following-filter:hover{
     background-color: black;
@@ -5492,6 +5498,13 @@ background-color: rgb(29, 155, 240);
     width: 60%;
     max-width: 80%;
   }
+  .chat{
+    display: none;
+    width: 100%;
+  }
+  .messages-wrapper{
+    width: 60%;
+  }
 }
 @media (max-width: 800px) {
   #register-login-popup{
@@ -5522,6 +5535,9 @@ background-color: rgb(29, 155, 240);
   }
   .new-post-popup{
     width: 70%;
+  }
+  .messages-wrapper{
+    width: 80%;
   }
 }
 @media (max-width: 700px) {
@@ -5556,6 +5572,11 @@ background-color: rgb(29, 155, 240);
     right: 15px;
     top: 15px;
     padding: 5px 15px;
+  }
+}
+@media(max-width: 600px){
+  .messages-wrapper{
+    width: 100%;
   }
 }
 @media (max-width: 560px){
