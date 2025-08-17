@@ -220,16 +220,27 @@ if(typeMessageInput){
         }
     })
 }
+
 document.addEventListener("DOMContentLoaded", function () {
+    if(window.innerWidth > 991){
+        let returnBackLink = document.querySelector(".returnBackLink");
+        if(returnBackLink){
+            returnBackLink.style.display = "none";
+        }
+    }
     let selectMessageWrapper = document.querySelector("#selectMessageNotification");
     if(!selectMessageWrapper && window.location.pathname.includes("/messages/") && window.innerWidth < 992){
+        let returnBackLink = document.querySelector(".returnBackLink");
+        if(returnBackLink){
+            returnBackLink.style.display = "block";
+        }
         let messagesWrapper = document.querySelector(".messages-wrapper");
         if(messagesWrapper){
             messagesWrapper.style.display = "none";
         }
         let chat = document.querySelector(".chat");
         if(chat){
-            chat.style.display = "block";
+            chat.style.display = "flex";
             let chatContainer = document.querySelector(".chat-messages-wrapper");
             if (chatContainer) {
                 chatContainer.scrollTop = chatContainer.scrollHeight;

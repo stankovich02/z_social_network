@@ -152,7 +152,27 @@
             </div>
         </div>
         <div class="chat" data-user-id="{{$activeChatUser->id}}">
-            <div class="chat-user-fullname">{{$activeChatUser->full_name}}</div>
+            <div id="topSingleChat">
+                <a href="{{$_SERVER['HTTP_REFERER']}}" class="returnBackLink">
+                    <div class="icon-embed-xsmall-5 w-embed">
+                        <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                xmlns:xlink="http://www.w3.org/1999/xlink"
+                                aria-hidden="true"
+                                role="img"
+                                class="iconify iconify--ic"
+                                width="100%"
+                                height="100%"
+                                preserveAspectRatio="xMidYMid meet"
+                                viewBox="0 0 24 24"
+                        >
+                            <path fill="currentColor" d="M21 11H6.83l3.58-3.59L9 6l-6 6l6 6l1.41-1.41L6.83 13H21z"></path>
+                        </svg>
+                    </div>
+                </a>
+                <div class="chat-user-fullname">{{$activeChatUser->full_name}}</div>
+            </div>
+
             <a href="{{route('profile', ['username' => $activeChatUser->username])}}" class="chat-user-info-wrapper">
                 <img src="{{asset('assets/img/users/' . $activeChatUser->photo)}}" loading="lazy" alt="" class="chat-user-image" />
                 <div class="chat-user-info">

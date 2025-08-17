@@ -3050,7 +3050,6 @@ textarea.w-input, textarea.w-select {
   font-weight: 400;
   word-wrap: break-word;          /* Staro svojstvo za kompatibilnost */
   overflow-wrap: break-word;      /* Novo svojstvo */
-  word-break: break-all;          /* Prekida čak i u sredini riječi */
   white-space: normal;            /* Omogućava prelamanje */
   hyphens: auto;
 }
@@ -5251,6 +5250,10 @@ background-color: rgb(29, 155, 240);
 #email-form-2{
   width: 90%;
 }
+#topSingleChat{
+  display: flex;
+  align-items: center;
+}
 /*RESPONSIVE*/
 @media (max-width: 1700px) {
   #opening-wrapper{
@@ -5501,6 +5504,8 @@ background-color: rgb(29, 155, 240);
   .chat{
     display: none;
     width: 100%;
+    padding-top: 0;
+    padding-bottom: 0;
   }
   .messages-wrapper{
     width: 60%;
@@ -5668,7 +5673,7 @@ background-color: rgb(29, 155, 240);
   #topHeaderNav{
     display: flex;
   }
-  .choose-post-option{
+  .choose-post-option,.choose-single-message-option{
     box-shadow: 0 0 5px #000;
     background-color: black;
     border-radius: 10px 10px 0 0;
