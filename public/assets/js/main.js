@@ -70,7 +70,7 @@ document.addEventListener("click", function (event) {
     if (!loggedInUserInfo.contains(event.target)) {
         logoutWrapper.style.display = "none";
     }
-    if (!topHeaderNav.contains(event.target)) {
+    if (topHeaderNav && !topHeaderNav.contains(event.target)) {
         profileHeaderWrapper.style.display = "none";
         const profileHeader = document.querySelector("#profileHeader");
         setTimeout(() => {

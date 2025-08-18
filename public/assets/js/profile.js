@@ -9,6 +9,8 @@ document.addEventListener("click", function (event) {
         if(chooseProfileOption){
             chooseProfileOption.style.display = "none";
         }
+        const chooseOptionsWrapper = document.querySelector("#chooseOptionsWrapper");
+        chooseOptionsWrapper.style.display = "none";
     }
     let disallowedPostClicks = ["user-image","posted-by-fullname","post-ic","more-opt-ic", "choose-post-option", "delete-post"];
     let allowedPostClicks = ["post-info", "single-post", "post-info-and-body", "post-body", "post-body-text", "post-reactions"];
@@ -1106,7 +1108,10 @@ let moreProfileIcon = document.querySelector(".more-profile-ic")
 if(moreProfileIcon){
     moreProfileIcon.addEventListener("click", function (){
         let chooseProfileOption = moreProfileIcon.parentElement.querySelector(".choose-profile-option");
+        let chooseOptionsWrapper = document.querySelector("#chooseOptionsWrapper");
         chooseProfileOption.style.display = (chooseProfileOption.style.display === "block") ? "none" : "block";
+        chooseOptionsWrapper.style.display = "block";
+
     })
 }
 let copyProfile = document.querySelector(".copy-profile");

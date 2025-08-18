@@ -103,6 +103,8 @@ document.addEventListener("click", function (event){
         document.querySelectorAll(".choose-message-option").forEach(chooseOption => {
             chooseOption.style.display = "none";
         })
+        const chooseOptionsWrapper = document.querySelector("#chooseOptionsWrapper");
+        chooseOptionsWrapper.style.display = "none";
     }
     if(event.target.classList.contains("single-message-option") || event.target.parentElement.classList.contains("single-message-option")){
         let messageWrapper = event.target.classList.contains("single-message-option") ? event.target.parentElement.parentElement.parentElement : event.target.parentElement.parentElement.parentElement.parentElement;
@@ -133,7 +135,7 @@ document.addEventListener("click", function (event){
         const chooseOption = event.target.parentElement.parentElement.querySelector(".choose-single-message-option");
         if(chooseOption.style.display === "block"){
             chooseOption.style.display = "none";
-        }
+   }
         else{
             chooseOption.style.display = "block";
         }

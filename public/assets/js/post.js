@@ -12,11 +12,14 @@ document.addEventListener("click", function (event) {
             }
         })
         const chooseOption = event.target.parentElement.parentElement.querySelector(".choose-comment-option");
+        const chooseOptionsWrapper = document.querySelector("#chooseOptionsWrapper");
         if(chooseOption.style.display === "block"){
             chooseOption.style.display = "none";
+            chooseOptionsWrapper.style.display = "none";
         }
         else{
             chooseOption.style.display = "block";
+            chooseOptionsWrapper.style.display = "block";
         }
     }
     if(!event.target.classList.contains("more-opt-ic")){
@@ -24,6 +27,8 @@ document.addEventListener("click", function (event) {
             chooseOption.style.display = "none";
         })
         document.querySelector(".choose-post-option").style.display = "none";
+        const chooseOptionsWrapper = document.querySelector("#chooseOptionsWrapper");
+        chooseOptionsWrapper.style.display = "none";
     }
     if (event.target.classList.contains("delete-comment")) {
         const commentId = event.target.getAttribute("data-id");
@@ -372,7 +377,8 @@ postMoreOptions.addEventListener("click", function (){
         }
     })
     const chooseOption = this.parentElement.parentElement.querySelector(".choose-post-option");
-
+    const chooseOptionsWrapper = document.querySelector("#chooseOptionsWrapper");
+    chooseOptionsWrapper.style.display = (chooseOptionsWrapper.style.display === "block") ? "none" : "block";
     chooseOption.style.display = (chooseOption.style.display === "block") ? "none" : "block";
 })
 

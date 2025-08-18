@@ -66,17 +66,22 @@ document.addEventListener("click", function (event){
             }
         })
         const chooseOption = event.target.parentElement.parentElement.querySelector(".choose-follower-option");
+        const chooseOptionsWrapper = document.querySelector("#chooseOptionsWrapper");
         if(chooseOption.style.display === "block"){
             chooseOption.style.display = "none";
+            chooseOptionsWrapper.style.display = "none";
         }
         else{
             chooseOption.style.display = "block";
+            chooseOptionsWrapper.style.display = "block";
         }
     }
     if(!event.target.classList.contains("more-opt-ic")){
         document.querySelectorAll(".choose-follower-option").forEach(chooseOption => {
             chooseOption.style.display = "none";
         })
+        const chooseOptionsWrapper = document.querySelector("#chooseOptionsWrapper");
+        chooseOptionsWrapper.style.display = "none";
     }
     if(event.target.className === "blockUserPopupBtn"){
         let userId = event.target.getAttribute("data-id");
