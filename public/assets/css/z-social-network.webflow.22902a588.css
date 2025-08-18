@@ -3748,6 +3748,7 @@ textarea.w-input, textarea.w-select {
 .pick-text {
   font-size: 30px;
   font-weight: 700;
+  line-height: 35px;
 }
 
 .pick-desc {
@@ -5380,7 +5381,7 @@ background-color: rgb(29, 155, 240);
   }*/
 }
 @media (max-width: 991px) {
-  .edit-profile-popup{
+  .edit-profile-popup,.setup-profile-popup{
     width: 85%;
   }
   #opening-wrapper{
@@ -5722,13 +5723,18 @@ background-color: rgb(29, 155, 240);
   .messages{
     padding-bottom: 0;
   }
-  .edit-profile-popup{
+  .edit-profile-popup,.setup-profile-popup{
     width: 100%;
     height: 100%;
     transform: none;
     top: 0;
     left: 0;
-    border-radius: 0px;
+    border-radius: 0;
+    max-height: 100%;
+  }
+  .pick-profile-picture,.pick-header,.describe-bio{
+    padding-left: 10px;
+    padding-right: 10px;
   }
 }
 @media (max-width: 450px) {
