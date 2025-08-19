@@ -646,7 +646,7 @@ function scrollToBottom() {
         chatContainer.scrollTop = chatContainer.scrollHeight;
     }
 }
-if(window.innerWidth < 991){
+if(window.innerWidth < 1301){
     let postBtn = document.querySelector(".post-btn");
     postBtn.innerHTML = '<i class="fa-solid fa-feather"></i>';
 }

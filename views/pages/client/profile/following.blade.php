@@ -47,8 +47,19 @@
                             <div class="user-following-fullname-and-username">
                                 <div class="user-following-fullname">{{$userProfile->follower->full_name}}</div>
                                 <div class="user-following-username">&#64;{{$userProfile->follower->username}}</div>
+                                @if(in_array($userProfile->follower->id, $loggedInUserFollowers))
+                                    <div class="followsBackInfo">Follows you</div>
+                                @endif
                             </div>
-                            <button class="followingBtn" data-id="{{$userProfile->follower->id}}" data-username="{{$userProfile->follower->username}}">Following</button>
+                            @if($userProfile->follower->id !== session()->get('user')->id)
+                                @if($userProfile->follower->loggedInUserFollowsUser)
+                                    <button class="followingBtn" data-id="{{$userProfile->follower->id}}" data-username="{{$userProfile->follower->username}}">Following</button>
+                                @elseif(in_array($userProfile->follower->id, $loggedInUserFollowers))
+                                    <button class="followBackBtn" data-id="{{$userProfile->follower->id}}" data-username="{{$userProfile->follower->username}}">Follow back</button>
+                                @else
+                                    <button class="followBtn" data-id="{{$userProfile->follower->id}}" data-username="{{$userProfile->follower->username}}">Follow</button>
+                                @endif
+                            @endif
                             @if($userProfile->follower->biography)
                                 <div class="user-following-bio">{{$userProfile->follower->biography}}</div>
                             @endif

@@ -200,7 +200,8 @@ if(singleFollowerUsers){
     singleFollowerUsers.forEach(singleFollowerUser => {
         singleFollowerUser.addEventListener("click", function (event){
             console.log(event.target.className)
-            if(event.target.className === "unfollowBtn" || event.target.className === "followBackBtn" || event.target.classList.contains("more-opt-ic") || event.target.classList.contains("remove-user-from-followers") || event.target.classList.contains("block-user")){
+            event.preventDefault();
+            if(event.target.className === "unfollowBtn" || event.target.className === "followBtn" || event.target.className === "followBackBtn" || event.target.classList.contains("more-opt-ic") || event.target.classList.contains("remove-user-from-followers") || event.target.classList.contains("block-user")){
                 event.preventDefault();
             }
         })
@@ -209,7 +210,7 @@ if(singleFollowerUsers){
 if(singleFollowingUsers){
     singleFollowingUsers.forEach(singleFollowingUser => {
         singleFollowingUser.addEventListener("click", function (event){
-            if(event.target.className === "unfollowBtn" || event.target.className === "followBackBtn"){
+            if(event.target.className === "unfollowBtn" || event.target.className === "followBackBtn" || event.target.className === "followBtn"){
                 event.preventDefault();
             }
         })

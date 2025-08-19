@@ -3299,7 +3299,7 @@ textarea.w-input, textarea.w-select {
   text-decoration: none;
   color: white;
 }
-.followers-stats:hover{
+.followers-stats:hover, .following-stats:hover{
   border-bottom: 1px solid white;
 }
 .text-span-3 {
@@ -4404,7 +4404,8 @@ textarea.w-input, textarea.w-select {
   display: flex;
   flex-direction: column;
   align-items: end;
-  position: relative;
+  position: absolute;
+  right: 10px;
 }
 .choose-post-option,.choose-comment-option{
   box-shadow: rgba(255, 255, 255, 0.2) 0 0 15px, rgba(255, 255, 255, 0.15) 0 0 3px 1px;
@@ -4795,6 +4796,7 @@ textarea.w-input, textarea.w-select {
   transition: all 0.3s;
   cursor: pointer;
   text-decoration: none;
+  position: relative;
 }
 .single-following-user:hover,.single-follower-user:hover{
   background-color: rgba(255,255,255,0.03);
@@ -4803,7 +4805,7 @@ textarea.w-input, textarea.w-select {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  width: 100%;
+  width: 85%;
   align-items: center;
   margin-left: 10px;
 }
@@ -4816,7 +4818,7 @@ textarea.w-input, textarea.w-select {
   flex-wrap: wrap;
   align-items: center;
 }
-.user-follower-fullname-and-username .followsBackInfo{
+.user-follower-fullname-and-username .followsBackInfo, .user-following-fullname-and-username .followsBackInfo, .searched-user-fullname-and-username .followsBackInfo{
   margin-top: 0;
 }
 .user-following-fullname-and-username .user-following-fullname, .user-follower-fullname-and-username .user-follower-fullname, .searched-user-fullname-and-username .searched-user-fullname{
@@ -5519,6 +5521,9 @@ background-color: rgb(29, 155, 240);
   }
 }
 @media (max-width: 800px) {
+  .filterWrapper .filterLink p{
+    width: 40%;
+  }
   .new-comment{
     width: 70%;
   }
@@ -5532,6 +5537,9 @@ background-color: rgb(29, 155, 240);
   }
 }
 @media (max-width: 768px) {
+  .user-following-information, .user-follower-information, .searched-user-information{
+  width: 80%;
+}
   #opening-heading{
     font-size: 60px;
     line-height: 60px;
@@ -5556,6 +5564,10 @@ background-color: rgb(29, 155, 240);
   }
 }
 @media (max-width: 700px) {
+  .user-following-fullname-and-username, .user-follower-fullname-and-username, .searched-user-fullname-and-username{
+    width: auto;
+    max-width: 200px;
+  }
   #register-login-popup{
     width: 80%;
     max-width: 80%;
@@ -5593,6 +5605,9 @@ background-color: rgb(29, 155, 240);
   .messages-wrapper{
     width: 100%;
   }
+  .filterWrapper .filterLink p{
+    width: 60%;
+  }
 }
 @media (max-width: 560px){
   .post-filter-text{
@@ -5600,6 +5615,12 @@ background-color: rgb(29, 155, 240);
   }
 }
 @media (max-width: 500px) {
+  .user-following-fullname-and-username .user-following-username,.user-follower-fullname-and-username .user-follower-username, .searched-user-fullname-and-username .searched-user-username{
+    margin-bottom: 5px;
+  }
+  .followsBackInfo{
+    margin-bottom: 5px;
+  }
   #chooseOptionsWrapper{
     background-color: #5b708366;
   }

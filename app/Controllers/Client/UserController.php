@@ -24,7 +24,7 @@ class UserController extends Controller
                 'photo' => asset('assets/img/users/'.$user->photo),
             ]);
         }
-        return response();
+        return response()->json([]);
     }
     public function edit(int $id) : Response
     {
@@ -86,7 +86,7 @@ class UserController extends Controller
        $user->save();
        session()->set('user', $sessionUser);
 
-       return response()->json([
+       return response()->setStatusCode(Response::HTTP_NO_CONTENT)->json([
             'coverImage' => asset('assets/img/users-covers/' . $coverImage),
             'profileImage' => asset('assets/img/users/' . $profileImage),
             'fullName' => $fullName,
@@ -115,7 +115,7 @@ class UserController extends Controller
             Notification::create($newNotification);
         }
         $user = User::with('followers')->where('id', '=', $id)->first();
-        return response()->json([
+        return response()->setStatusCode(Response::HTTP_CREATED)->json([
             'numOfFollowers' => count($user->followers),
         ]);
     }
@@ -138,7 +138,7 @@ class UserController extends Controller
                                   ->where('follower_id', '=', session()->get('user')->id)
                                   ->count();
         $user = User::with('followers')->where('id', '=', $id)->first();
-        return response()->json(
+        return response()->setStatusCode(Response::HTTP_NO_CONTENT)->json(
             [
                 'followBack' => $followBack > 0,
                 'numOfFollowers' => count($user->followers),
@@ -197,7 +197,7 @@ class UserController extends Controller
             session()->set('user', $sessionUser);
         }
 
-        return response()->json([
+        return response()->setStatusCode(Response::HTTP_CREATED)->json([
             'newPhoto' => asset('assets/img/users/' . $newName),
             'oldPhoto' => asset('assets/img/users/' . $oldPhoto),
         ]);
@@ -243,7 +243,7 @@ class UserController extends Controller
             session()->set('user', $sessionUser);
         }
 
-        return response()->json([
+        return response()->setStatusCode(Response::HTTP_CREATED)->json([
             'newPhoto' => asset('assets/img/users-covers/' . $newName),
             'oldPhoto' => asset('assets/img/users-covers/' . $oldPhoto),
         ]);
@@ -284,6 +284,6 @@ class UserController extends Controller
         session()->set('user', $sessionUser);
         $user->save();
 
-        return response()->json([]);
+        return response()->setStatusCode(Response::HTTP_CREATED)->json([]);
     }
 }

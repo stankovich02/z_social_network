@@ -167,13 +167,13 @@ class MessageController extends Controller
                                      ->where('other_user_id', '=', $otherUserId)
                                      ->first();
             $route = route('messages.conversation', ['id' => $insertedId->id]);
-            return \response()->json([
+            return response()->json([
                 'route' => $route
             ]);
         }
         $conversationExists = $conversationExists1 ?: $conversationExists2;
         $route = route('messages.conversation', ['id' => $conversationExists->id]);
-        return \response()->json([
+        return response()->json([
             'route' => $route
         ]);
     }

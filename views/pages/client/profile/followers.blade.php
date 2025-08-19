@@ -47,16 +47,11 @@
                                 <div class="user-follower-fullname-and-username">
                                     <div class="user-follower-fullname">{{$userProfile->user->full_name}}</div>
                                     <div class="user-follower-username">&#64;{{$userProfile->user->username}}</div>
-                                    @if($user->username === session()->get('user')->username)
+                                    @if(in_array($userProfile->user->id, $loggedInUserFollowers))
                                         <div class="followsBackInfo">Follows you</div>
                                     @endif
                                 </div>
                                 @if($user->username === session()->get('user')->username)
-                                    @if($userProfile->user->loggedInUserFollowsFollower)
-                                        <button class="followingBtn" data-id="{{$userProfile->user->id}}">Following</button>
-                                    @else
-                                        <button class="followBackBtn" data-id="{{$userProfile->user->id}}">Follow back</button>
-                                    @endif
                                     <div class="single-follower-more-options-wrapper">
                                         <div class="more-options w-embed single-follower-more-options">
                                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--ph more-opt-ic" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 256">
@@ -68,6 +63,13 @@
                                             <div class="single-follower-option remove-user-from-followers" data-id="{{$userProfile->user->id}}" data-username="{{$userProfile->user->username}}"><i class="fa-solid fa-user-xmark"></i> Remove this follower</div>
                                         </div>
                                     </div>
+                                @endif
+                                @if($userProfile->user->id !== session()->get('user')->id)
+                                    @if($userProfile->user->loggedInUserFollowsFollower)
+                                        <button class="followingBtn" data-id="{{$userProfile->user->id}}" data-username="{{$userProfile->user->username}}">Following</button>
+                                    @else
+                                        <button class="followBackBtn" data-id="{{$userProfile->user->id}}" data-username="{{$userProfile->user->username}}">Follow back</button>
+                                    @endif
                                 @endif
                                 @if($userProfile->user->biography)
                                     <div class="user-follower-bio">{{$userProfile->user->biography}}</div>

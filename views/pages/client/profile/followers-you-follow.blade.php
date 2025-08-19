@@ -45,6 +45,9 @@
                             <div class="user-following-fullname-and-username">
                                 <div class="user-following-fullname">{{$userProfile->full_name}}</div>
                                 <div class="user-following-username">&#64;{{$userProfile->username}}</div>
+                                @if(in_array($userProfile->id, $loggedInUserFollowers))
+                                    <div class="followsBackInfo">Follows you</div>
+                                @endif
                             </div>
                             <button class="followingBtn" data-id="{{$userProfile->id}}" data-username="{{$userProfile->username}}">Following</button>
                             @if($userProfile->biography)

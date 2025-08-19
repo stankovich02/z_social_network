@@ -158,6 +158,12 @@ class ProfileController extends Controller
                 ->get(),
             'follower_id'
         );
+        $loggedInUserFollowers = array_column(
+            Database::table(UserFollower::TABLE)
+                ->where('follower_id', '=', session()->get('user')->id)
+                ->get(),
+            'user_id'
+        );
         if($username !== session()->get('user')->username) {
             $profileUserFollowers = array_column(
                 Database::table(UserFollower::TABLE)
@@ -169,11 +175,11 @@ class ProfileController extends Controller
         }
         foreach ($user->followers as $follower) {
             $follower->user->loggedInUserFollowsFollower = in_array($follower->user->id, $userFollowing);
-
         }
         return view('pages.client.profile.followers', [
             'user' => $user,
             'matchedFollowers' => $matched ?? [],
+            'loggedInUserFollowers' => $loggedInUserFollowers,
         ]);
     }
     public function following(string $username) : View
@@ -187,6 +193,12 @@ class ProfileController extends Controller
         $user = User::with('following', 'following.follower')
                     ->where('username', '=', $username)
                     ->first();
+        $loggedInUserFollowers = array_column(
+            Database::table(UserFollower::TABLE)
+                ->where('follower_id', '=', session()->get('user')->id)
+                ->get(),
+            'user_id'
+        );
         if($username !== session()->get('user')->username) {
             $profileUserFollowers = array_column(
                 Database::table(UserFollower::TABLE)
@@ -196,9 +208,13 @@ class ProfileController extends Controller
             );
             $matched = array_intersect($userFollowing, $profileUserFollowers);
         }
+        foreach ($user->following as $following) {
+            $following->follower->loggedInUserFollowsUser = in_array($following->follower->id, $userFollowing);
+        }
         return view('pages.client.profile.following', [
             'user' => $user,
             'matchedFollowers' => $matched ?? [],
+            'loggedInUserFollowers' => $loggedInUserFollowers,
         ]);
     }
 
@@ -213,12 +229,31 @@ class ProfileController extends Controller
                 ->get(),
             'follower_id'
         );
-        $matchedFollowers = User::with('role')
-                                ->whereIn('id', $userFollowing)
-                                ->get();
+        $loggedInUserFollowers = array_column(
+            Database::table(UserFollower::TABLE)
+                ->where('follower_id', '=', session()->get('user')->id)
+                ->get(),
+            'user_id'
+        );
+        if($username !== session()->get('user')->username) {
+            $profileUserFollowers = array_column(
+                Database::table(UserFollower::TABLE)
+                    ->where('follower_id', '=', $user->id)
+                    ->get(),
+                'user_id'
+            );
+            $matched = array_intersect($userFollowing, $profileUserFollowers);
+            if(count($matched) > 0) {
+                $matchedFollowers = User::with('role')
+                    ->whereIn('id', $matched)
+                    ->get();
+            }
+        }
+
         return view('pages.client.profile.followers-you-follow', [
             'user' => $user,
-            'matchedFollowers' => $matchedFollowers,
+            'matchedFollowers' => $matchedFollowers ?? [],
+            'loggedInUserFollowers' => $loggedInUserFollowers,
         ]);
     }
 }
