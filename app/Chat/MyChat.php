@@ -76,9 +76,6 @@ class MyChat implements MessageComponentInterface, \Ratchet\MessageComponentInte
             return;
         }
 
-        echo "User $sentFrom " . ($isTyping ? "started" : "stopped") . " typing to user $sentTo\n";
-
-
         if (isset($this->clients[$sentTo])) {
             $this->clients[$sentTo]->send(json_encode([
                 'type' => 'typing',

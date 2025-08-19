@@ -82,3 +82,12 @@ if(notificationPopup){
         notificationPopup.remove();
     }, 5000)
 }
+let currentNameLength = document.querySelector("#name-wrapper .current-num-of-characters");
+let currentUsernameLength = document.querySelector("#username-wrapper .current-num-of-characters");
+if(currentNameLength){
+    currentNameLength.innerHTML = fullNameInput.value.length;
+}
+if(currentUsernameLength){
+    currentUsernameLength.innerHTML = usernameInput.value.length;
+}
+
