@@ -114,8 +114,8 @@ class MessageController extends Controller
             'user_id'
         );
         $matched = array_intersect($loggedInUserFollowing, $profileUserFollowers);
-        foreach ($matched as $id) {
-            $matchedUser = User::where('id', '=', $id)->first();
+        foreach ($matched as $matchedId) {
+            $matchedUser = User::where('id', '=', $matchedId)->first();
             $matchedFollowers[] = [
                 'full_name' => $matchedUser->full_name,
                 'photo' => asset('assets/img/users/' . $matchedUser->photo),

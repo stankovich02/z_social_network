@@ -1,3 +1,5 @@
+let typingIndicatorElement;
+let isTyping = false;
 const postBtn = document.querySelector(".post-btn");
 postBtn.addEventListener("click", () => {
     const newPostPopup = document.querySelector("#new-post-popup-wrapper");
@@ -10,6 +12,109 @@ postBtn.addEventListener("click", () => {
     })
 
 })
+function createTypingIndicator() {
+    const typingIndicator = document.createElement('div');
+    typingIndicator.className = 'typing-indicator';
+    typingIndicator.id = 'typingIndicator';
+    typingIndicator.innerHTML = `
+        <div class="typing-bubble">
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+        </div>
+    `;
+    return typingIndicator;
+}
+function showTypingIndicator(senderId) {
+    const messageWrapper = document.querySelector(".chat-messages-wrapper");
+    if (!messageWrapper) return;
+
+    const currentUserId = messageWrapper.parentElement.getAttribute("data-user-id");
+    if (currentUserId !== senderId) return;
+
+
+    hideTypingIndicator();
+
+
+    typingIndicatorElement = createTypingIndicator();
+    messageWrapper.appendChild(typingIndicatorElement);
+
+    setTimeout(() => {
+        typingIndicatorElement.classList.add('show');
+    }, 10);
+
+
+    setTimeout(scrollToBottom, 100);
+}
+function hideTypingIndicator() {
+    if (typingIndicatorElement) {
+        typingIndicatorElement.classList.remove('show');
+        setTimeout(() => {
+            if (typingIndicatorElement && typingIndicatorElement.parentElement) {
+                typingIndicatorElement.remove();
+            }
+            typingIndicatorElement = null;
+        }, 300);
+    }
+}
+function setupTypingListener() {
+    const messageInput = document.querySelector(".type-message-input");
+    const sendMessageButton = document.querySelector(".send-message-icon");
+
+    if (!messageInput || !sendMessageButton) return;
+
+    const conversationId = sendMessageButton.getAttribute("data-conversation-id");
+    const receiverId = sendMessageButton.getAttribute("data-receiver-id");
+    const senderId = sendMessageButton.getAttribute("data-id");
+
+    messageInput.addEventListener('input', function() {
+        const inputValue = this.value.trim();
+
+        if (inputValue && !isTyping) {
+
+            isTyping = true;
+            sendTypingSignal(true, conversationId, receiverId, senderId);
+        } else if (!inputValue && isTyping) {
+
+            isTyping = false;
+            sendTypingSignal(false, conversationId, receiverId, senderId);
+        }
+
+        clearTimeout(typingTimeout);
+        if (inputValue) {
+            typingTimeout = setTimeout(() => {
+                if (isTyping) {
+                    isTyping = false;
+                    sendTypingSignal(false, conversationId, receiverId, senderId);
+                }
+            }, 2000);
+        }
+    });
+
+    messageInput.addEventListener('blur', function() {
+        if (isTyping) {
+            isTyping = false;
+            sendTypingSignal(false, conversationId, receiverId, senderId);
+            clearTimeout(typingTimeout);
+        }
+    });
+}
+document.addEventListener('DOMContentLoaded', function() {
+    setupTypingListener();
+});
+function sendTypingSignal(isTypingNow, conversationId, receiverId, senderId) {
+    if (socket.readyState === WebSocket.OPEN) {
+        const typingData = JSON.stringify({
+            type: 'typing',
+            is_typing: isTypingNow,
+            conversation_id: conversationId,
+            sent_from: senderId,
+            sent_to: receiverId,
+            timestamp: Date.now()
+        });
+        socket.send(typingData);
+    }
+}
 
 const textareas = document.querySelectorAll('textarea');
 textareas.forEach(textarea => {
@@ -397,10 +502,23 @@ socket.onmessage = function (event) {
     const data = JSON.parse(event.data);
     let loggedInUser = document.querySelector(".logged-in-user");
     let userId = loggedInUser.getAttribute("data-id");
+    if (data.type === 'typing') {
+        if (parseInt(data.sent_from) !== parseInt(userId)) {
+            if (data.is_typing) {
+                showTypingIndicator(data.sent_from);
+            } else {
+                hideTypingIndicator();
+            }
+        }
+        return;
+    }
     if (data.type === 'request_user_id') {
         socket.send(JSON.stringify({ user_id: userId }));
         return;
     }
+
+    hideTypingIndicator();
+
     if (data.viewed) {
         let messageId = data.message_id;
         let sentMessageWrapper = document.querySelector(`.sent-message-wrapper[data-id="${messageId}"]`);
@@ -624,6 +742,14 @@ function sendMessage() {
     let sentTo = sendMessageButton.getAttribute("data-receiver-id");
     let conversationId = sendMessageButton.getAttribute("data-conversation-id");
     let otherUserColumn = sendMessageButton.getAttribute("data-other-user-column-name");
+
+    if (isTyping) {
+        isTyping = false;
+        sendTypingSignal(false, conversationId, sentTo);
+        clearTimeout(typingTimeout);
+    }
+
+
     const now = new Date();
     const offset = now.getTimezoneOffset() * 60000;
     const localISOTime = new Date(now - offset).toISOString().slice(0, 19);
@@ -636,6 +762,9 @@ function sendMessage() {
         other_user_column: otherUserColumn,
         created_at: formattedDate
     });
+    if(messageInput.value.trim() === ""){
+        return;
+    }
     socket.send(messageData);
     messageInput.value = "";
 }

@@ -300,7 +300,7 @@ document.addEventListener("mouseover", function (event){
     }
 })
 document.addEventListener("mouseout", function (event){
-    if(event.target.parentElement.classList.contains("message-more-options")){
+    if(event.target.parentElement !== null && event.target.parentElement.classList.contains("message-more-options")){
         let chooseOption = event.target.parentElement.parentElement.querySelector(".choose-message-option");
         if(!chooseOption.style.display || chooseOption.style.display === "none"){
             event.target.parentElement.parentElement.style.opacity = "0";

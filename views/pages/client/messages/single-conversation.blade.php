@@ -265,7 +265,6 @@
                         </div>
                     @endif
                 @endforeach
-
             </div>
             @if($chatIsBlocked)
                 <div id="blockedChat">

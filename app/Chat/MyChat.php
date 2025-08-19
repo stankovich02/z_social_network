@@ -26,7 +26,14 @@ class MyChat implements MessageComponentInterface, \Ratchet\MessageComponentInte
             echo "His ip address is: " . $from->remoteAddress . "\n";
             return;
         }
+
+        if (isset($data['type']) && $data['type'] === 'typing') {
+            $this->handleTypingIndicator($data);
+            return;
+        }
+
         if (isset($data['sent_from']) && isset($data['sent_to']) && isset($data['message'])) {
+            var_dump($data);
             $sentFrom = $data['sent_from'];
             $sentTo = $data['sent_to'];
             $message = $data['message'];
@@ -58,7 +65,33 @@ class MyChat implements MessageComponentInterface, \Ratchet\MessageComponentInte
             $this->markMessageAsSeen($data);
         }
     }
+    private function handleTypingIndicator($data) {
+        $sentFrom = $data['sent_from'] ?? null;
+        $sentTo = $data['sent_to'] ?? null;
+        $conversationId = $data['conversation_id'] ?? null;
+        $isTyping = $data['is_typing'] ?? false;
 
+        if (!$sentTo || !$conversationId) {
+            echo "Invalid typing data received.\n";
+            return;
+        }
+
+        echo "User $sentFrom " . ($isTyping ? "started" : "stopped") . " typing to user $sentTo\n";
+
+
+        if (isset($this->clients[$sentTo])) {
+            $this->clients[$sentTo]->send(json_encode([
+                'type' => 'typing',
+                'sent_from' => $sentFrom,
+                'sent_to' => $sentTo,
+                'conversation_id' => $conversationId,
+                'is_typing' => $isTyping,
+                'timestamp' => time()
+            ]));
+        } else {
+            echo "User $sentTo is not connected.\n";
+        }
+    }
     private function saveMessageToDatabase($sentFrom,$sentTo, $message, $createdAt, $conversationId, $otherUserColumn) : int
     {
         $stmt = $this->pdo->prepare("SELECT * FROM left_conversations WHERE conversation_id = ? AND is_active = 0");
