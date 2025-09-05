@@ -7,18 +7,19 @@ use Ratchet\WebSocket\MessageComponentInterface;
 
 class MyChat implements MessageComponentInterface, \Ratchet\MessageComponentInterface
 {
-    protected $clients;
-    protected $pdo;
+    protected array $clients;
+    protected \PDO $pdo;
 
     public function __construct() {
         $this->clients = [];
         $this->pdo = new \PDO("mysql:host=localhost;dbname=z_social_network", "root", "");
     }
-    function onOpen(ConnectionInterface $conn)
+    function onOpen(ConnectionInterface $conn) : void
     {
         $conn->send(json_encode(['type' => 'request_user_id']));
     }
-    public function onMessage(ConnectionInterface $from, $msg) {
+    public function onMessage(ConnectionInterface $from, $msg)  : void
+    {
         $data = json_decode($msg, true);
         if (isset($data['user_id'])) {
             $this->clients[$data['user_id']] = $from;
@@ -129,7 +130,7 @@ class MyChat implements MessageComponentInterface, \Ratchet\MessageComponentInte
     }
 
 
-    function onClose(ConnectionInterface $conn)
+    function onClose(ConnectionInterface $conn) : void
     {
         foreach ($this->clients as $userId => $client) {
             if ($client === $conn) {
@@ -140,7 +141,7 @@ class MyChat implements MessageComponentInterface, \Ratchet\MessageComponentInte
         }
     }
 
-    function onError(ConnectionInterface $conn, \Exception $e)
+    function onError(ConnectionInterface $conn, \Exception $e) : void
     {
         echo "Error: {$e->getMessage()}\n";
         $conn->close();

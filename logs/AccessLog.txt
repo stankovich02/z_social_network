@@ -1,0 +1,14 @@
+2025-09-05 16:00:45 ::1 /posts/mark-multiple-views POST
+2025-09-05 16:00:45 ::1 /home GET
+2025-09-05 16:00:51 ::1 /posts/mark-multiple-views POST
+2025-09-05 16:00:51 ::1 /explore GET
+2025-09-05 16:00:52 ::1 /home GET
+2025-09-05 16:00:52 ::1 /posts/mark-multiple-views POST
+2025-09-05 16:00:53 ::1 /notifications GET
+2025-09-05 16:00:53 ::1 /notifications/76/read POST
+2025-09-05 16:00:53 ::1 /notifications/52/read POST
+2025-09-05 16:00:53 ::1 /notifications/51/read POST
+2025-09-05 16:00:53 ::1 /notifications/50/read POST
+2025-09-05 16:00:53 ::1 /notifications/40/read POST
+2025-09-05 16:00:53 ::1 /notifications/35/read POST
+2025-09-05 16:00:53 ::1 /messages GET
