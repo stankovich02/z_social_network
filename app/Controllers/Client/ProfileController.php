@@ -38,9 +38,10 @@ class ProfileController extends Controller
             $post->content = preg_replace('/#(\w+)/', '<span class="hashtag">#$1</span>', $post->content);
             $post->views = $this->calculateStatNumber($post->views);
         }
+
         foreach ($user->repostedPosts as $repostedPost) {
             $repostedPost->type = Post::REPOSTED_POST;
-            $repostedPost->content = preg_replace('/#(\w+)/', '<span class="hashtag">#$1</span>', $repostedPost->content);
+            $repostedPost->post->content = preg_replace('/#(\w+)/', '<span class="hashtag">#$1</span>', $repostedPost->post->content);
             $repostedPost->views = $this->calculateStatNumber($repostedPost->views);
         }
         if($username !== session()->get('user')->username) {

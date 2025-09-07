@@ -51,7 +51,7 @@
                                         <div class="followsBackInfo">Follows you</div>
                                     @endif
                                 </div>
-                                @if($user->username === session()->get('user')->username)
+                                @if($userProfile->user->id !== session()->get('user')->id)
                                     <div class="single-follower-more-options-wrapper">
                                         <div class="more-options w-embed single-follower-more-options">
                                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--ph more-opt-ic" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 256">
@@ -59,8 +59,13 @@
                                             </svg>
                                         </div>
                                         <div class="choose-follower-option">
+                                            @if($user->username === session()->get('user')->username)
                                             <div class="single-follower-option block-user" data-id="{{$userProfile->user->id}}" data-username="{{$userProfile->user->username}}"><div class="block-icon w-embed"><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" height="100%" width="100%" class="iconify iconify--ic" role="img" aria-hidden="true" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2M4 12c0-4.42 3.58-8 8-8c1.85 0 3.55.63 4.9 1.69L5.69 16.9A7.9 7.9 0 0 1 4 12m8 8c-1.85 0-3.55-.63-4.9-1.69L18.31 7.1A7.9 7.9 0 0 1 20 12c0 4.42-3.58 8-8 8" fill="currentColor"></path></svg></div>Block &#64;{{$userProfile->user->username}}</div>
                                             <div class="single-follower-option remove-user-from-followers" data-id="{{$userProfile->user->id}}" data-username="{{$userProfile->user->username}}"><i class="fa-solid fa-user-xmark"></i> Remove this follower</div>
+                                            @endif
+                                            @if($user->username !== session()->get('user')->username && $userProfile->user->id !== session()->get('user')->id)
+                                                <div class="single-follower-option block-user" data-id="{{$userProfile->user->id}}" data-username="{{$userProfile->user->username}}"><div class="block-icon w-embed"><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" height="100%" width="100%" class="iconify iconify--ic" role="img" aria-hidden="true" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2M4 12c0-4.42 3.58-8 8-8c1.85 0 3.55.63 4.9 1.69L5.69 16.9A7.9 7.9 0 0 1 4 12m8 8c-1.85 0-3.55-.63-4.9-1.69L18.31 7.1A7.9 7.9 0 0 1 20 12c0 4.42-3.58 8-8 8" fill="currentColor"></path></svg></div>Block &#64;{{$userProfile->user->username}}</div>
+                                            @endif
                                         </div>
                                     </div>
                                 @endif

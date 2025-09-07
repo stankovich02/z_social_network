@@ -262,10 +262,12 @@ document.addEventListener("DOMContentLoaded", function () {
     if (chatWrapper && newMessagesNotification) {
         chatWrapper.scrollTo({
             top: newMessagesNotification.offsetTop - chatWrapper.offsetTop - 30,
-            behavior: "smooth"
         });
     }
     if(chatWrapper){
+        chatWrapper.scrollTo({
+            top: chatWrapper.scrollHeight,
+        });
         let LSMessageId = localStorage.getItem('messageId');
         if(LSMessageId){
             let sentMessage = document.querySelector(`.sent-message-wrapper[data-id="${LSMessageId}"]`);

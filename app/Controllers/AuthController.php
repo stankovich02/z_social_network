@@ -62,7 +62,7 @@ class AuthController extends Controller
             );
             session()->set('user', $user);
             $_SESSION['old'] = null;
-            return redirect('/home')->with('success-message', 'You have successfully logged in.');
+            return redirect('/home');
         }
         return redirect()->back()->with('error-message', 'Wrong credentials.');
     }

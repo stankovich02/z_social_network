@@ -514,8 +514,8 @@ function feedWriteInputAndIcon() {
 }
 document.querySelector("#feedNewPost .new-post-body").addEventListener("input", function () {
     const postBtn = document.querySelector("#feedPostBtn");
-    postBtn.disabled = this.value.trim() === "";
-    this.value.trim() === "" ? postBtn.classList.add("disabled-new-post-btn") : postBtn.classList.remove("disabled-new-post-btn");
+    postBtn.disabled = this.value.trim() === "" && !document.querySelector("#newFormBlock .uploaded-post-image img");
+    this.value.trim() === "" && !document.querySelector("#newFormBlock .uploaded-post-image img") ? postBtn.classList.add("disabled-new-post-btn") : postBtn.classList.remove("disabled-new-post-btn");
 });
 let observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {

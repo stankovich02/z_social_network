@@ -173,12 +173,6 @@
                         </div>
                         <div class="comment-body">{{$comment->content}}</div>
                         <div class="comment-reactions">
-                            <div class="comments-on-comment-stats">
-                                <div class="comment-stats-icon w-embed">
-                                    <i class="fa-regular fa-comment post-ic"></i>
-                                </div>
-                                <div class="comment-reactions-stats-num"></div>
-                            </div>
                             <div class="liked-on-comment-stats">
                                 <div class="comment-stats-icon w-embed" data-cid="{{$comment->id}}" data-pid="{{$post->id}}">
                                     <i class="fa-heart post-ic {{$comment->userLiked ? "likedComment fa-solid" : "fa-regular"}}"></i>

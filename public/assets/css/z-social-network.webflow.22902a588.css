@@ -4154,7 +4154,7 @@ textarea.w-input, textarea.w-select {
   border-radius: 20px;
   width: 50%;
   max-width: 600px;
-  height: 80vh;
+  height: 85vh;
   max-height: 800px;
   padding: 15px;
   position: fixed;
@@ -5050,7 +5050,6 @@ background-color: rgb(29, 155, 240);
   height: auto!important;
   top: 50%;
   left: 50%;
-  border-radius: 50%;
   transform: translate(-50%, -50%);
   position: absolute;
 }

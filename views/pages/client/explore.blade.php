@@ -168,7 +168,7 @@
                                 </div>
                             </div>
                         @endforeach
-                        @if(count($posts) === 5 && $filter !== "posts")
+                        @if(count($posts) > 5 && $filter !== "posts")
                             <div id="viewAllPosts">
                                 <a href="{{route('explore')}}?q={{rawurlencode($query)}}&filter=posts">View all</a>
                             </div>

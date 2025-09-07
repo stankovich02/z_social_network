@@ -128,7 +128,7 @@ document.addEventListener("click", function (event){
             success: function(data){
                 let followingBtn = document.querySelector(`.followingBtn[data-id="${userId}"]`);
                 let actionPopupWrapper = document.querySelector("#action-popup-wrapper");
-                if(data.followBack){
+                if(data.followBack !== null){
                     followingBtn.className = "followBackBtn";
                     followingBtn.textContent = "Follow back";
                     followingBtn.dataset.id = userId;
@@ -199,8 +199,6 @@ let singleFollowerUsers = document.querySelectorAll(".single-follower-user");
 if(singleFollowerUsers){
     singleFollowerUsers.forEach(singleFollowerUser => {
         singleFollowerUser.addEventListener("click", function (event){
-            console.log(event.target.className)
-            event.preventDefault();
             if(event.target.className === "unfollowBtn" || event.target.className === "followBtn" || event.target.className === "followBackBtn" || event.target.classList.contains("more-opt-ic") || event.target.classList.contains("remove-user-from-followers") || event.target.classList.contains("block-user")){
                 event.preventDefault();
             }
