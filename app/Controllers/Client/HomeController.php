@@ -50,9 +50,9 @@ class HomeController extends Controller
         if (count($followedUsers) > 0) {
             $posts = $posts->whereNotIn('user_id', $followedUsers);
         }
-       /* if(count($viewedPosts) > 0){
+        if(count($viewedPosts) > 0){
             $posts = $posts->whereNotIn('id', $viewedPosts);
-        }*/
+        }
         if (count($blockedUsers) > 0) {
             $posts = $posts->whereNotIn('user_id', $blockedUsers);
         }

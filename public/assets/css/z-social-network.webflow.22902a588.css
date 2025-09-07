@@ -1169,11 +1169,6 @@ textarea.w-input, textarea.w-select {
   inset: -100%;
 }
 
-/*.w-background-video > video::-webkit-media-controls-start-playback-button {
-  -webkit-appearance: none;
-  display: none !important;
-}*/
-
 .w-background-video--control {
   background-color: #0000;
   padding: 0;
@@ -3048,9 +3043,9 @@ textarea.w-input, textarea.w-select {
   margin-bottom: 0;
   font-size: 15px;
   font-weight: 400;
-  word-wrap: break-word;          /* Staro svojstvo za kompatibilnost */
-  overflow-wrap: break-word;      /* Novo svojstvo */
-  white-space: normal;            /* Omogućava prelamanje */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
   hyphens: auto;
 }
 
@@ -5415,26 +5410,14 @@ background-color: rgb(29, 155, 240);
     width: 60%;
     max-width: 60%;
   }
-/*  .header{
-    width: 400px;
-  }*/
   #logout-wrapper{
     left: 120px;
   }
-/*  .content{
-    width: 50%;
-  }*/
 }
 @media (max-width: 1100px) {
-/*  .header{
-    width: 350px;
-  }*/
   #logout-wrapper{
     left: 70px;
   }
-/*  .content{
-    width: 60%;
-  }*/
 }
 @media (max-width: 991px) {
   .edit-profile-popup,.setup-profile-popup{
