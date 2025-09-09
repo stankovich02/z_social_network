@@ -30,7 +30,7 @@ class UserController extends Controller
     {
         $user = User::where('id', '=', $id)->first();
         if($user->id !== session()->get('user')->id){
-            return response()->setStatusCode(Response::HTTP_FORBIDDEN)->json([
+            return response()->json([
                 'editError' => 'You are not allowed to edit other users information.'
             ]);
         }
@@ -44,13 +44,13 @@ class UserController extends Controller
     public function update(int $id, Request $request) : Response
     {
        if($id !== session()->get('user')->id){
-         return response()->setStatusCode(Response::HTTP_FORBIDDEN)->json([
+         return response()->json([
             'editError' => 'You are not allowed to update other users information.'
          ]);
        }
        $fullName = $request->input('fullName');
        if(preg_match('/(^[A-Za-z]{3,16})([ ]{0,1})([A-Za-z]{3,16})?([ ]{0,1})?([A-Za-z]{3,16})?([ ]{0,1})?([A-Za-z]{3,16})/', $fullName) === 0){
-         return response()->setStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY)->json([
+         return response()->json([
             'fullNameError' => 'Full name is in invalid format. Example: John Doe'
          ]);
        }
@@ -86,7 +86,7 @@ class UserController extends Controller
        $user->save();
        session()->set('user', $sessionUser);
 
-       return response()->setStatusCode(Response::HTTP_NO_CONTENT)->json([
+       return response()->json([
             'coverImage' => asset('assets/img/users-covers/' . $coverImage),
             'profileImage' => asset('assets/img/users/' . $profileImage),
             'fullName' => $fullName,
@@ -115,7 +115,7 @@ class UserController extends Controller
             Notification::create($newNotification);
         }
         $user = User::with('followers')->where('id', '=', $id)->first();
-        return response()->setStatusCode(Response::HTTP_CREATED)->json([
+        return response()->json([
             'numOfFollowers' => count($user->followers),
         ]);
     }
@@ -126,7 +126,7 @@ class UserController extends Controller
                 ->where('user_id', '=', $id)
                 ->where('follower_id', '=', session()->get('user')->id)
                 ->delete();
-            return response()->setStatusCode(Response::HTTP_NO_CONTENT)->json([]);
+            return response()->json([]);
         }
         else{
             Database::table(UserFollower::TABLE)
@@ -138,7 +138,7 @@ class UserController extends Controller
                                   ->where('follower_id', '=', session()->get('user')->id)
                                   ->count();
         $user = User::with('followers')->where('id', '=', $id)->first();
-        return response()->setStatusCode(Response::HTTP_NO_CONTENT)->json(
+        return response()->json(
             [
                 'followBack' => $followBack > 0,
                 'numOfFollowers' => count($user->followers),
@@ -197,7 +197,7 @@ class UserController extends Controller
             session()->set('user', $sessionUser);
         }
 
-        return response()->setStatusCode(Response::HTTP_CREATED)->json([
+        return response()->json([
             'newPhoto' => asset('assets/img/users/' . $newName),
             'oldPhoto' => asset('assets/img/users/' . $oldPhoto),
         ]);
@@ -243,7 +243,7 @@ class UserController extends Controller
             session()->set('user', $sessionUser);
         }
 
-        return response()->setStatusCode(Response::HTTP_CREATED)->json([
+        return response()->json([
             'newPhoto' => asset('assets/img/users-covers/' . $newName),
             'oldPhoto' => asset('assets/img/users-covers/' . $oldPhoto),
         ]);
@@ -273,7 +273,7 @@ class UserController extends Controller
     {
         $biography = $request->input('biography');
         if(strlen($biography) > 160){
-            return response()->setStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY)->json([
+            return response()->json([
                 'error' => 'Biography must be less than 160 characters'
             ]);
         }
@@ -284,6 +284,6 @@ class UserController extends Controller
         session()->set('user', $sessionUser);
         $user->save();
 
-        return response()->setStatusCode(Response::HTTP_CREATED)->json([]);
+        return response()->json([]);
     }
 }
